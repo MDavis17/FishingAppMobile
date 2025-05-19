@@ -1,12 +1,13 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { SafeAreaView, StyleSheet } from "react-native";
+import LogList from "./features/catchLog/components/LogList";
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Hello there</Text>
+    <SafeAreaView style={styles.container}>
+      <LogList />
       <StatusBar style="auto" />
-    </View>
+    </SafeAreaView>
   );
 }
 
