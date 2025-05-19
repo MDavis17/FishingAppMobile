@@ -24,9 +24,9 @@ export default function App() {
                 if (route.name === "Home") {
                   iconName = "home";
                 } else if (route.name === "Logs") {
-                  iconName = "clipboard-list";
-                } else if (route.name === "Trip") {
-                  iconName = "map-marker-path";
+                  iconName = "book-outline";
+                } else if (route.name === "Plan") {
+                  iconName = "map-clock-outline";
                 }
 
                 return (
@@ -43,7 +43,7 @@ export default function App() {
           >
             <Tab.Screen name="Home" component={AnglerHome} />
             <Tab.Screen name="Logs" component={LogList} />
-            <Tab.Screen name="Trip" component={TripPlanner} />
+            <Tab.Screen name="Plan" component={TripPlanner} />
           </Tab.Navigator>
         </NavigationContainer>
       </PaperProvider>
