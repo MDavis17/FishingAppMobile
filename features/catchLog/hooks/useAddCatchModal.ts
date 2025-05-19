@@ -1,5 +1,5 @@
 import { useState, Dispatch, SetStateAction } from "react";
-import { CatchEntry, CatchTime, FisheryType, InputError } from "../../../types";
+import { CatchEntry, CatchTime, WaterType, InputError } from "../../../types";
 
 export default function useAddCatchModal(
   addNewCatch: (newCatch: CatchEntry) => void,
@@ -8,9 +8,7 @@ export default function useAddCatchModal(
 ) {
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [species, setSpecies] = useState("");
-  const [fisherySelected, setFisherySelected] = useState<FisheryType>(
-    FisheryType.Freshwater
-  );
+  const [waterType, setWaterType] = useState<WaterType>(WaterType.Freshwater);
   const [inputError, setInputError] = useState<InputError | null>(null);
 
   const validateInputs = (): InputError | null => {
@@ -42,11 +40,11 @@ export default function useAddCatchModal(
       id: Math.floor(10000 + Math.random() * 90000), // Random 5-digit ID
       dateTime: combinedDateTime.toISOString(),
       species,
-      fisheryType: fisherySelected,
+      waterType,
     };
     addNewCatch(newCatch);
     setSpecies(""); // Reset form fields
-    setFisherySelected(FisheryType.Freshwater);
+    setWaterType(WaterType.Freshwater);
     setIsNewCatchModalVisible(false); // Hide form after submission
   };
   return {
@@ -54,8 +52,8 @@ export default function useAddCatchModal(
     setDate,
     species,
     setSpecies,
-    fisherySelected,
-    setFisherySelected,
+    waterType,
+    setWaterType,
     inputError,
     setInputError,
     handleAddCatch,

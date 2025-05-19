@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { CatchEntry, FisheryType } from "../../../types";
+import { CatchEntry, WaterType } from "../../../types";
 
 export default function useLogList() {
   const [logs, setLogs] = useState<CatchEntry[]>([]);

@@ -1,6 +1,6 @@
 import { Button, FlatList, StyleSheet, View } from "react-native";
 import { List, Text } from "react-native-paper";
-import { FisheryType } from "types";
+import { WaterType } from "types";
 import useLogList from "../hooks/useLogList";
 import AddCatchModal from "./AddCatchModal";
 
@@ -20,7 +20,7 @@ export default function LogList() {
       id: number;
       dateTime: string;
       species: string;
-      fisheryType: FisheryType;
+      waterType: WaterType;
     };
   }) => (
     <List.Item
@@ -29,7 +29,7 @@ export default function LogList() {
       left={(props) => (
         <List.Icon
           {...props}
-          icon={item.fisheryType === FisheryType.Saltwater ? "waves" : "wave"}
+          icon={item.waterType === WaterType.Saltwater ? "waves" : "wave"}
         />
       )}
     />

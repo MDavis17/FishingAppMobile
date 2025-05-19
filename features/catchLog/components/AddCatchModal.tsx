@@ -24,8 +24,8 @@ export default function AddCatchModal({
     setDate,
     species,
     setSpecies,
-    fisherySelected,
-    setFisherySelected,
+    waterType,
+    setWaterType,
     inputError,
     setInputError,
     handleAddCatch,
@@ -77,10 +77,7 @@ export default function AddCatchModal({
               )}
             </View>
 
-            <WaterSelector
-              fisherySelected={fisherySelected}
-              setFisherySelected={setFisherySelected}
-            />
+            <WaterSelector waterType={waterType} setWaterType={setWaterType} />
 
             <View style={styles.buttonContainer}>
               <Button
