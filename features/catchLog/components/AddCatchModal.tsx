@@ -9,7 +9,7 @@ interface Props {
   addNewCatch: (catchData: CatchEntry) => void;
 }
 
-export default function AddCatchForm({ addNewCatch }: Props) {
+export default function AddCatchModal({ addNewCatch }: Props) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [catchDate, setCatchDate] = useState<Date | undefined>(new Date());
   const [species, setSpecies] = useState("");
