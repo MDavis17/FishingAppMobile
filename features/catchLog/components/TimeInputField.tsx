@@ -1,16 +1,16 @@
 import { TextInput, TouchableRipple } from "react-native-paper";
 import { TimePickerModal } from "react-native-paper-dates";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { View } from "react-native";
 import { CatchTime } from "types";
 
-export function TimeInputField() {
-  const now = new Date();
+interface Props {
+  time: CatchTime;
+  setTime: Dispatch<SetStateAction<CatchTime>>;
+}
+
+export function TimeInputField({ time, setTime }: Props) {
   const [visible, setVisible] = useState(false);
-  const [time, setTime] = useState<CatchTime>({
-    hours: now.getHours(),
-    minutes: now.getMinutes(),
-  });
 
   const formattedTime = `${String(time.hours).padStart(2, "0")}:${String(
     time.minutes

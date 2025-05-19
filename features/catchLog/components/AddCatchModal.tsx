@@ -4,6 +4,7 @@ import { CatchEntry, FisheryType } from "types";
 import { DatePickerInput } from "react-native-paper-dates";
 import WaterSelector from "./WaterSelector";
 import { TimeInputField } from "./TimeInputField";
+import useTimeInputField from "../hooks/useTimeInputField";
 
 interface Props {
   addNewCatch: (catchData: CatchEntry) => void;
@@ -17,10 +18,20 @@ export default function AddCatchModal({ addNewCatch }: Props) {
     FisheryType.Freshwater
   );
 
+  const { time, setTime } = useTimeInputField();
+
   const handleAddCatch = () => {
+    if (!catchDate || !time) {
+      return;
+    }
+
+    const combinedDateTime = new Date(catchDate);
+    combinedDateTime.setHours(time.hours);
+    combinedDateTime.setMinutes(time.minutes);
+
     const newCatch: CatchEntry = {
       id: Math.floor(10000 + Math.random() * 90000), // Random 5-digit ID
-      dateTime: new Date().toISOString(),
+      dateTime: combinedDateTime.toISOString(),
       species,
       fisheryType: fisherySelected,
     };
@@ -53,7 +64,7 @@ export default function AddCatchModal({ addNewCatch }: Props) {
             </View>
 
             <View style={styles.input}>
-              <TimeInputField />
+              <TimeInputField time={time} setTime={setTime} />
             </View>
 
             <View style={styles.input}>
@@ -98,26 +109,12 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     flex: 1,
   },
-  // input: {
-  //   height: 40,
-  //   borderColor: "#ccc",
-  //   borderWidth: 1,
-  //   marginBottom: 10,
-  //   paddingHorizontal: 10,
-  //   borderRadius: 5,
-  // },
   dateInput: {
     marginTop: 20,
     marginBottom: 40,
   },
   input: {
     marginBottom: 20,
-  },
-  radioButton: {
-    flexDirection: "row",
-    marginBottom: 10,
-    paddingHorizontal: 10,
-    backgroundColor: "red",
   },
   modalOverlay: {
     flex: 1,
