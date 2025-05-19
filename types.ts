@@ -12,6 +12,11 @@ export interface CatchTime {
   minutes: number;
 }
 
+export interface InputError {
+  inputId: string;
+  message: string;
+}
+
 export enum FisheryType {
   Freshwater = "Freshwater",
   Saltwater = "Saltwater",

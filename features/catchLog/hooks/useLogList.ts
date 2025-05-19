@@ -4,6 +4,7 @@ import { CatchEntry, FisheryType } from "../../../types";
 export default function useLogList() {
   const [logs, setLogs] = useState<CatchEntry[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isNewCatchModalVisible, setIsNewCatchModalVisible] = useState(false);
 
   const addNewCatch = (newCatch: CatchEntry) => {
     if (!newCatch.species || !newCatch.dateTime) {
@@ -29,5 +30,11 @@ export default function useLogList() {
     fetchLogs();
   }, []);
 
-  return { logs, isLoading, addNewCatch };
+  return {
+    isLoading,
+    logs,
+    isNewCatchModalVisible,
+    setIsNewCatchModalVisible,
+    addNewCatch,
+  };
 }

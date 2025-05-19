@@ -1,54 +1,42 @@
-import React, { useState } from "react";
-import { View, StyleSheet, TextInput, Button, Modal } from "react-native";
-import { CatchEntry, FisheryType } from "types";
+import React, { Dispatch, SetStateAction } from "react";
+import { View, StyleSheet, TextInput, Button, Modal, Text } from "react-native";
+import { CatchEntry, InputError } from "types";
 import { DatePickerInput } from "react-native-paper-dates";
 import WaterSelector from "./WaterSelector";
 import { TimeInputField } from "./TimeInputField";
 import useTimeInputField from "../hooks/useTimeInputField";
+import useAddCatchModal from "../hooks/useAddCatchModal";
 
 interface Props {
   addNewCatch: (catchData: CatchEntry) => void;
+  isNewCatchModalVisible: boolean;
+  setIsNewCatchModalVisible: Dispatch<SetStateAction<boolean>>;
 }
 
-export default function AddCatchModal({ addNewCatch }: Props) {
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [catchDate, setCatchDate] = useState<Date | undefined>(new Date());
-  const [species, setSpecies] = useState("");
-  const [fisherySelected, setFisherySelected] = useState<FisheryType>(
-    FisheryType.Freshwater
-  );
-
+export default function AddCatchModal({
+  addNewCatch,
+  isNewCatchModalVisible,
+  setIsNewCatchModalVisible,
+}: Props) {
   const { time, setTime } = useTimeInputField();
-
-  const handleAddCatch = () => {
-    if (!catchDate || !time) {
-      return;
-    }
-
-    const combinedDateTime = new Date(catchDate);
-    combinedDateTime.setHours(time.hours);
-    combinedDateTime.setMinutes(time.minutes);
-
-    const newCatch: CatchEntry = {
-      id: Math.floor(10000 + Math.random() * 90000), // Random 5-digit ID
-      dateTime: combinedDateTime.toISOString(),
-      species,
-      fisheryType: fisherySelected,
-    };
-    addNewCatch(newCatch);
-    setSpecies(""); // Reset form fields
-    setFisherySelected(FisheryType.Freshwater);
-    setIsModalVisible(false); // Hide form after submission
-  };
-
+  const {
+    date,
+    setDate,
+    species,
+    setSpecies,
+    fisherySelected,
+    setFisherySelected,
+    inputError,
+    setInputError,
+    handleAddCatch,
+  } = useAddCatchModal(addNewCatch, time, setIsNewCatchModalVisible);
   return (
     <View style={styles.container}>
-      <Button title="Add New Catch" onPress={() => setIsModalVisible(true)} />
       <Modal
-        visible={isModalVisible}
+        visible={isNewCatchModalVisible}
         animationType="slide"
         transparent={true}
-        onRequestClose={() => setIsModalVisible(false)}
+        onRequestClose={() => setIsNewCatchModalVisible(false)}
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
@@ -56,11 +44,18 @@ export default function AddCatchModal({ addNewCatch }: Props) {
               <DatePickerInput
                 locale="en"
                 label="Catch Date"
-                value={catchDate}
-                onChange={(d) => setCatchDate(d)}
+                value={date}
+                onChange={(d) => setDate(d)}
                 inputMode="start"
                 mode="outlined"
+                style={[
+                  styles.input,
+                  inputError?.inputId === "date" && styles.errorInput,
+                ]}
               />
+              {inputError?.inputId === "date" && (
+                <Text style={styles.errorText}>{inputError.message}</Text>
+              )}
             </View>
 
             <View style={styles.input}>
@@ -72,8 +67,14 @@ export default function AddCatchModal({ addNewCatch }: Props) {
                 placeholder="Species"
                 value={species}
                 onChangeText={setSpecies}
-                style={styles.textInput}
+                style={[
+                  styles.textInput,
+                  inputError?.inputId === "species" && styles.errorInput,
+                ]}
               />
+              {inputError?.inputId === "species" && (
+                <Text style={styles.errorText}>{inputError.message}</Text>
+              )}
             </View>
 
             <WaterSelector
@@ -84,7 +85,10 @@ export default function AddCatchModal({ addNewCatch }: Props) {
             <View style={styles.buttonContainer}>
               <Button
                 title="Cancel"
-                onPress={() => setIsModalVisible(false)}
+                onPress={() => {
+                  setInputError(null);
+                  setIsNewCatchModalVisible(false);
+                }}
                 color="red"
               />
               <Button title="Log Catch" onPress={handleAddCatch} />
@@ -135,6 +139,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     paddingHorizontal: 10,
     borderRadius: 5,
+  },
+  errorInput: {
+    borderColor: "red",
+  },
+  errorText: {
+    color: "red",
+    fontSize: 12,
   },
   buttonContainer: {
     marginTop: 20,

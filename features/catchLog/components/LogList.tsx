@@ -1,11 +1,17 @@
-import { FlatList, StyleSheet, View } from "react-native";
+import { Button, FlatList, StyleSheet, View } from "react-native";
 import { List, Text } from "react-native-paper";
 import { FisheryType } from "types";
 import useLogList from "../hooks/useLogList";
 import AddCatchModal from "./AddCatchModal";
 
 export default function LogList() {
-  const { isLoading, logs, addNewCatch } = useLogList();
+  const {
+    isLoading,
+    logs,
+    isNewCatchModalVisible,
+    setIsNewCatchModalVisible,
+    addNewCatch,
+  } = useLogList();
 
   const renderItem = ({
     item,
@@ -62,7 +68,15 @@ export default function LogList() {
         keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={styles.listContainer}
       />
-      <AddCatchModal addNewCatch={addNewCatch} />
+      <Button
+        title="Add New Catch"
+        onPress={() => setIsNewCatchModalVisible(true)}
+      />
+      <AddCatchModal
+        isNewCatchModalVisible={isNewCatchModalVisible}
+        setIsNewCatchModalVisible={setIsNewCatchModalVisible}
+        addNewCatch={addNewCatch}
+      />
     </View>
   );
 }
