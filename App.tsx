@@ -23,7 +23,7 @@ export default function App() {
 
                 if (route.name === "Home") {
                   iconName = "home";
-                } else if (route.name === "Logs") {
+                } else if (route.name === "Fishing Log") {
                   iconName = "book-outline";
                 } else if (route.name === "Plan") {
                   iconName = "map-clock-outline";
@@ -42,7 +42,7 @@ export default function App() {
             })}
           >
             <Tab.Screen name="Home" component={AnglerHome} />
-            <Tab.Screen name="Logs" component={LogList} />
+            <Tab.Screen name="Fishing Log" component={LogList} />
             <Tab.Screen name="Plan" component={TripPlanner} />
           </Tab.Navigator>
         </NavigationContainer>
