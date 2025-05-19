@@ -1,17 +1,51 @@
-import { StatusBar } from "expo-status-bar";
-import { SafeAreaView, StyleSheet } from "react-native";
+import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { StyleSheet } from "react-native";
 import LogList from "./features/catchLog/components/LogList";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { PaperProvider } from "react-native-paper";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import AnglerHome from "features/anglerHome/AnglerHome";
+import TripPlanner from "features/tripPlanner/TripPlanner";
+
+const Tab = createBottomTabNavigator();
 
 export default function App() {
   return (
     <SafeAreaProvider>
       <PaperProvider>
-        <SafeAreaView style={styles.container}>
-          <LogList />
-          <StatusBar style="auto" />
-        </SafeAreaView>
+        <NavigationContainer>
+          <Tab.Navigator
+            screenOptions={({ route }) => ({
+              tabBarIcon: ({ color, size }) => {
+                let iconName;
+
+                if (route.name === "Home") {
+                  iconName = "home";
+                } else if (route.name === "Fishing Log") {
+                  iconName = "book-outline";
+                } else if (route.name === "Plan") {
+                  iconName = "map-clock-outline";
+                }
+
+                return (
+                  <MaterialCommunityIcons
+                    name={iconName as any}
+                    size={size}
+                    color={color}
+                  />
+                );
+              },
+              tabBarActiveTintColor: "#0077cc",
+              tabBarInactiveTintColor: "gray",
+            })}
+          >
+            <Tab.Screen name="Home" component={AnglerHome} />
+            <Tab.Screen name="Fishing Log" component={LogList} />
+            <Tab.Screen name="Plan" component={TripPlanner} />
+          </Tab.Navigator>
+        </NavigationContainer>
       </PaperProvider>
     </SafeAreaProvider>
   );

@@ -58,10 +58,6 @@ export default function LogList() {
 
   return (
     <View style={styles.container}>
-      <Text variant="headlineMedium" style={styles.header}>
-        My Log Book
-      </Text>
-
       <FlatList
         data={logs}
         renderItem={renderItem}
