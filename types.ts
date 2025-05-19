@@ -4,11 +4,21 @@ export interface CatchEntry {
   species: string;
   weight?: number;
   length?: number;
-  fisheryType: FisheryType;
+  waterType: WaterType;
 }
 
-export enum FisheryType {
-  Freshwater = 0,
-  Saltwater = 1,
-  Brackish = 2,
+export interface CatchTime {
+  hours: number;
+  minutes: number;
+}
+
+export interface InputError {
+  inputId: string;
+  message: string;
+}
+
+export enum WaterType {
+  Freshwater = "Freshwater",
+  Saltwater = "Saltwater",
+  Brackish = "Brackish",
 }

@@ -1,10 +1,17 @@
-import { FlatList, StyleSheet, View } from "react-native";
+import { Button, FlatList, StyleSheet, View } from "react-native";
 import { List, Text } from "react-native-paper";
-import { FisheryType } from "types";
+import { WaterType } from "types";
 import useLogList from "../hooks/useLogList";
+import AddCatchModal from "./AddCatchModal";
 
 export default function LogList() {
-  const { isLoading, logs } = useLogList();
+  const {
+    isLoading,
+    logs,
+    isNewCatchModalVisible,
+    setIsNewCatchModalVisible,
+    addNewCatch,
+  } = useLogList();
 
   const renderItem = ({
     item,
@@ -13,7 +20,7 @@ export default function LogList() {
       id: number;
       dateTime: string;
       species: string;
-      fisheryType: FisheryType;
+      waterType: WaterType;
     };
   }) => (
     <List.Item
@@ -22,7 +29,7 @@ export default function LogList() {
       left={(props) => (
         <List.Icon
           {...props}
-          icon={item.fisheryType === FisheryType.Saltwater ? "waves" : "wave"}
+          icon={item.waterType === WaterType.Saltwater ? "waves" : "wave"}
         />
       )}
     />
@@ -50,7 +57,7 @@ export default function LogList() {
   }
 
   return (
-    <View>
+    <View style={styles.container}>
       <Text variant="headlineMedium" style={styles.header}>
         My Log Book
       </Text>
@@ -60,6 +67,15 @@ export default function LogList() {
         renderItem={renderItem}
         keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={styles.listContainer}
+      />
+      <Button
+        title="Add New Catch"
+        onPress={() => setIsNewCatchModalVisible(true)}
+      />
+      <AddCatchModal
+        isNewCatchModalVisible={isNewCatchModalVisible}
+        setIsNewCatchModalVisible={setIsNewCatchModalVisible}
+        addNewCatch={addNewCatch}
       />
     </View>
   );

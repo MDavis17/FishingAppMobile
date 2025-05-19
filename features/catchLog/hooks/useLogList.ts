@@ -1,27 +1,22 @@
 import { useState, useEffect } from "react";
-import { CatchEntry, FisheryType } from "../../../types";
+import { CatchEntry, WaterType } from "../../../types";
 
 export default function useLogList() {
   const [logs, setLogs] = useState<CatchEntry[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isNewCatchModalVisible, setIsNewCatchModalVisible] = useState(false);
+
+  const addNewCatch = (newCatch: CatchEntry) => {
+    if (!newCatch.species || !newCatch.dateTime) {
+      return;
+    }
+    setLogs((prevLogs) => [...prevLogs, newCatch]);
+  };
 
   useEffect(() => {
     const fetchLogs = async () => {
       try {
-        const mockedData: CatchEntry[] = [
-          {
-            id: 1,
-            dateTime: "2025-05-13T10:15:37",
-            species: "Rainbow Trout",
-            fisheryType: FisheryType.Freshwater,
-          },
-          {
-            id: 2,
-            dateTime: "2025-05-14T14:20:00",
-            species: "Halibut",
-            fisheryType: FisheryType.Saltwater,
-          },
-        ];
+        const mockedData: CatchEntry[] = [];
         // Simulate network delay
         await new Promise((resolve) => setTimeout(resolve, 2000));
         setLogs(mockedData);
@@ -35,5 +30,11 @@ export default function useLogList() {
     fetchLogs();
   }, []);
 
-  return { logs, isLoading };
+  return {
+    isLoading,
+    logs,
+    isNewCatchModalVisible,
+    setIsNewCatchModalVisible,
+    addNewCatch,
+  };
 }
