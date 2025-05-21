@@ -37,11 +37,11 @@ export default function useAddCatchModal(
     combinedDateTime.setMinutes(time.minutes);
 
     const newCatch: CatchEntry = {
-      id: Math.floor(10000 + Math.random() * 90000), // Random 5-digit ID
       dateTime: combinedDateTime.toISOString(),
       species,
       waterType,
     };
+
     addNewCatch(newCatch);
     setSpecies(""); // Reset form fields
     setWaterType(WaterType.Freshwater);

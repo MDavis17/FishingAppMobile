@@ -1,5 +1,5 @@
 export interface CatchEntry {
-  id: number;
+  id?: number;
   dateTime: string;
   species: string;
   weight?: number;
