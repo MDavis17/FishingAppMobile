@@ -61,7 +61,7 @@ export default function LogList() {
       <FlatList
         data={logs}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item.dateTime}
         contentContainerStyle={styles.listContainer}
       />
       <Button
