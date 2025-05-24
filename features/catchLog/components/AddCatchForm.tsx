@@ -105,19 +105,6 @@ const styles = StyleSheet.create({
   input: {
     marginBottom: 20,
   },
-  modalOverlay: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-  },
-  modalContent: {
-    width: "90%",
-    backgroundColor: "white",
-    padding: 20,
-    borderRadius: 10,
-    elevation: 5,
-  },
   textInput: {
     height: 40,
     borderColor: "#ccc",

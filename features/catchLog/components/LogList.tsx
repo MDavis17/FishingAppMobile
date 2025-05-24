@@ -119,10 +119,6 @@ const styles = StyleSheet.create({
   skeletonTextShort: {
     width: "60%",
   },
-  header: {
-    textAlign: "center",
-    marginVertical: 10,
-  },
   listContainer: {
     padding: 10,
   },
