@@ -11,21 +11,59 @@ export default function CatchDetail() {
 
   const route = useRoute<CatchDetailRouteProp>();
   const { catchItem } = route.params;
+  const { species, length, weight, dateTime } = catchItem;
+
+  const mockWeatherData = {
+    airTemp: 72,
+    units: "F",
+    waterTemp: 63,
+    tideLevelAtCatchTime: 0.25,
+    tideDirection: "incoming",
+  };
+
+  const { airTemp, units, waterTemp, tideLevelAtCatchTime, tideDirection } =
+    mockWeatherData;
+
+  const mockLocationData = { name: "San Diego, California" };
+  const { name } = mockLocationData;
 
   useEffect(() => {
-    const formattedDate = new Date(catchItem.dateTime).toLocaleDateString();
+    const formattedDate = new Date(dateTime).toLocaleDateString();
     navigation.setOptions({ title: formattedDate });
-  }, [catchItem, navigation]);
+  }, [dateTime, navigation]);
+
+  const hasMeasurements = length || weight;
 
   return (
     <View style={styles.container}>
-      <Text>Species: {catchItem.species}</Text>
-      <Text>Length: {catchItem.length} in</Text>
+      <Text>{species}</Text>
+      {hasMeasurements && (
+        <View>
+          {length && <Text>Length: {length} in</Text>}
+          {weight && <Text>Weight: {weight} lb</Text>}
+        </View>
+      )}
+
+      <View>
+        <View style={styles.dataContainer}>
+          <Text>{name}</Text>
+        </View>
+        <View style={styles.dataContainer}>
+          <Text>Weather</Text>
+          <Text>{`Air Temperature: ${airTemp}° ${units}`}</Text>
+          <Text>{`Water Temperature: ${waterTemp}° ${units}`}</Text>
+        </View>
+        <View style={styles.dataContainer}>
+          <Text>Tides</Text>
+          <Text>{`At Catch Time: ${tideLevelAtCatchTime}`}</Text>
+          <Text>{`Tide Direction: ${tideDirection}`}</Text>
+        </View>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16, backgroundColor: "white" },
-  title: { fontSize: 24, fontWeight: "bold", marginBottom: 16 },
+  dataContainer: { paddingTop: 8, paddingBottom: 8 },
 });
