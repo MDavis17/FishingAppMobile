@@ -2,7 +2,8 @@ import { Button, FlatList, StyleSheet, View } from "react-native";
 import { List, Text } from "react-native-paper";
 import { WaterType } from "types";
 import useLogList from "../hooks/useLogList";
-import AddCatchModal from "./AddCatchModal";
+import PopupModal from "common/components/PopupModal";
+import AddCatchForm from "./AddCatchForm";
 
 export default function LogList() {
   const {
@@ -68,11 +69,16 @@ export default function LogList() {
         title="Add New Catch"
         onPress={() => setIsNewCatchModalVisible(true)}
       />
-      <AddCatchModal
-        isNewCatchModalVisible={isNewCatchModalVisible}
-        setIsNewCatchModalVisible={setIsNewCatchModalVisible}
-        addNewCatch={addNewCatch}
-      />
+      <PopupModal
+        showModal={isNewCatchModalVisible}
+        setShowModal={setIsNewCatchModalVisible}
+      >
+        <AddCatchForm
+          isNewCatchModalVisible={isNewCatchModalVisible}
+          setIsNewCatchModalVisible={setIsNewCatchModalVisible}
+          addNewCatch={addNewCatch}
+        />
+      </PopupModal>
     </View>
   );
 }
@@ -112,10 +118,6 @@ const styles = StyleSheet.create({
   },
   skeletonTextShort: {
     width: "60%",
-  },
-  header: {
-    textAlign: "center",
-    marginVertical: 10,
   },
   listContainer: {
     padding: 10,
