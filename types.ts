@@ -22,3 +22,10 @@ export enum WaterType {
   Saltwater = "Saltwater",
   Brackish = "Brackish",
 }
+
+export type RootStackParamList = {
+  Home: undefined;
+  Logs: undefined;
+  TripPlanning: undefined;
+  CatchDetail: { catchItem: CatchEntry };
+};

@@ -2,12 +2,12 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { StyleSheet } from "react-native";
-import LogList from "./features/catchLog/components/LogList";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { PaperProvider } from "react-native-paper";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import AnglerHome from "features/anglerHome/AnglerHome";
 import TripPlanner from "features/tripPlanner/TripPlanner";
+import LogNavigation from "features/catchLog/navigation/LogNavigation";
 
 const Tab = createBottomTabNavigator();
 
@@ -42,7 +42,11 @@ export default function App() {
             })}
           >
             <Tab.Screen name="Home" component={AnglerHome} />
-            <Tab.Screen name="Fishing Log" component={LogList} />
+            <Tab.Screen
+              name="Fishing Log"
+              component={LogNavigation}
+              options={{ headerShown: false }}
+            />
             <Tab.Screen name="Plan" component={TripPlanner} />
           </Tab.Navigator>
         </NavigationContainer>
