@@ -1,7 +1,7 @@
 import { useState, Dispatch, SetStateAction } from "react";
 import { CatchEntry, CatchTime, WaterType, InputError } from "../../../types";
 
-export default function useAddCatchModal(
+export default function useAddCatchForm(
   addNewCatch: (newCatch: CatchEntry) => void,
   time: CatchTime,
   setIsNewCatchModalVisible: Dispatch<SetStateAction<boolean>>
@@ -19,6 +19,12 @@ export default function useAddCatchModal(
       return { inputId: "species", message: "Species cannot be empty." };
     }
     return null;
+  };
+
+  const resetForm = () => {
+    setSpecies("");
+    setWaterType(WaterType.Freshwater);
+    setIsNewCatchModalVisible(false);
   };
 
   const handleAddCatch = () => {
@@ -43,9 +49,7 @@ export default function useAddCatchModal(
     };
 
     addNewCatch(newCatch);
-    setSpecies(""); // Reset form fields
-    setWaterType(WaterType.Freshwater);
-    setIsNewCatchModalVisible(false); // Hide form after submission
+    resetForm();
   };
   return {
     date,
