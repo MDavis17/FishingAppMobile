@@ -1,26 +1,11 @@
-import {
-  Button,
-  FlatList,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { List, Text } from "react-native-paper";
-import { CatchEntry, RootStackParamList, WaterType } from "types";
+import { Button, FlatList, StyleSheet, View } from "react-native";
+import { Text } from "react-native-paper";
 import useLogList from "../hooks/useLogList";
 import PopupModal from "common/components/PopupModal";
 import AddCatchForm from "./AddCatchForm";
-import { useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-
-type LogsScreenNavigationProp = NativeStackNavigationProp<
-  RootStackParamList,
-  "Logs"
->;
+import { LogItem } from "./LogItem";
 
 export default function LogList() {
-  const navigation = useNavigation<LogsScreenNavigationProp>();
-
   const {
     isLoading,
     logs,
@@ -28,21 +13,6 @@ export default function LogList() {
     setIsNewCatchModalVisible,
     addNewCatch,
   } = useLogList();
-
-  const renderItem = ({ item }: { item: CatchEntry }) => (
-    <TouchableOpacity onPress={() => handleSelectCatch(item)}>
-      <List.Item
-        title={item.dateTime}
-        description={item.species}
-        left={(props) => (
-          <List.Icon
-            {...props}
-            icon={item.waterType === WaterType.Saltwater ? "waves" : "wave"}
-          />
-        )}
-      />
-    </TouchableOpacity>
-  );
 
   const renderSkeletonItem = (_: any, index: number) => (
     <View key={index} style={styles.skeletonItem}>
@@ -54,8 +24,8 @@ export default function LogList() {
     </View>
   );
 
-  const handleSelectCatch = (catchItem: CatchEntry) => {
-    navigation.navigate("CatchDetail", { catchItem });
+  const handleDelete = (id: number) => {
+    console.log("delete item", id);
   };
 
   if (isLoading) {
@@ -73,7 +43,9 @@ export default function LogList() {
     <View style={styles.container}>
       <FlatList
         data={logs}
-        renderItem={renderItem}
+        renderItem={({ item }) => (
+          <LogItem item={item} onDelete={(id) => handleDelete(id)} />
+        )}
         keyExtractor={(item) => item.dateTime}
         contentContainerStyle={styles.listContainer}
       />
