@@ -21,22 +21,37 @@ export const LogItem = ({ item, onDelete }: Props) => {
   const navigation = useNavigation<LogsScreenNavigationProp>();
 
   const handleSelectCatch = (catchItem: CatchEntry) => {
-    navigation.navigate("CatchDetail", { catchItem });
+    navigation.navigate("CatchDetail", {
+      catchItem,
+      deleteCatch: () => {
+        confirmDelete(true);
+      },
+    });
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = (shouldPopNavigation = false) => {
     Alert.alert("Delete Catch", "Are you sure you want to delete this catch?", [
       { text: "Cancel", style: "cancel" },
       {
         text: "Delete",
         style: "destructive",
-        onPress: () => onDelete(item.id),
+        onPress: () => {
+          onDelete(item.id);
+          if (shouldPopNavigation) {
+            navigation.goBack();
+          }
+        },
       },
     ]);
   };
 
   const renderRightActions = () => (
-    <TouchableOpacity style={styles.deleteButton} onPress={confirmDelete}>
+    <TouchableOpacity
+      style={styles.deleteButton}
+      onPress={() => {
+        confirmDelete(false);
+      }}
+    >
       <FontAwesome name="trash" size={24} color="white" />
     </TouchableOpacity>
   );
