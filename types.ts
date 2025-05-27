@@ -27,5 +27,5 @@ export type RootStackParamList = {
   Home: undefined;
   Logs: undefined;
   TripPlanning: undefined;
-  CatchDetail: { catchItem: CatchEntry };
+  CatchDetail: { catchItem: CatchEntry; deleteCatch: () => void };
 };

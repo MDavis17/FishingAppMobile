@@ -1,6 +1,6 @@
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect } from "react";
-import { StyleSheet, View } from "react-native";
+import { Button, StyleSheet, View } from "react-native";
 import { Text } from "react-native-paper";
 import { RootStackParamList } from "types";
 
@@ -10,7 +10,7 @@ export default function CatchDetail() {
   const navigation = useNavigation();
 
   const route = useRoute<CatchDetailRouteProp>();
-  const { catchItem } = route.params;
+  const { catchItem, deleteCatch } = route.params;
   const { species, length, weight, dateTime } = catchItem;
 
   const mockWeatherData = {
@@ -59,6 +59,9 @@ export default function CatchDetail() {
           <Text>{`Tide Direction: ${tideDirection}`}</Text>
         </View>
       </View>
+      <View style={styles.buttonContainer}>
+        <Button title="Delete" onPress={deleteCatch} color="red" />
+      </View>
     </View>
   );
 }
@@ -66,4 +69,7 @@ export default function CatchDetail() {
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16, backgroundColor: "white" },
   dataContainer: { paddingTop: 8, paddingBottom: 8 },
+  buttonContainer: {
+    marginTop: 20,
+  },
 });
