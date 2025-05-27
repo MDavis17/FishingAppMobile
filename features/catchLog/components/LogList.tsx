@@ -12,6 +12,7 @@ export default function LogList() {
     isNewCatchModalVisible,
     setIsNewCatchModalVisible,
     addNewCatch,
+    deleteCatch,
   } = useLogList();
 
   const renderSkeletonItem = (_: any, index: number) => (
@@ -23,10 +24,6 @@ export default function LogList() {
       </View>
     </View>
   );
-
-  const handleDelete = (id: number) => {
-    console.log("delete item", id);
-  };
 
   if (isLoading) {
     return (
@@ -44,7 +41,7 @@ export default function LogList() {
       <FlatList
         data={logs}
         renderItem={({ item }) => (
-          <LogItem item={item} onDelete={(id) => handleDelete(id)} />
+          <LogItem item={item} onDelete={(id) => deleteCatch(id)} />
         )}
         keyExtractor={(item) => item.dateTime}
         contentContainerStyle={styles.listContainer}

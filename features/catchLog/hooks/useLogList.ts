@@ -32,6 +32,30 @@ export default function useLogList() {
     }
   };
 
+  const deleteCatch = async (catchId: number) => {
+    try {
+      const response = await fetch(
+        `http://127.0.0.1:8000/catchLog/${catchId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.detail || "Something went wrong");
+      }
+
+      setLogs((prevLogs) => prevLogs.filter((log) => log.id !== catchId));
+    } catch (error) {
+      console.error("Error delete log:", error);
+      throw error;
+    }
+  };
+
   useEffect(() => {
     const fetchLogs = async () => {
       try {
@@ -51,7 +75,7 @@ export default function useLogList() {
       }
     };
     fetchLogs();
-  }, []);
+  }, [logs]);
 
   return {
     isLoading,
@@ -59,5 +83,6 @@ export default function useLogList() {
     isNewCatchModalVisible,
     setIsNewCatchModalVisible,
     addNewCatch,
+    deleteCatch,
   };
 }
