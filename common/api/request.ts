@@ -128,5 +128,6 @@ export async function unauthenticatedFetch(
   //     });
   //   }
 
-  return await response.json();
+  const responseJson = await response.json();
+  return { ok: response.status === HTTP_STATUS.OK, data: responseJson };
 }

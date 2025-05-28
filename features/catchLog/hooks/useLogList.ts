@@ -14,7 +14,13 @@ export default function useLogList() {
 
     try {
       const response = await getCatchLogs();
-      setLogs(response);
+      console.log("response", response);
+
+      if (!response.ok) {
+        throw new Error("Something went wrong");
+      }
+
+      setLogs(response.data);
     } catch (error) {
       console.error("Error fetching logs:", error);
     } finally {
@@ -34,7 +40,7 @@ export default function useLogList() {
     try {
       const response = await addNewCatchLog(newCatch);
 
-      if (!response.entry) {
+      if (!response.ok) {
         throw new Error("Something went wrong");
       }
 
@@ -47,9 +53,11 @@ export default function useLogList() {
 
   const deleteCatch = async (catchId: number) => {
     try {
-      await deleteCatchLogById(catchId);
+      const response = await deleteCatchLogById(catchId);
 
-      // need some error handling
+      if (!response.ok) {
+        throw new Error("Something went wrong");
+      }
 
       setLogs((prevLogs) => prevLogs.filter((log) => log.id != catchId));
     } catch (error) {
