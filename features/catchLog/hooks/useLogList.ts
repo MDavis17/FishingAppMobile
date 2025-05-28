@@ -1,10 +1,30 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { CatchEntry } from "../../../types";
+import { getCatchLogs } from "../api/getCatchLogs";
+import { deleteCatchLogById } from "../api/deleteCatchLogById";
+import { addNewCatchLog } from "../api/addNewCatchLog";
 
 export default function useLogList() {
   const [logs, setLogs] = useState<CatchEntry[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isNewCatchModalVisible, setIsNewCatchModalVisible] = useState(false);
+
+  const fetchLogs = useCallback(async () => {
+    setIsLoading(true);
+
+    try {
+      const response = await getCatchLogs();
+      setLogs(response);
+    } catch (error) {
+      console.error("Error fetching logs:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchLogs();
+  }, [fetchLogs]);
 
   const addNewCatch = async (newCatch: CatchEntry) => {
     if (!newCatch.species || !newCatch.dateTime) {
@@ -12,20 +32,13 @@ export default function useLogList() {
     }
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/catchLog/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newCatch),
-      });
-      const data = await response.json();
+      const response = await addNewCatchLog(newCatch);
 
-      if (!response.ok) {
-        throw new Error(data.detail || "Something went wrong");
+      if (!response.entry) {
+        throw new Error("Something went wrong");
       }
 
-      setLogs((prevLogs) => [...prevLogs, newCatch]);
+      await fetchLogs();
     } catch (error) {
       console.error("Error creating log:", error);
       throw error;
@@ -34,48 +47,16 @@ export default function useLogList() {
 
   const deleteCatch = async (catchId: number) => {
     try {
-      const response = await fetch(
-        `http://127.0.0.1:8000/catchLog/${catchId}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      const data = await response.json();
+      await deleteCatchLogById(catchId);
 
-      if (!response.ok) {
-        throw new Error(data.detail || "Something went wrong");
-      }
+      // need some error handling
 
-      setLogs((prevLogs) => prevLogs.filter((log) => log.id !== catchId));
+      setLogs((prevLogs) => prevLogs.filter((log) => log.id != catchId));
     } catch (error) {
       console.error("Error delete log:", error);
       throw error;
     }
   };
-
-  useEffect(() => {
-    const fetchLogs = async () => {
-      try {
-        const response = await fetch("http://localhost:8000/catchLog/", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        const data = await response.json();
-
-        setLogs(data);
-      } catch (error) {
-        console.error("Failed to fetch logs:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchLogs();
-  }, [logs]);
 
   return {
     isLoading,
