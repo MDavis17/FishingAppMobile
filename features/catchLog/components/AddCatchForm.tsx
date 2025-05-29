@@ -35,8 +35,14 @@ export default function AddCatchForm() {
     setInputError,
     handleAddCatch,
     selectedLocation,
+    setSelectedLocation,
     handleSelectNewLocation,
+    currentLocation,
   } = useAddCatchForm(time, addNewCatch);
+
+  if (!selectedLocation) {
+    return;
+  }
 
   return (
     <SafeAreaView>
@@ -80,6 +86,16 @@ export default function AddCatchForm() {
         </View>
 
         <View style={styles.mapContainer}>
+          <Button
+            icon="crosshairs-gps"
+            onPress={() => {
+              if (currentLocation) {
+                setSelectedLocation(currentLocation);
+              }
+            }}
+          >
+            Use My Location
+          </Button>
           <MapWindow
             isViewOnly={true}
             selectedLocation={selectedLocation}
@@ -154,7 +170,7 @@ const styles = StyleSheet.create({
   },
   borderRadius: { borderRadius: 5 },
   mapContainer: {
-    height: 230,
+    height: 260,
     width: "100%",
     marginVertical: 12,
     borderRadius: 5,
