@@ -1,4 +1,5 @@
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import MapWindow from "common/components/MapWindow";
 import { useEffect } from "react";
 import { Button, StyleSheet, View } from "react-native";
 import { Text } from "react-native-paper";
@@ -11,7 +12,7 @@ export default function CatchDetail() {
 
   const route = useRoute<CatchDetailRouteProp>();
   const { catchItem, deleteCatch } = route.params;
-  const { species, length, weight, dateTime } = catchItem;
+  const { species, length, weight, dateTime, location } = catchItem;
 
   const mockWeatherData = {
     airTemp: 72,
@@ -23,9 +24,6 @@ export default function CatchDetail() {
 
   const { airTemp, units, waterTemp, tideLevelAtCatchTime, tideDirection } =
     mockWeatherData;
-
-  const mockLocationData = { name: "San Diego, California" };
-  const { name } = mockLocationData;
 
   useEffect(() => {
     const formattedDate = new Date(dateTime).toLocaleDateString();
@@ -46,7 +44,7 @@ export default function CatchDetail() {
 
       <View>
         <View style={styles.dataContainer}>
-          <Text>{name}</Text>
+          <MapWindow selectedLocation={location} height={200} isViewOnly />
         </View>
         <View style={styles.dataContainer}>
           <Text>Weather</Text>

@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CatchEntry, CatchTime, WaterType, InputError } from "../../../types";
 import { useNavigation } from "@react-navigation/native";
+import * as Location from "expo-location";
+import { LatLng } from "react-native-maps";
 
 export default function useAddCatchForm(
   time: CatchTime,
@@ -11,10 +13,8 @@ export default function useAddCatchForm(
   const [species, setSpecies] = useState("");
   const [waterType, setWaterType] = useState<WaterType>(WaterType.Freshwater);
   const [inputError, setInputError] = useState<InputError | null>(null);
-  const [selectedLocation, setSelectedLocation] = useState({
-    latitude: 37.78825,
-    longitude: -122.4324,
-  });
+  const [selectedLocation, setSelectedLocation] = useState<LatLng | null>(null);
+  const [currentLocation, setCurrentLocation] = useState<LatLng | null>(null);
 
   const validateInputs = (): InputError | null => {
     if (!date) {
@@ -29,6 +29,7 @@ export default function useAddCatchForm(
   const resetForm = () => {
     setSpecies("");
     setWaterType(WaterType.Freshwater);
+    setSelectedLocation(currentLocation);
     navigation.goBack();
   };
 
@@ -39,7 +40,7 @@ export default function useAddCatchForm(
       return;
     }
 
-    if (!date) {
+    if (!date || !selectedLocation) {
       return;
     }
 
@@ -51,6 +52,7 @@ export default function useAddCatchForm(
       dateTime: combinedDateTime.toISOString(),
       species,
       waterType,
+      location: selectedLocation,
     };
 
     addNewCatch(newCatch);
@@ -66,6 +68,27 @@ export default function useAddCatchForm(
     });
   };
 
+  useEffect(() => {
+    (async () => {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        console.warn("Permission to access location was denied");
+        return;
+      }
+
+      const loc = await Location.getCurrentPositionAsync({});
+
+      setCurrentLocation({
+        latitude: loc.coords.latitude,
+        longitude: loc.coords.longitude,
+      });
+      setSelectedLocation({
+        latitude: loc.coords.latitude,
+        longitude: loc.coords.longitude,
+      });
+    })();
+  }, []);
+
   return {
     date,
     setDate,
@@ -79,5 +102,6 @@ export default function useAddCatchForm(
     selectedLocation,
     setSelectedLocation,
     handleSelectNewLocation,
+    currentLocation,
   };
 }
