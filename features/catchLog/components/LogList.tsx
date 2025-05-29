@@ -1,19 +1,10 @@
 import { FlatList, StyleSheet, View } from "react-native";
 import { Button, Text } from "react-native-paper";
 import useLogList from "../hooks/useLogList";
-import PopupModal from "common/components/PopupModal";
-import AddCatchForm from "./AddCatchForm";
 import { LogItem } from "./LogItem";
 
 export default function LogList() {
-  const {
-    isLoading,
-    logs,
-    isNewCatchModalVisible,
-    setIsNewCatchModalVisible,
-    addNewCatch,
-    deleteCatch,
-  } = useLogList();
+  const { isLoading, logs, openNewCatchForm, deleteCatch } = useLogList();
 
   const renderSkeletonItem = (_: any, index: number) => (
     <View key={index} style={styles.skeletonItem}>
@@ -46,19 +37,7 @@ export default function LogList() {
         keyExtractor={(item) => item.dateTime}
         contentContainerStyle={styles.listContainer}
       />
-      <Button onPress={() => setIsNewCatchModalVisible(true)}>
-        Add New Catch
-      </Button>
-      <PopupModal
-        showModal={isNewCatchModalVisible}
-        setShowModal={setIsNewCatchModalVisible}
-      >
-        <AddCatchForm
-          isNewCatchModalVisible={isNewCatchModalVisible}
-          setIsNewCatchModalVisible={setIsNewCatchModalVisible}
-          addNewCatch={addNewCatch}
-        />
-      </PopupModal>
+      <Button onPress={() => openNewCatchForm()}>Add New Catch</Button>
     </View>
   );
 }

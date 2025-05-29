@@ -1,6 +1,6 @@
-import React, { Dispatch, SetStateAction } from "react";
-import { View, StyleSheet, TextInput, Modal, Text } from "react-native";
-import { CatchEntry } from "types";
+import React from "react";
+import { View, StyleSheet, TextInput, Text } from "react-native";
+import { RootStackParamList } from "types";
 import { DatePickerInput } from "react-native-paper-dates";
 import WaterSelector from "./WaterSelector";
 import { TimeInputField } from "./TimeInputField";
@@ -8,17 +8,14 @@ import useTimeInputField from "../hooks/useTimeInputField";
 import useAddCatchForm from "../hooks/useAddCatchForm";
 import { Button } from "react-native-paper";
 import MapWindow from "common/components/MapWindow";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 
-interface Props {
-  addNewCatch: (catchData: CatchEntry) => void;
-  isNewCatchModalVisible: boolean;
-  setIsNewCatchModalVisible: Dispatch<SetStateAction<boolean>>;
-}
+type NewCatchRouteProp = RouteProp<RootStackParamList, "AddNewCatch">;
 
-export default function AddCatchForm({
-  addNewCatch,
-  setIsNewCatchModalVisible,
-}: Props) {
+export default function AddCatchForm() {
+  const navigation = useNavigation();
+  const route = useRoute<NewCatchRouteProp>();
+  const { addNewCatch } = route.params;
   const { time, setTime } = useTimeInputField();
   const {
     date,
@@ -31,10 +28,26 @@ export default function AddCatchForm({
     setInputError,
     handleAddCatch,
     selectedLocation,
-    setSelectedLocation,
-  } = useAddCatchForm(addNewCatch, time, setIsNewCatchModalVisible);
+    handleSelectNewLocation,
+  } = useAddCatchForm(time, addNewCatch);
+
   return (
-    <View>
+    <View style={{ padding: 16 }}>
+      <View style={styles.input}>
+        <TextInput
+          placeholder="Species"
+          value={species}
+          onChangeText={setSpecies}
+          style={[
+            styles.textInput,
+            inputError?.inputId === "species" && styles.errorInput,
+          ]}
+        />
+        {inputError?.inputId === "species" && (
+          <Text style={styles.errorText}>{inputError.message}</Text>
+        )}
+      </View>
+
       <View style={styles.dateInput}>
         <DatePickerInput
           locale="en"
@@ -58,26 +71,8 @@ export default function AddCatchForm({
       </View>
 
       <View style={{ height: 230, width: "100%", marginBottom: 20 }}>
-        <Button onPress={() => {}}>modify location</Button>
-        <MapWindow
-          selectedLocation={selectedLocation}
-          setSelectedLocation={setSelectedLocation}
-        />
-      </View>
-
-      <View style={styles.input}>
-        <TextInput
-          placeholder="Species"
-          value={species}
-          onChangeText={setSpecies}
-          style={[
-            styles.textInput,
-            inputError?.inputId === "species" && styles.errorInput,
-          ]}
-        />
-        {inputError?.inputId === "species" && (
-          <Text style={styles.errorText}>{inputError.message}</Text>
-        )}
+        <MapWindow isViewOnly={true} selectedLocation={selectedLocation} />
+        <Button onPress={handleSelectNewLocation}>modify location</Button>
       </View>
 
       <WaterSelector waterType={waterType} setWaterType={setWaterType} />
@@ -86,7 +81,7 @@ export default function AddCatchForm({
         <Button
           onPress={() => {
             setInputError(null);
-            setIsNewCatchModalVisible(false);
+            navigation.goBack();
           }}
           labelStyle={{ color: "red" }}
         >
