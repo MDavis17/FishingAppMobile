@@ -89,7 +89,7 @@ export default function AddCatchForm() {
             style={styles.modifyLocationButton}
             onPress={handleSelectNewLocation}
           >
-            modify location
+            Modify Location
           </Button>
         </View>
 
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
   },
   borderRadius: { borderRadius: 5 },
   mapContainer: {
-    height: 250,
+    height: 230,
     width: "100%",
     marginVertical: 12,
     borderRadius: 5,
