@@ -1,5 +1,12 @@
 import React from "react";
-import { View, StyleSheet, TextInput, Text } from "react-native";
+import {
+  View,
+  StyleSheet,
+  TextInput,
+  Text,
+  ScrollView,
+  SafeAreaView,
+} from "react-native";
 import { RootStackParamList } from "types";
 import { DatePickerInput } from "react-native-paper-dates";
 import WaterSelector from "./WaterSelector";
@@ -32,51 +39,64 @@ export default function AddCatchForm() {
   } = useAddCatchForm(time, addNewCatch);
 
   return (
-    <View style={{ padding: 16 }}>
-      <View style={styles.input}>
-        <TextInput
-          placeholder="Species"
-          value={species}
-          onChangeText={setSpecies}
-          style={[
-            styles.textInput,
-            inputError?.inputId === "species" && styles.errorInput,
-          ]}
-        />
-        {inputError?.inputId === "species" && (
-          <Text style={styles.errorText}>{inputError.message}</Text>
-        )}
-      </View>
+    <SafeAreaView>
+      <ScrollView style={styles.scrollViewContainer}>
+        <View style={styles.input}>
+          <TextInput
+            placeholder="Species"
+            value={species}
+            onChangeText={setSpecies}
+            style={[
+              styles.textInput,
+              inputError?.inputId === "species" && styles.errorInput,
+            ]}
+          />
+          {inputError?.inputId === "species" && (
+            <Text style={styles.errorText}>{inputError.message}</Text>
+          )}
+        </View>
 
-      <View style={styles.dateInput}>
-        <DatePickerInput
-          locale="en"
-          label="Catch Date"
-          value={date}
-          onChange={(d) => setDate(d)}
-          inputMode="start"
-          mode="outlined"
-          style={[
-            styles.input,
-            inputError?.inputId === "date" && styles.errorInput,
-          ]}
-        />
-        {inputError?.inputId === "date" && (
-          <Text style={styles.errorText}>{inputError.message}</Text>
-        )}
-      </View>
+        <View style={styles.dateTimeContainer}>
+          <DatePickerInput
+            locale="en"
+            label="Catch Date"
+            value={date}
+            onChange={(d) => setDate(d)}
+            inputMode="start"
+            mode="outlined"
+            style={[
+              styles.input,
+              inputError?.inputId === "date" && styles.errorInput,
+              { marginRight: 8 },
+            ]}
+          />
+          {inputError?.inputId === "date" && (
+            <Text style={styles.errorText}>{inputError.message}</Text>
+          )}
 
-      <View style={styles.input}>
-        <TimeInputField time={time} setTime={setTime} />
-      </View>
+          <View style={[styles.input, styles.borderRadius]}>
+            <TimeInputField time={time} setTime={setTime} />
+          </View>
+        </View>
 
-      <View style={{ height: 230, width: "100%", marginBottom: 20 }}>
-        <MapWindow isViewOnly={true} selectedLocation={selectedLocation} />
-        <Button onPress={handleSelectNewLocation}>modify location</Button>
-      </View>
+        <View style={styles.mapContainer}>
+          <MapWindow
+            isViewOnly={true}
+            selectedLocation={selectedLocation}
+            height={200}
+          />
+          <Button
+            style={styles.modifyLocationButton}
+            onPress={handleSelectNewLocation}
+          >
+            modify location
+          </Button>
+        </View>
 
-      <WaterSelector waterType={waterType} setWaterType={setWaterType} />
-
+        <View style={styles.waterSelectorContainer}>
+          <WaterSelector waterType={waterType} setWaterType={setWaterType} />
+        </View>
+      </ScrollView>
       <View style={styles.buttonContainer}>
         <Button
           onPress={() => {
@@ -89,7 +109,7 @@ export default function AddCatchForm() {
         </Button>
         <Button onPress={handleAddCatch}>Log Catch</Button>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -98,6 +118,8 @@ const styles = StyleSheet.create({
     margin: 20,
     flex: 1,
   },
+  scrollViewContainer: { padding: 16 },
+  modifyLocationButton: { padding: 8 },
   form: {
     marginTop: 10,
     padding: 10,
@@ -106,12 +128,10 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     flex: 1,
   },
-  dateInput: {
-    marginTop: 30,
-    marginBottom: 40,
-  },
+  dateTimeContainer: { alignContent: "flex-end", flexDirection: "row" },
   input: {
-    marginBottom: 20,
+    flex: 1,
+    marginVertical: 6,
   },
   textInput: {
     height: 40,
@@ -128,8 +148,16 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   buttonContainer: {
-    marginTop: 20,
+    marginHorizontal: 16,
     flexDirection: "row",
     justifyContent: "space-between",
   },
+  borderRadius: { borderRadius: 5 },
+  mapContainer: {
+    height: 250,
+    width: "100%",
+    marginVertical: 12,
+    borderRadius: 5,
+  },
+  waterSelectorContainer: { marginVertical: 12 },
 });
