@@ -12,7 +12,7 @@ export interface CatchEntry {
   weight?: number;
   length?: number;
   waterType: WaterType;
-  location: Location;
+  location?: Location;
 }
 
 export interface CatchTime {
