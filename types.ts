@@ -1,3 +1,5 @@
+import { LatLng } from "react-native-maps";
+
 export interface CatchEntry {
   id?: number;
   dateTime: string;
@@ -28,4 +30,9 @@ export type RootStackParamList = {
   Logs: undefined;
   TripPlanning: undefined;
   CatchDetail: { catchItem: CatchEntry; deleteCatch: () => void };
+  AddNewCatch: { addNewCatch: (catchData: CatchEntry) => void };
+  SelectLocation: {
+    initialLocation: LatLng;
+    onLocationSelected: (newLocation: LatLng) => void;
+  };
 };

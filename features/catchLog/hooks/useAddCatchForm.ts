@@ -1,15 +1,20 @@
-import { useState, Dispatch, SetStateAction } from "react";
+import { useState } from "react";
 import { CatchEntry, CatchTime, WaterType, InputError } from "../../../types";
+import { useNavigation } from "@react-navigation/native";
 
 export default function useAddCatchForm(
-  addNewCatch: (newCatch: CatchEntry) => void,
   time: CatchTime,
-  setIsNewCatchModalVisible: Dispatch<SetStateAction<boolean>>
+  addNewCatch: (newCatch: CatchEntry) => void
 ) {
+  const navigation = useNavigation();
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [species, setSpecies] = useState("");
   const [waterType, setWaterType] = useState<WaterType>(WaterType.Freshwater);
   const [inputError, setInputError] = useState<InputError | null>(null);
+  const [selectedLocation, setSelectedLocation] = useState({
+    latitude: 37.78825,
+    longitude: -122.4324,
+  });
 
   const validateInputs = (): InputError | null => {
     if (!date) {
@@ -24,7 +29,7 @@ export default function useAddCatchForm(
   const resetForm = () => {
     setSpecies("");
     setWaterType(WaterType.Freshwater);
-    setIsNewCatchModalVisible(false);
+    navigation.goBack();
   };
 
   const handleAddCatch = () => {
@@ -51,6 +56,16 @@ export default function useAddCatchForm(
     addNewCatch(newCatch);
     resetForm();
   };
+
+  const handleSelectNewLocation = () => {
+    navigation.navigate("SelectLocation", {
+      initialLocation: selectedLocation,
+      onLocationSelected: (newLocation: LatLng) => {
+        setSelectedLocation(newLocation);
+      },
+    });
+  };
+
   return {
     date,
     setDate,
@@ -61,5 +76,8 @@ export default function useAddCatchForm(
     inputError,
     setInputError,
     handleAddCatch,
+    selectedLocation,
+    setSelectedLocation,
+    handleSelectNewLocation,
   };
 }
