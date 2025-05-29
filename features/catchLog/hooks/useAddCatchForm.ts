@@ -51,6 +51,7 @@ export default function useAddCatchForm(
       dateTime: combinedDateTime.toISOString(),
       species,
       waterType,
+      location: selectedLocation,
     };
 
     addNewCatch(newCatch);
