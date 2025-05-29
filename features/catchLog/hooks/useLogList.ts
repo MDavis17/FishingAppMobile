@@ -3,11 +3,12 @@ import { CatchEntry } from "../../../types";
 import { getCatchLogs } from "../api/getCatchLogs";
 import { deleteCatchLogById } from "../api/deleteCatchLogById";
 import { addNewCatchLog } from "../api/addNewCatchLog";
+import { useNavigation } from "@react-navigation/native";
 
 export default function useLogList() {
+  const navigation = useNavigation();
   const [logs, setLogs] = useState<CatchEntry[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isNewCatchModalVisible, setIsNewCatchModalVisible] = useState(false);
 
   const fetchLogs = useCallback(async () => {
     setIsLoading(true);
@@ -31,6 +32,10 @@ export default function useLogList() {
   useEffect(() => {
     fetchLogs();
   }, [fetchLogs]);
+
+  const openNewCatchForm = () => {
+    navigation.navigate("AddNewCatch", { addNewCatch });
+  };
 
   const addNewCatch = async (newCatch: CatchEntry) => {
     if (!newCatch.species || !newCatch.dateTime) {
@@ -69,9 +74,7 @@ export default function useLogList() {
   return {
     isLoading,
     logs,
-    isNewCatchModalVisible,
-    setIsNewCatchModalVisible,
-    addNewCatch,
+    openNewCatchForm,
     deleteCatch,
   };
 }
