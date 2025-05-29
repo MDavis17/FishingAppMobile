@@ -1,11 +1,13 @@
 import React, { Dispatch, SetStateAction } from "react";
-import { View, StyleSheet, TextInput, Button, Modal, Text } from "react-native";
+import { View, StyleSheet, TextInput, Modal, Text } from "react-native";
 import { CatchEntry } from "types";
 import { DatePickerInput } from "react-native-paper-dates";
 import WaterSelector from "./WaterSelector";
 import { TimeInputField } from "./TimeInputField";
 import useTimeInputField from "../hooks/useTimeInputField";
 import useAddCatchForm from "../hooks/useAddCatchForm";
+import { Button } from "react-native-paper";
+import MapWindow from "common/components/MapWindow";
 
 interface Props {
   addNewCatch: (catchData: CatchEntry) => void;
@@ -28,6 +30,8 @@ export default function AddCatchForm({
     inputError,
     setInputError,
     handleAddCatch,
+    selectedLocation,
+    setSelectedLocation,
   } = useAddCatchForm(addNewCatch, time, setIsNewCatchModalVisible);
   return (
     <View>
@@ -53,6 +57,14 @@ export default function AddCatchForm({
         <TimeInputField time={time} setTime={setTime} />
       </View>
 
+      <View style={{ height: 230, width: "100%", marginBottom: 20 }}>
+        <Button onPress={() => {}}>modify location</Button>
+        <MapWindow
+          selectedLocation={selectedLocation}
+          setSelectedLocation={setSelectedLocation}
+        />
+      </View>
+
       <View style={styles.input}>
         <TextInput
           placeholder="Species"
@@ -72,14 +84,15 @@ export default function AddCatchForm({
 
       <View style={styles.buttonContainer}>
         <Button
-          title="Cancel"
           onPress={() => {
             setInputError(null);
             setIsNewCatchModalVisible(false);
           }}
-          color="red"
-        />
-        <Button title="Log Catch" onPress={handleAddCatch} />
+          labelStyle={{ color: "red" }}
+        >
+          Cancel
+        </Button>
+        <Button onPress={handleAddCatch}>Log Catch</Button>
       </View>
     </View>
   );
@@ -99,7 +112,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   dateInput: {
-    marginTop: 20,
+    marginTop: 30,
     marginBottom: 40,
   },
   input: {

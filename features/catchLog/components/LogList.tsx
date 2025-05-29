@@ -1,5 +1,5 @@
-import { Button, FlatList, StyleSheet, View } from "react-native";
-import { Text } from "react-native-paper";
+import { FlatList, StyleSheet, View } from "react-native";
+import { Button, Text } from "react-native-paper";
 import useLogList from "../hooks/useLogList";
 import PopupModal from "common/components/PopupModal";
 import AddCatchForm from "./AddCatchForm";
@@ -46,10 +46,9 @@ export default function LogList() {
         keyExtractor={(item) => item.dateTime}
         contentContainerStyle={styles.listContainer}
       />
-      <Button
-        title="Add New Catch"
-        onPress={() => setIsNewCatchModalVisible(true)}
-      />
+      <Button onPress={() => setIsNewCatchModalVisible(true)}>
+        Add New Catch
+      </Button>
       <PopupModal
         showModal={isNewCatchModalVisible}
         setShowModal={setIsNewCatchModalVisible}

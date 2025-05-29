@@ -10,6 +10,7 @@ export default function useAddCatchForm(
   const [species, setSpecies] = useState("");
   const [waterType, setWaterType] = useState<WaterType>(WaterType.Freshwater);
   const [inputError, setInputError] = useState<InputError | null>(null);
+  const [selectedLocation, setSelectedLocation] = useState(null);
 
   const validateInputs = (): InputError | null => {
     if (!date) {
@@ -61,5 +62,7 @@ export default function useAddCatchForm(
     inputError,
     setInputError,
     handleAddCatch,
+    selectedLocation,
+    setSelectedLocation,
   };
 }
