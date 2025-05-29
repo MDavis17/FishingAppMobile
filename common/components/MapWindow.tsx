@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { View, StyleSheet } from "react-native";
+import { View } from "react-native";
 import MapView, { LatLng, MapPressEvent, Marker } from "react-native-maps";
 
 interface Props {
@@ -19,15 +19,16 @@ export default function MapWindow({
 }: Props) {
   const mapRef = useRef<MapView | null>(null);
 
-  const mapViewRegion = {
-    ...selectedLocation,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,
-  };
-
   useEffect(() => {
     if (mapRef.current && selectedLocation) {
-      mapRef.current.animateToRegion(mapViewRegion, 1000);
+      mapRef.current.animateToRegion(
+        {
+          ...selectedLocation,
+          latitudeDelta: mapRef.current.context.latitudeDelta,
+          longitudeDelta: mapRef.current.context.latitudeDelta,
+        },
+        500
+      );
     }
   }, [selectedLocation]);
 
@@ -43,7 +44,11 @@ export default function MapWindow({
       <MapView
         ref={mapRef}
         style={{ width, height }}
-        initialRegion={mapViewRegion}
+        initialRegion={{
+          ...selectedLocation,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        }}
         scrollEnabled={!isViewOnly}
         zoomEnabled={!isViewOnly}
         pitchEnabled={!isViewOnly}
@@ -55,9 +60,3 @@ export default function MapWindow({
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  mapContainer: {
-    flex: 1,
-  },
-});

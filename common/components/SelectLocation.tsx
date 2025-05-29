@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet } from "react-native";
+import { View } from "react-native";
 import { RootStackParamList } from "types";
 import MapWindow from "common/components/MapWindow";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
@@ -47,5 +47,3 @@ export default function SelectLocation() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({});
