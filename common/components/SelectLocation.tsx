@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { RootStackParamList } from "types";
 import MapWindow from "common/components/MapWindow";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
@@ -25,16 +25,10 @@ export default function SelectLocation() {
   };
 
   return (
-    <View>
+    <View style={styles.flexContainer}>
       <MapWindow selectedLocation={location} onLocationSelect={handlePress} />
       {location !== initialLocation && (
-        <View
-          style={{
-            position: "absolute",
-            bottom: 30,
-            alignSelf: "center",
-          }}
-        >
+        <View style={styles.confirmButton}>
           <Button
             style={{ backgroundColor: "blue", opacity: 0.9 }}
             textColor="white"
@@ -47,3 +41,12 @@ export default function SelectLocation() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  flexContainer: { flex: 1 },
+  confirmButton: {
+    position: "absolute",
+    bottom: 20,
+    alignSelf: "center",
+  },
+});
