@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
-import { View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import MapView, { LatLng, MapPressEvent, Marker } from "react-native-maps";
+import CustomPlacesInput from "./CustomPlacesInput";
 
 interface Props {
   height?: number | string;
@@ -40,7 +41,11 @@ export default function MapWindow({
   };
 
   return (
-    <View>
+    <View style={styles.container}>
+      {!isViewOnly && onLocationSelect && (
+        <CustomPlacesInput onLocationSelect={onLocationSelect} />
+      )}
+
       <MapView
         ref={mapRef}
         style={{ width, height }}
@@ -60,3 +65,7 @@ export default function MapWindow({
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: { flex: 1, position: "relative" },
+});

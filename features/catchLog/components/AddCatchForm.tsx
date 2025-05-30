@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollViewContainer: { padding: 16 },
-  modifyLocationButton: { padding: 8 },
+  modifyLocationButton: { padding: 8, backgroundColor: "white", opacity: 0.9 },
   form: {
     marginTop: 10,
     padding: 10,

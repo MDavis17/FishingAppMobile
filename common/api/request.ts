@@ -1,8 +1,8 @@
-import { config } from "./config";
+import { config, GooglePlacesApiBaseUrl, GooglePlacesAPIKey } from "./config";
 import { HTTP_STATUS } from "./constants";
 import { RequestHeaders, RequestMethod } from "./types";
 
-export const urlFormatter = (path: string) => {
+export const internalUrlFormatter = (path: string) => {
   const cleanPath = path[0] === "/" ? path.substring(1) : path;
   let urlPath = `${config.api}${cleanPath}`;
 
@@ -11,6 +11,17 @@ export const urlFormatter = (path: string) => {
   }
 
   return urlPath;
+};
+
+export const externalUrlFormatter = (
+  externalBaseUrl: string,
+  path: string,
+  queryString?: string
+) => {
+  const cleanPath = path[0] === "/" ? path.substring(1) : path;
+  return `${externalBaseUrl}${cleanPath}${
+    queryString ? `?${queryString}` : ""
+  }`;
 };
 
 //* NO AUTHENTICATION YET *//
@@ -117,7 +128,7 @@ export async function unauthenticatedFetch(
 
   console.log(`Network: ${options.method} request to ${url}`, requestOptions);
 
-  let response = await fetch(urlFormatter(url), requestOptions);
+  let response = await fetch(internalUrlFormatter(url), requestOptions);
 
   console.log(`Network: Received ${url}`, response);
 
@@ -127,6 +138,43 @@ export async function unauthenticatedFetch(
   //       type: ACTIONS.CONNECTED,
   //     });
   //   }
+
+  const responseJson = await response.json();
+  return { ok: response.status === HTTP_STATUS.OK, data: responseJson };
+}
+
+export async function googlePlacesFetch(
+  url: string,
+  queryString: string,
+  options: { method: RequestMethod; body?: string } = {
+    method: RequestMethod.GET,
+  }
+) {
+  const requestOptions: RequestHeaders = { ...options };
+
+  if (!requestOptions.headers) {
+    requestOptions.headers = {};
+  }
+
+  if (
+    options.method !== RequestMethod.GET &&
+    requestOptions.headers["Content-Type"] === undefined
+  ) {
+    requestOptions.headers["Content-Type"] = "application/json";
+  }
+
+  console.log(`Network: ${options.method} request to ${url}`, requestOptions);
+
+  let response = await fetch(
+    externalUrlFormatter(
+      GooglePlacesApiBaseUrl,
+      url,
+      `${queryString}&key=${GooglePlacesAPIKey}`
+    ),
+    requestOptions
+  );
+
+  console.log(`Network: Received ${url}`, response);
 
   const responseJson = await response.json();
   return { ok: response.status === HTTP_STATUS.OK, data: responseJson };
