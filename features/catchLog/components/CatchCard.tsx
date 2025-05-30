@@ -1,5 +1,5 @@
-import React from "react";
-import { TouchableOpacity, Alert, StyleSheet } from "react-native";
+import React, { useRef, useState } from "react";
+import { TouchableOpacity, Alert, StyleSheet, View } from "react-native";
 import { Swipeable } from "react-native-gesture-handler";
 import { FontAwesome } from "@expo/vector-icons";
 import { CatchEntry, RootStackParamList, WaterType } from "types";
@@ -8,7 +8,7 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 interface Props {
-  item: CatchEntry;
+  catchItem: CatchEntry;
   onDelete: (id: number) => void;
 }
 
@@ -17,8 +17,10 @@ type LogsScreenNavigationProp = NativeStackNavigationProp<
   "Logs"
 >;
 
-export const LogItem = ({ item, onDelete }: Props) => {
+export default function CatchCard({ catchItem, onDelete }: Props) {
   const navigation = useNavigation<LogsScreenNavigationProp>();
+  const [isSwiping, setIsSwiping] = useState(false);
+  const swipeableRef = useRef<Swipeable>(null);
 
   const handleSelectCatch = (catchItem: CatchEntry) => {
     navigation.navigate("CatchDetail", {
@@ -36,7 +38,7 @@ export const LogItem = ({ item, onDelete }: Props) => {
         text: "Delete",
         style: "destructive",
         onPress: () => {
-          onDelete(item.id);
+          onDelete(catchItem.id);
           if (shouldPopNavigation) {
             navigation.goBack();
           }
@@ -49,6 +51,7 @@ export const LogItem = ({ item, onDelete }: Props) => {
     <TouchableOpacity
       style={styles.deleteButton}
       onPress={() => {
+        swipeableRef.current?.close();
         confirmDelete(false);
       }}
     >
@@ -57,29 +60,46 @@ export const LogItem = ({ item, onDelete }: Props) => {
   );
 
   return (
-    <Swipeable renderRightActions={renderRightActions}>
-      <TouchableOpacity onPress={() => handleSelectCatch(item)}>
-        <List.Item
-          title={item.dateTime}
-          description={item.species}
-          left={(props) => (
-            <List.Icon
-              {...props}
-              icon={item.waterType === WaterType.Saltwater ? "waves" : "wave"}
-            />
-          )}
-        />
-      </TouchableOpacity>
+    <Swipeable
+      ref={swipeableRef}
+      renderRightActions={renderRightActions}
+      onSwipeableOpen={() => setIsSwiping(true)}
+      onSwipeableClose={() => setIsSwiping(false)}
+    >
+      <View
+        style={[styles.itemContainer, isSwiping && styles.itemContainerSwiping]}
+      >
+        <TouchableOpacity onPress={() => handleSelectCatch(catchItem)}>
+          <List.Item
+            title={catchItem.dateTime}
+            description={catchItem.species}
+            left={(props) => (
+              <List.Icon
+                {...props}
+                icon={
+                  catchItem.waterType === WaterType.Saltwater ? "waves" : "wave"
+                }
+              />
+            )}
+          />
+        </TouchableOpacity>
+      </View>
     </Swipeable>
   );
-};
+}
 
 const styles = StyleSheet.create({
   itemContainer: {
     backgroundColor: "white",
-    padding: 16,
-    borderBottomColor: "#eee",
-    borderBottomWidth: 1,
+    paddingVertical: 16,
+    borderColor: "#eee",
+    borderWidth: 1,
+    elevation: 2,
+    borderRadius: 10,
+  },
+  itemContainerSwiping: {
+    borderTopRightRadius: 0,
+    borderBottomRightRadius: 0,
   },
   text: {
     fontSize: 16,
@@ -94,5 +114,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: 70,
     height: "100%",
+    borderRadius: 10,
+    borderTopLeftRadius: 0,
+    borderBottomLeftRadius: 0,
   },
 });
