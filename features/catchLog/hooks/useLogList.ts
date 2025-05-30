@@ -15,7 +15,6 @@ export default function useLogList() {
 
     try {
       const response = await getCatchLogs();
-      console.log("response", response);
 
       if (!response.ok) {
         throw new Error("Something went wrong");

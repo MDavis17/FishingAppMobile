@@ -5,6 +5,8 @@ type Config = {
   api: string;
 };
 
+export const GooglePlacesAPIKey = "AIzaSyAIFMv0a-wViRjrkAmzPwG_RuLBOPergy8";
+
 // export class ConfigurationManager {
 //     constructor() {
 //         if (configManager) {
