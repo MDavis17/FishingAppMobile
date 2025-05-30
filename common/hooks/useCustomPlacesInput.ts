@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { GooglePlacesAPIKey } from "common/api/config";
 import { Keyboard } from "react-native";
 import { LatLng } from "react-native-maps";
+import { getPlaceSuggestions } from "common/api/getPlaceSuggestions";
 
 export default function useCustomPlacesInput(
   onLocationSelect: (location: LatLng) => void
@@ -22,15 +23,10 @@ export default function useCustomPlacesInput(
 
     const fetchPlaces = async () => {
       try {
-        const res = await fetch(
-          `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(
-            query
-          )}&key=${GooglePlacesAPIKey}&language=en`
-        );
-        const json = await res.json();
+        const response = await getPlaceSuggestions(encodeURIComponent(query));
 
-        if (!cancelled && json.status === "OK") {
-          setResults(json.predictions || []);
+        if (!cancelled && response.ok) {
+          setResults(response.data.predictions || []);
           setShowResults(true);
         }
       } catch (err) {

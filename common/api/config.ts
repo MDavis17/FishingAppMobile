@@ -70,4 +70,6 @@ export const GooglePlacesAPIKey = "AIzaSyAIFMv0a-wViRjrkAmzPwG_RuLBOPergy8";
 // }
 
 export let config: Config = DEV_API;
+export const GooglePlacesApiBaseUrl =
+  "https://maps.googleapis.com/maps/api/place/";
 // export let configManager = new ConfigurationManager();
