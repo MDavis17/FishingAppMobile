@@ -3,6 +3,7 @@ import { GooglePlacesAPIKey } from "common/api/config";
 import { Keyboard } from "react-native";
 import { LatLng } from "react-native-maps";
 import { getPlaceSuggestions } from "common/api/getPlaceSuggestions";
+import { getPlaceDetails } from "common/api/getPlaceDetails";
 
 export default function useCustomPlacesInput(
   onLocationSelect: (location: LatLng) => void
@@ -43,12 +44,12 @@ export default function useCustomPlacesInput(
 
   const handleSelect = async (item) => {
     try {
-      const res = await fetch(
-        `https://maps.googleapis.com/maps/api/place/details/json?place_id=${item.place_id}&key=${GooglePlacesAPIKey}`
-      );
-      const json = await res.json();
-      const location = json.result?.geometry?.location;
+      const response = await getPlaceDetails(item.place_id);
+      if (!response.ok) {
+        throw response;
+      }
 
+      const location = response.data.result?.geometry?.location;
       if (location) {
         setQuery(item.description);
         setResults([]);
@@ -63,6 +64,7 @@ export default function useCustomPlacesInput(
           longitude: location.lng,
         });
       } else {
+        // maybe some better alerting for the user
         console.warn("Location not found in place details");
       }
     } catch (err) {
