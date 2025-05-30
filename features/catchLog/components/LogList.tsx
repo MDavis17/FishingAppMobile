@@ -32,7 +32,7 @@ export default function LogList() {
       <FlatList
         data={logs}
         renderItem={({ item }) => (
-          <CatchCard item={item} onDelete={(id) => deleteCatch(id)} />
+          <CatchCard catchItem={item} onDelete={(id) => deleteCatch(id)} />
         )}
         keyExtractor={(item) => item.dateTime}
         contentContainerStyle={styles.listContainer}

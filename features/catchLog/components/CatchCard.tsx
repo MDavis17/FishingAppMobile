@@ -8,7 +8,7 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 interface Props {
-  item: CatchEntry;
+  catchItem: CatchEntry;
   onDelete: (id: number) => void;
 }
 
@@ -17,7 +17,7 @@ type LogsScreenNavigationProp = NativeStackNavigationProp<
   "Logs"
 >;
 
-export default function CatchCard({ item, onDelete }: Props) {
+export default function CatchCard({ catchItem, onDelete }: Props) {
   const navigation = useNavigation<LogsScreenNavigationProp>();
   const [isSwiping, setIsSwiping] = useState(false);
   const swipeableRef = useRef<Swipeable>(null);
@@ -38,7 +38,7 @@ export default function CatchCard({ item, onDelete }: Props) {
         text: "Delete",
         style: "destructive",
         onPress: () => {
-          onDelete(item.id);
+          onDelete(catchItem.id);
           if (shouldPopNavigation) {
             navigation.goBack();
           }
@@ -69,14 +69,16 @@ export default function CatchCard({ item, onDelete }: Props) {
       <View
         style={[styles.itemContainer, isSwiping && styles.itemContainerSwiping]}
       >
-        <TouchableOpacity onPress={() => handleSelectCatch(item)}>
+        <TouchableOpacity onPress={() => handleSelectCatch(catchItem)}>
           <List.Item
-            title={item.dateTime}
-            description={item.species}
+            title={catchItem.dateTime}
+            description={catchItem.species}
             left={(props) => (
               <List.Icon
                 {...props}
-                icon={item.waterType === WaterType.Saltwater ? "waves" : "wave"}
+                icon={
+                  catchItem.waterType === WaterType.Saltwater ? "waves" : "wave"
+                }
               />
             )}
           />
