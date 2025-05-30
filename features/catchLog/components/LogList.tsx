@@ -1,7 +1,7 @@
 import { FlatList, StyleSheet, View } from "react-native";
 import { Button, Text } from "react-native-paper";
 import useLogList from "../hooks/useLogList";
-import { LogItem } from "./LogItem";
+import CatchCard from "./CatchCard";
 
 export default function LogList() {
   const { isLoading, logs, openNewCatchForm, deleteCatch } = useLogList();
@@ -32,10 +32,11 @@ export default function LogList() {
       <FlatList
         data={logs}
         renderItem={({ item }) => (
-          <LogItem item={item} onDelete={(id) => deleteCatch(id)} />
+          <CatchCard item={item} onDelete={(id) => deleteCatch(id)} />
         )}
         keyExtractor={(item) => item.dateTime}
         contentContainerStyle={styles.listContainer}
+        ItemSeparatorComponent={() => <View style={{ height: 8 }} />}
       />
       <Button onPress={() => openNewCatchForm()}>Add New Catch</Button>
     </View>
@@ -46,8 +47,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center",
-    padding: 20,
+    padding: 8,
+    backgroundColor: "white",
   },
   loadingText: {
     marginBottom: 20,

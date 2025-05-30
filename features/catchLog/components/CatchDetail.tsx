@@ -41,11 +41,10 @@ export default function CatchDetail() {
           {weight && <Text>Weight: {weight} lb</Text>}
         </View>
       )}
-
-      <View>
-        <View style={styles.dataContainer}>
-          <MapWindow selectedLocation={location} height={200} isViewOnly />
-        </View>
+      <View style={styles.mapContainer}>
+        <MapWindow selectedLocation={location} height={200} isViewOnly />
+      </View>
+      <View style={styles.flex2}>
         <View style={styles.dataContainer}>
           <Text>Weather</Text>
           <Text>{`Air Temperature: ${airTemp}° ${units}`}</Text>
@@ -66,6 +65,8 @@ export default function CatchDetail() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16, backgroundColor: "white" },
+  mapContainer: { flex: 1 },
+  flex2: { flex: 2 },
   dataContainer: { paddingTop: 8, paddingBottom: 8 },
   buttonContainer: {
     marginTop: 20,
