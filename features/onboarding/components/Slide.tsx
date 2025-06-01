@@ -1,36 +1,30 @@
 import React from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Dimensions,
-  TouchableOpacity,
-} from "react-native";
+import { View, StyleSheet, Dimensions, ViewStyle } from "react-native";
+import { Button } from "react-native-paper";
 
 const { width } = Dimensions.get("window");
 
 interface Props {
-  title: string;
-  description: string;
+  children: React.JSX.Element | React.JSX.Element[];
   handleNext: () => void;
   isLastSlide: boolean;
+  contentStyle?: ViewStyle;
 }
 
 export default function Slide({
-  title,
-  description,
+  children,
   handleNext,
   isLastSlide,
+  contentStyle,
 }: Props) {
   return (
     <View style={styles.slide}>
-      <Text style={styles.title}>{title}</Text>
-      <Text style={styles.description}>{description}</Text>
-      <TouchableOpacity onPress={handleNext} style={styles.button}>
-        <Text style={styles.buttonText}>
+      <View style={contentStyle}>{children}</View>
+      <View style={styles.buttonContainer}>
+        <Button mode="contained" onPress={handleNext}>
           {isLastSlide ? "Get Started" : "Next"}
-        </Text>
-      </TouchableOpacity>
+        </Button>
+      </View>
     </View>
   );
 }
@@ -42,18 +36,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 20,
   },
-  title: {
-    fontSize: 28,
-    fontWeight: "bold",
-    marginBottom: 10,
-    textAlign: "center",
-  },
-  description: { fontSize: 16, textAlign: "center", marginBottom: 40 },
-  button: {
-    backgroundColor: "#007aff",
-    paddingHorizontal: 30,
-    paddingVertical: 12,
-    borderRadius: 25,
-  },
-  buttonText: { color: "#fff", fontWeight: "bold" },
+  buttonContainer: { paddingTop: 16 },
 });

@@ -1,6 +1,6 @@
 import React from "react";
-import { View, Text, StyleSheet, Dimensions } from "react-native";
-import { Button } from "react-native-paper";
+import { Text, StyleSheet, Dimensions } from "react-native";
+import Slide from "./Slide";
 
 const { width } = Dimensions.get("window");
 
@@ -18,13 +18,10 @@ export default function InfoSlide({
   isLastSlide,
 }: Props) {
   return (
-    <View style={styles.slide}>
+    <Slide handleNext={handleNext} isLastSlide={isLastSlide}>
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.description}>{description}</Text>
-      <Button mode="contained" onPress={handleNext}>
-        {isLastSlide ? "Get Started" : "Next"}
-      </Button>
-    </View>
+    </Slide>
   );
 }
 
@@ -41,6 +38,5 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     textAlign: "center",
   },
-  description: { fontSize: 16, textAlign: "center", marginBottom: 40 },
-  buttonText: { color: "#fff", fontWeight: "bold" },
+  description: { fontSize: 16, textAlign: "center" },
 });
