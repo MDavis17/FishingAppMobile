@@ -9,7 +9,6 @@ import { ThemeProvider, useAppTheme } from "common/theme/ThemeContext";
 
 const ThemedApp = () => {
   const { themeName, theme } = useAppTheme();
-  console.log("Theme set to:", themeName);
   return (
     <PaperProvider theme={theme}>
       <NavigationContainer>

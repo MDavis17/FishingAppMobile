@@ -31,7 +31,7 @@ export default function SelectLocation() {
         <View style={styles.confirmButton}>
           <Button
             mode="contained"
-            style={{ opacity: 0.9 }}
+            style={styles.button}
             textColor="white"
             onPress={handleConfirm}
           >
@@ -49,5 +49,8 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 20,
     alignSelf: "center",
+  },
+  button: {
+    opacity: 0.9,
   },
 });
