@@ -87,6 +87,7 @@ export default function AddCatchForm() {
 
         <View style={styles.mapContainer}>
           <Button
+            mode="contained"
             icon="crosshairs-gps"
             onPress={() => {
               if (currentLocation) {
@@ -102,6 +103,7 @@ export default function AddCatchForm() {
             height={200}
           />
           <Button
+            mode="outlined"
             style={styles.modifyLocationButton}
             onPress={handleSelectNewLocation}
           >
@@ -123,7 +125,9 @@ export default function AddCatchForm() {
         >
           Cancel
         </Button>
-        <Button onPress={handleAddCatch}>Log Catch</Button>
+        <Button mode="contained" onPress={handleAddCatch}>
+          Log Catch
+        </Button>
       </View>
     </SafeAreaView>
   );
@@ -135,7 +139,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollViewContainer: { padding: 16 },
-  modifyLocationButton: { padding: 8, backgroundColor: "white", opacity: 0.9 },
+  modifyLocationButton: { padding: 8, opacity: 0.9 },
   form: {
     marginTop: 10,
     padding: 10,
