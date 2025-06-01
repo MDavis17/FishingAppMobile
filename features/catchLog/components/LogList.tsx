@@ -38,7 +38,9 @@ export default function LogList() {
         contentContainerStyle={styles.listContainer}
         ItemSeparatorComponent={() => <View style={{ height: 8 }} />}
       />
-      <Button onPress={() => openNewCatchForm()}>Add New Catch</Button>
+      <Button mode="contained" onPress={() => openNewCatchForm()}>
+        Add New Catch
+      </Button>
     </View>
   );
 }

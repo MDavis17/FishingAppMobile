@@ -30,7 +30,8 @@ export default function SelectLocation() {
       {location !== initialLocation && (
         <View style={styles.confirmButton}>
           <Button
-            style={{ backgroundColor: "blue", opacity: 0.9 }}
+            mode="contained"
+            style={styles.button}
             textColor="white"
             onPress={handleConfirm}
           >
@@ -48,5 +49,8 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 20,
     alignSelf: "center",
+  },
+  button: {
+    opacity: 0.9,
   },
 });
