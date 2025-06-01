@@ -1,45 +1,71 @@
 import React, { useRef } from "react";
-import {
-  View,
-  Text,
-  FlatList,
-  StyleSheet,
-  Dimensions,
-  TouchableOpacity,
-  Animated,
-} from "react-native";
+import { View, FlatList, StyleSheet, Dimensions, Animated } from "react-native";
+import InfoSlide from "./InfoSlide";
+import ConfigureSlide from "./ConfigureSlide";
+import { useTheme } from "react-native-paper";
 
 const { width } = Dimensions.get("window");
 
 const slides = [
-  { key: "1", title: "Welcome!", description: "Your fishing log made easy." },
+  {
+    key: "1",
+    render: ({ onNext }: { onNext: () => void }) => (
+      <InfoSlide
+        title="Welcome!"
+        description="Your fishing guide is now in your pocket!"
+        handleNext={onNext}
+        isLastSlide={false}
+      />
+    ),
+  },
   {
     key: "2",
-    title: "Log Catches",
-    description: "Record your best catches fast.",
+    render: ({ onNext }: { onNext: () => void }) => (
+      <InfoSlide
+        title="What are your goals?"
+        description="Want to catch more of one kind of fish? Want to catch more kinds of
+          fish? Want to find more spots?"
+        handleNext={onNext}
+        isLastSlide={false}
+      />
+    ),
   },
   {
     key: "3",
-    title: "Track Conditions",
-    description: "Save tide, temp, and more.",
+    render: ({ onNext }: { onNext: () => void }) => (
+      <ConfigureSlide handleNext={onNext} isLastSlide={false} />
+    ),
   },
   {
     key: "4",
-    title: "Review Insights",
-    description: "Analyze your fishing patterns.",
+    render: ({ onNext }: { onNext: () => void }) => (
+      <InfoSlide
+        title="This is YOUR Fishing Journey"
+        description="Any data you log will stay with you. No spot sharing or crowdsourcing."
+        handleNext={onNext}
+        isLastSlide={false}
+      />
+    ),
   },
   {
     key: "5",
-    title: "Let’s Get Started",
-    description: "Time to fish smarter.",
+    render: ({ onNext }: { onNext: () => void }) => (
+      <InfoSlide
+        title="Let’s Get Started"
+        description="Time to fish smarter."
+        handleNext={onNext}
+        isLastSlide={true}
+      />
+    ),
   },
 ];
 
-export default function OnboardingScreen({
+export default function OnboardingCarousel({
   onComplete,
 }: {
   onComplete: () => void;
 }) {
+  const theme = useTheme();
   const scrollX = useRef(new Animated.Value(0)).current;
   const flatListRef = useRef<FlatList>(null);
 
@@ -64,20 +90,9 @@ export default function OnboardingScreen({
           [{ nativeEvent: { contentOffset: { x: scrollX } } }],
           { useNativeDriver: false }
         )}
-        renderItem={({ item, index }) => (
-          <View style={styles.slide}>
-            <Text style={styles.title}>{item.title}</Text>
-            <Text style={styles.description}>{item.description}</Text>
-            <TouchableOpacity
-              onPress={() => handleNext(index)}
-              style={styles.button}
-            >
-              <Text style={styles.buttonText}>
-                {index === slides.length - 1 ? "Get Started" : "Next"}
-              </Text>
-            </TouchableOpacity>
-          </View>
-        )}
+        renderItem={({ item, index }) =>
+          item.render({ onNext: () => handleNext(index) })
+        }
       />
       <View style={styles.indicatorContainer}>
         {slides.map((_, i) => {
@@ -88,7 +103,13 @@ export default function OnboardingScreen({
             extrapolate: "clamp",
           });
           return (
-            <Animated.View key={i} style={[styles.dot, { width: dotWidth }]} />
+            <Animated.View
+              key={i}
+              style={[
+                styles.dot,
+                { width: dotWidth, backgroundColor: theme.colors.primary },
+              ]}
+            />
           );
         })}
       </View>
@@ -106,13 +127,6 @@ const styles = StyleSheet.create({
   },
   title: { fontSize: 28, fontWeight: "bold", marginBottom: 10 },
   description: { fontSize: 16, textAlign: "center", marginBottom: 40 },
-  button: {
-    backgroundColor: "#007aff",
-    paddingHorizontal: 30,
-    paddingVertical: 12,
-    borderRadius: 25,
-  },
-  buttonText: { color: "#fff", fontWeight: "bold" },
   indicatorContainer: {
     flexDirection: "row",
     justifyContent: "center",
@@ -121,7 +135,6 @@ const styles = StyleSheet.create({
   dot: {
     height: 8,
     borderRadius: 4,
-    backgroundColor: "#007aff",
     marginHorizontal: 4,
   },
 });

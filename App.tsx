@@ -4,16 +4,29 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { PaperProvider } from "react-native-paper";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import RootNavigation from "features/root/navigation/RootNavigation";
+import { useColorScheme } from "react-native";
+import { ThemeProvider, useAppTheme } from "common/theme/ThemeContext";
+
+const ThemedApp = () => {
+  const { themeName, theme } = useAppTheme();
+  console.log("Theme set to:", themeName);
+  return (
+    <PaperProvider theme={theme}>
+      <NavigationContainer>
+        <RootNavigation />
+      </NavigationContainer>
+    </PaperProvider>
+  );
+};
 
 export default function App() {
+  const colorScheme = useColorScheme();
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
-        <PaperProvider>
-          <NavigationContainer>
-            <RootNavigation />
-          </NavigationContainer>
-        </PaperProvider>
+        <ThemeProvider>
+          <ThemedApp />
+        </ThemeProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );

@@ -30,7 +30,8 @@ export default function SelectLocation() {
       {location !== initialLocation && (
         <View style={styles.confirmButton}>
           <Button
-            style={{ backgroundColor: "blue", opacity: 0.9 }}
+            mode="contained"
+            style={{ opacity: 0.9 }}
             textColor="white"
             onPress={handleConfirm}
           >
