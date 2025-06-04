@@ -2,7 +2,7 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import AnglerHome from "features/anglerHome/AnglerHome";
-import TripPlanner from "features/tripPlanner/TripPlanner";
+import TripPlanner from "features/tripPlanner/components/TripPlanner";
 import LogNavigation from "features/catchLog/navigation/LogNavigation";
 
 const Tab = createBottomTabNavigator();

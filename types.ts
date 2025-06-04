@@ -10,6 +10,14 @@ export interface CatchEntry {
   location?: LatLng;
 }
 
+export interface Trip {
+  id?: number;
+  date: string;
+  waterType: WaterType;
+  location?: LatLng;
+  catchList: CatchEntry[];
+}
+
 export interface CatchTime {
   hours: number;
   minutes: number;
@@ -36,4 +44,5 @@ export type RootStackParamList = {
     initialLocation: LatLng;
     onLocationSelected: (newLocation: LatLng) => void;
   };
+  Plan: undefined;
 };
