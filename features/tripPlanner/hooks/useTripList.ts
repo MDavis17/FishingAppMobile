@@ -2,6 +2,8 @@ import { useState, useEffect, useCallback } from "react";
 import { Trip } from "../../../types";
 import { useNavigation } from "@react-navigation/native";
 import { getTrips } from "../api/getTrips";
+import { deleteTripById } from "../api/deleteTripById";
+import { addNewTrip } from "../api/addNewTrip";
 
 export default function useTripList() {
   const navigation = useNavigation();
@@ -30,48 +32,48 @@ export default function useTripList() {
     fetchTrips();
   }, [fetchTrips]);
 
-  // const openNewCatchForm = () => {
-  //   navigation.navigate("AddNewCatch", { addNewCatch });
-  // };
+  const openNewTripForm = () => {
+    navigation.navigate("NewTrip", { createNewTrip });
+  };
 
-  // const addNewCatch = async (newCatch: CatchEntry) => {
-  //   if (!newCatch.species || !newCatch.dateTime) {
-  //     return;
-  //   }
+  const createNewTrip = async (newTrip: Trip) => {
+    if (!newTrip.date || !newTrip.location) {
+      return;
+    }
 
-  //   try {
-  //     const response = await addNewCatchLog(newCatch);
+    try {
+      const response = await addNewTrip(newTrip);
 
-  //     if (!response.ok) {
-  //       throw new Error("Something went wrong");
-  //     }
+      if (!response.ok) {
+        throw new Error("Something went wrong");
+      }
 
-  //     await fetchLogs();
-  //   } catch (error) {
-  //     console.error("Error creating log:", error);
-  //     throw error;
-  //   }
-  // };
+      await fetchTrips();
+    } catch (error) {
+      console.error("Error creating trip:", error);
+      throw error;
+    }
+  };
 
-  // const deleteCatch = async (catchId: number) => {
-  //   try {
-  //     const response = await deleteCatchLogById(catchId);
+  const deleteTrip = async (tripId: number) => {
+    try {
+      const response = await deleteTripById(tripId);
 
-  //     if (!response.ok) {
-  //       throw new Error("Something went wrong");
-  //     }
+      if (!response.ok) {
+        throw new Error("Something went wrong");
+      }
 
-  //     setLogs((prevLogs) => prevLogs.filter((log) => log.id != catchId));
-  //   } catch (error) {
-  //     console.error("Error delete log:", error);
-  //     throw error;
-  //   }
-  // };
+      setTrips((prevLogs) => prevLogs.filter((log) => log.id != tripId));
+    } catch (error) {
+      console.error("Error delete trip:", error);
+      throw error;
+    }
+  };
 
   return {
     isLoading,
     trips,
-    // openNewCatchForm,
-    // deleteCatch,
+    openNewTripForm,
+    deleteTrip,
   };
 }

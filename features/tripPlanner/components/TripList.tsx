@@ -1,9 +1,10 @@
 import { FlatList, StyleSheet, View } from "react-native";
 import { Button, Text } from "react-native-paper";
 import useTripList from "../hooks/useTripList";
+import TripCard from "./TripCard";
 
 export default function TripList() {
-  const { isLoading, trips } = useTripList();
+  const { isLoading, trips, deleteTrip, openNewTripForm } = useTripList();
 
   const renderSkeletonItem = (_: any, index: number) => (
     <View key={index} style={styles.skeletonItem}>
@@ -31,18 +32,13 @@ export default function TripList() {
       <FlatList
         data={trips}
         renderItem={({ item }) => (
-          <View>
-            <Text>{item.date}</Text>
-            <Text>{item.location?.toString()}</Text>
-            <Text>{item.waterType}</Text>
-            <Text>{item.catchList.toString()}</Text>
-          </View>
+          <TripCard trip={item} onDelete={(id) => deleteTrip(id)} />
         )}
         keyExtractor={(item) => item.date}
         contentContainerStyle={styles.listContainer}
         ItemSeparatorComponent={() => <View style={{ height: 8 }} />}
       />
-      <Button mode="contained" onPress={() => {}}>
+      <Button mode="contained" onPress={openNewTripForm}>
         Add New Trip
       </Button>
     </View>

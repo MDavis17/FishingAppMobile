@@ -37,7 +37,6 @@ export enum WaterType {
 export type RootStackParamList = {
   Home: undefined;
   Logs: undefined;
-  TripPlanning: undefined;
   CatchDetail: { catchItem: CatchEntry; deleteCatch: () => void };
   AddNewCatch: { addNewCatch: (catchData: CatchEntry) => void };
   SelectLocation: {
@@ -45,4 +44,6 @@ export type RootStackParamList = {
     onLocationSelected: (newLocation: LatLng) => void;
   };
   Plan: undefined;
+  TripDetail: { trip: Trip; deleteTrip: () => void };
+  NewTrip: { createNewTrip: (newTrip: Trip) => void };
 };
