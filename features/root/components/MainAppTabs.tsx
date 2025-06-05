@@ -2,8 +2,8 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import AnglerHome from "features/anglerHome/AnglerHome";
-import TripPlanner from "features/tripPlanner/TripPlanner";
 import LogNavigation from "features/catchLog/navigation/LogNavigation";
+import PlannerNavigation from "features/tripPlanner/navigation/PlannerNavigation";
 
 const Tab = createBottomTabNavigator();
 
@@ -40,7 +40,11 @@ export default function MainAppTabs() {
         component={LogNavigation}
         options={{ headerShown: false }}
       />
-      <Tab.Screen name="Plan" component={TripPlanner} />
+      <Tab.Screen
+        name="Plan"
+        component={PlannerNavigation}
+        options={{ headerShown: false }}
+      />
     </Tab.Navigator>
   );
 }
