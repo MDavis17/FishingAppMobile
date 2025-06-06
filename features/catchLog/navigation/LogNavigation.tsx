@@ -1,17 +1,32 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import LogList from "../components/LogList";
-import CatchDetail from "../components/CatchDetail";
 import { RootStackParamList } from "types";
-import AddCatchForm from "../components/AddCatchForm";
 import SelectLocation from "common/components/SelectLocation";
+import LogListTabs from "../components/LogListTabs";
+import TripDetail from "features/tripPlanner/components/TripDetail";
+import NewTripForm from "features/tripPlanner/components/NewTripForm";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function LogNavigation() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Fishing Log" component={LogList} />
+      <Stack.Screen name="Fishing Log" component={LogListTabs} />
       <Stack.Screen
+        name="TripDetail"
+        component={TripDetail}
+        options={{ presentation: "modal" }}
+      />
+      <Stack.Screen
+        name="NewTrip"
+        component={NewTripForm}
+        options={{ presentation: "modal", title: "New Trip" }}
+      />
+      <Stack.Screen
+        name="SelectLocation"
+        component={SelectLocation}
+        options={{ title: "Select Location" }}
+      />
+      {/* <Stack.Screen
         name="CatchDetail"
         component={CatchDetail}
         options={{ presentation: "modal" }}
@@ -25,7 +40,7 @@ export default function LogNavigation() {
         name="SelectLocation"
         component={SelectLocation}
         options={{ title: "Select Location" }}
-      />
+      /> */}
     </Stack.Navigator>
   );
 }
