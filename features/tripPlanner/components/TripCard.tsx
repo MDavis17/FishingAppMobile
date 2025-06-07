@@ -2,10 +2,11 @@ import React, { useRef, useState } from "react";
 import { TouchableOpacity, Alert, StyleSheet, View } from "react-native";
 import { Swipeable } from "react-native-gesture-handler";
 import { FontAwesome } from "@expo/vector-icons";
-import { RootStackParamList, Trip, WaterType } from "types";
-import { List } from "react-native-paper";
+import { CatchEntry, RootStackParamList, Trip, WaterType } from "types";
+import { List, Text, useTheme } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { format } from "date-fns";
 
 interface Props {
   trip: Trip;
@@ -21,6 +22,9 @@ export default function TripCard({ trip, onDelete }: Props) {
   const navigation = useNavigation<PlanScreenNavigationProp>();
   const [isSwiping, setIsSwiping] = useState(false);
   const swipeableRef = useRef<Swipeable>(null);
+  const theme = useTheme();
+
+  const formattedDate = format(new Date(trip.date), "EEEE M/d/yyyy h:mm a");
 
   const handleSelectCatch = (trip: Trip) => {
     navigation.navigate("TripDetail", {
@@ -59,6 +63,17 @@ export default function TripCard({ trip, onDelete }: Props) {
     </TouchableOpacity>
   );
 
+  const mockTrip = {
+    ...trip,
+    location: { coordinates: { ...trip.location }, name: "Home Beach" },
+    catchList: [
+      { species: "Halibut" } as CatchEntry,
+      { species: "Surf Perch" } as CatchEntry,
+      { species: "Surf Perch" } as CatchEntry,
+    ],
+    catchSummary: "Halibut, Surf Perch (2)",
+  };
+
   return (
     <Swipeable
       ref={swipeableRef}
@@ -69,21 +84,41 @@ export default function TripCard({ trip, onDelete }: Props) {
       <View
         style={[styles.itemContainer, isSwiping && styles.itemContainerSwiping]}
       >
-        <TouchableOpacity onPress={() => handleSelectCatch(trip)}>
-          <List.Item
-            title={trip.date}
-            description={
-              trip.location
-                ? `Lat: ${trip.location.latitude} Lon: ${trip.location.longitude}`
-                : trip.waterType.toString()
-            }
-            left={(props) => (
-              <List.Icon
-                {...props}
-                icon={trip.waterType === WaterType.Saltwater ? "waves" : "wave"}
-              />
-            )}
-          />
+        <TouchableOpacity onPress={() => handleSelectCatch(mockTrip)}>
+          <View
+            style={{ flexDirection: "row", alignItems: "center", padding: 16 }}
+          >
+            <List.Icon
+              icon={trip.waterType === WaterType.Saltwater ? "waves" : "wave"}
+              style={{ marginRight: 12 }}
+            />
+            <View style={{ flex: 1 }}>
+              <Text
+                style={{
+                  fontWeight: "bold",
+                  fontSize: 16,
+                  color: theme.colors.onSurface,
+                }}
+              >
+                {mockTrip.location.name}
+              </Text>
+              <View>
+                <Text>{formattedDate}</Text>
+                {mockTrip.catchList.length > 0 && (
+                  <Text
+                    style={{
+                      color: theme.colors.onSurfaceVariant,
+                      marginTop: 4,
+                    }}
+                    numberOfLines={2}
+                    ellipsizeMode="tail"
+                  >
+                    {mockTrip.catchSummary}
+                  </Text>
+                )}
+              </View>
+            </View>
+          </View>
         </TouchableOpacity>
       </View>
     </Swipeable>
