@@ -21,11 +21,13 @@ export default function TripDetail() {
 
   return (
     <View style={styles.container}>
-      {location && (
-        <View style={styles.mapContainer}>
-          <MapWindow selectedLocation={location} height={200} isViewOnly />
-        </View>
-      )}
+      <View style={styles.mapContainer}>
+        <MapWindow
+          selectedLocation={location.coordinates}
+          height={200}
+          isViewOnly
+        />
+      </View>
       <View style={styles.flex2}>
         <View style={styles.dataContainer}>
           <Text>{waterType}</Text>
