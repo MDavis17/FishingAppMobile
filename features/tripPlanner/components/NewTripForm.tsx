@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  View,
-  StyleSheet,
-  TextInput,
-  Text,
-  ScrollView,
-  SafeAreaView,
-} from "react-native";
+import { View, StyleSheet, Text, ScrollView, SafeAreaView } from "react-native";
 import { RootStackParamList } from "types";
 import { DatePickerInput } from "react-native-paper-dates";
 import { Button } from "react-native-paper";

@@ -1,5 +1,10 @@
 import { LatLng } from "react-native-maps";
 
+export interface Location {
+  name: string;
+  coordinates: LatLng;
+}
+
 export interface CatchEntry {
   id?: number;
   dateTime: string;
@@ -14,8 +19,9 @@ export interface Trip {
   id?: number;
   date: string;
   waterType: WaterType;
-  location?: LatLng;
+  location: Location;
   catchList: CatchEntry[];
+  catchSummary: string;
 }
 
 export interface CatchTime {
