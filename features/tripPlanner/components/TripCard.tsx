@@ -6,6 +6,7 @@ import { RootStackParamList, Trip, WaterType } from "types";
 import { List } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { format } from "date-fns";
 
 interface Props {
   trip: Trip;
@@ -21,6 +22,8 @@ export default function TripCard({ trip, onDelete }: Props) {
   const navigation = useNavigation<PlanScreenNavigationProp>();
   const [isSwiping, setIsSwiping] = useState(false);
   const swipeableRef = useRef<Swipeable>(null);
+
+  const formattedDate = format(new Date(trip.date), "EEEE M/d/yyyy h:mm a");
 
   const handleSelectCatch = (trip: Trip) => {
     navigation.navigate("TripDetail", {
@@ -71,7 +74,7 @@ export default function TripCard({ trip, onDelete }: Props) {
       >
         <TouchableOpacity onPress={() => handleSelectCatch(trip)}>
           <List.Item
-            title={trip.date}
+            title={formattedDate}
             description={
               trip.location
                 ? `Lat: ${trip.location.latitude} Lon: ${trip.location.longitude}`
