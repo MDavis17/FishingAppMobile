@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { StyleSheet, View } from "react-native";
 import MapView, { LatLng, MapPressEvent, Marker } from "react-native-maps";
 import CustomPlacesInput from "./CustomPlacesInput";
+import { useTheme } from "react-native-paper";
 
 interface Props {
   height?: number | string;
@@ -19,6 +20,7 @@ export default function MapWindow({
   isViewOnly = false,
 }: Props) {
   const mapRef = useRef<MapView | null>(null);
+  const theme = useTheme();
 
   useEffect(() => {
     if (mapRef.current && selectedLocation) {
@@ -60,7 +62,10 @@ export default function MapWindow({
         rotateEnabled={!isViewOnly}
         onPress={handleSetNewLocation}
       >
-        <Marker coordinate={selectedLocation} />
+        <Marker
+          coordinate={selectedLocation}
+          pinColor={theme.colors.secondary}
+        />
       </MapView>
     </View>
   );

@@ -2,7 +2,7 @@ import React from "react";
 import { View, StyleSheet, Text, ScrollView, SafeAreaView } from "react-native";
 import { RootStackParamList } from "types";
 import { DatePickerInput } from "react-native-paper-dates";
-import { Button, TextInput } from "react-native-paper";
+import { TextInput, useTheme } from "react-native-paper";
 import MapWindow from "common/components/MapWindow";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import useNewTripForm from "../hooks/useNewTripForm";
@@ -14,6 +14,7 @@ import SecondaryButton from "common/components/buttons/SecondaryButton";
 type NewTripRouteProp = RouteProp<RootStackParamList, "NewTrip">;
 
 export default function NewTripForm() {
+  const theme = useTheme();
   const navigation = useNavigation();
   const route = useRoute<NewTripRouteProp>();
   const { createNewTrip } = route.params;
@@ -38,8 +39,13 @@ export default function NewTripForm() {
   }
 
   return (
-    <SafeAreaView>
-      <ScrollView style={styles.scrollViewContainer}>
+    <SafeAreaView style={{ backgroundColor: theme.colors.background }}>
+      <ScrollView
+        style={[
+          styles.scrollViewContainer,
+          { backgroundColor: theme.colors.background },
+        ]}
+      >
         <View style={styles.dateTimeContainer}>
           <DatePickerInput
             locale="en"
@@ -60,28 +66,38 @@ export default function NewTripForm() {
         </View>
 
         <View style={styles.mapContainer}>
-          <SecondaryButton
-            icon="crosshairs-gps"
-            onPress={() => {
-              if (currentLocation) {
-                setSelectedLocation(currentLocation);
-              }
+          <MapWindow isViewOnly={true} selectedLocation={selectedLocation} />
+          <View
+            style={{
+              flexDirection: "row",
+              alignSelf: "center",
+              paddingVertical: 8,
             }}
           >
-            Use My Location
-          </SecondaryButton>
-          <MapWindow
-            isViewOnly={true}
-            selectedLocation={selectedLocation}
-            height={200}
-          />
-          <SecondaryButton onPress={handleSelectNewLocation}>
-            Modify Location
-          </SecondaryButton>
+            <View style={{ marginHorizontal: 4 }}>
+              <SecondaryButton
+                icon="crosshairs-gps"
+                onPress={() => {
+                  if (currentLocation) {
+                    setSelectedLocation(currentLocation);
+                  }
+                }}
+              >
+                Use My Location
+              </SecondaryButton>
+            </View>
+
+            <View style={{ marginHorizontal: 4 }}>
+              <SecondaryButton onPress={handleSelectNewLocation}>
+                Modify Location
+              </SecondaryButton>
+            </View>
+          </View>
         </View>
 
         <View>
           <TextInput
+            mode="outlined"
             label="Location Name"
             value={locationName}
             onChangeText={setLocationName}
@@ -100,7 +116,12 @@ export default function NewTripForm() {
           <WaterSelector waterType={waterType} setWaterType={setWaterType} />
         </View>
       </ScrollView>
-      <View style={styles.buttonContainer}>
+      <View
+        style={[
+          styles.buttonContainer,
+          { backgroundColor: theme.colors.background },
+        ]}
+      >
         <TertiaryButton
           onPress={() => {
             setInputError(null);
@@ -117,10 +138,6 @@ export default function NewTripForm() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    margin: 20,
-    flex: 1,
-  },
   scrollViewContainer: { padding: 16 },
   modifyLocationButton: { padding: 8 },
   form: {
