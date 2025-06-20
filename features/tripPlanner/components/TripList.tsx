@@ -3,6 +3,7 @@ import { Button, Text } from "react-native-paper";
 import useTripList from "../hooks/useTripList";
 import TripCard from "./TripCard";
 import PrimaryButton from "common/components/buttons/PrimaryButton";
+import SecondaryButton from "common/components/buttons/SecondaryButton";
 
 export default function TripList() {
   const { isLoading, trips, deleteTrip, openNewTripForm } = useTripList();

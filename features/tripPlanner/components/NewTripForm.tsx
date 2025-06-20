@@ -9,6 +9,7 @@ import useNewTripForm from "../hooks/useNewTripForm";
 import WaterSelector from "features/catchLog/components/WaterSelector";
 import PrimaryButton from "common/components/buttons/PrimaryButton";
 import TertiaryButton from "common/components/buttons/TertiaryButton";
+import SecondaryButton from "common/components/buttons/SecondaryButton";
 
 type NewTripRouteProp = RouteProp<RootStackParamList, "NewTrip">;
 
@@ -59,7 +60,7 @@ export default function NewTripForm() {
         </View>
 
         <View style={styles.mapContainer}>
-          <PrimaryButton
+          <SecondaryButton
             icon="crosshairs-gps"
             onPress={() => {
               if (currentLocation) {
@@ -68,15 +69,15 @@ export default function NewTripForm() {
             }}
           >
             Use My Location
-          </PrimaryButton>
+          </SecondaryButton>
           <MapWindow
             isViewOnly={true}
             selectedLocation={selectedLocation}
             height={200}
           />
-          <PrimaryButton onPress={handleSelectNewLocation}>
+          <SecondaryButton onPress={handleSelectNewLocation}>
             Modify Location
-          </PrimaryButton>
+          </SecondaryButton>
         </View>
 
         <View>

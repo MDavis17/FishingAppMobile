@@ -9,6 +9,7 @@ interface Props {
   icon?: IconSource;
   textColor?: string;
   mode?: "text" | "contained" | "outlined" | "elevated" | "contained-tonal";
+  borderColor?: string;
 }
 
 export default function AbstractButton({
@@ -17,9 +18,16 @@ export default function AbstractButton({
   icon,
   textColor,
   mode,
+  borderColor,
 }: Props) {
   return (
-    <Button mode={mode} onPress={onPress} icon={icon} textColor={textColor}>
+    <Button
+      mode={mode}
+      onPress={onPress}
+      icon={icon}
+      textColor={textColor}
+      style={{ borderColor: borderColor }}
+    >
       {children}
     </Button>
   );
