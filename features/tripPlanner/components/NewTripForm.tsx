@@ -67,14 +67,8 @@ export default function NewTripForm() {
 
         <View style={styles.mapContainer}>
           <MapWindow isViewOnly={true} selectedLocation={selectedLocation} />
-          <View
-            style={{
-              flexDirection: "row",
-              alignSelf: "center",
-              paddingVertical: 8,
-            }}
-          >
-            <View style={{ marginHorizontal: 4 }}>
+          <View style={styles.mapActionsContainer}>
+            <View style={styles.mapActionButton}>
               <SecondaryButton
                 icon="crosshairs-gps"
                 onPress={() => {
@@ -87,7 +81,7 @@ export default function NewTripForm() {
               </SecondaryButton>
             </View>
 
-            <View style={{ marginHorizontal: 4 }}>
+            <View style={styles.mapActionButton}>
               <SecondaryButton onPress={handleSelectNewLocation}>
                 Modify Location
               </SecondaryButton>
@@ -104,7 +98,6 @@ export default function NewTripForm() {
             style={[
               styles.input,
               inputError?.inputId === "locationName" && styles.errorInput,
-              { marginRight: 8 },
             ]}
           />
           {inputError?.inputId === "locationName" && (
@@ -180,4 +173,10 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   waterSelectorContainer: { marginVertical: 12 },
+  mapActionsContainer: {
+    flexDirection: "row",
+    alignSelf: "center",
+    paddingVertical: 8,
+  },
+  mapActionButton: { marginHorizontal: 4 },
 });
