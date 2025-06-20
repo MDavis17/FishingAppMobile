@@ -2,7 +2,7 @@ import React from "react";
 import { View, StyleSheet, Text, ScrollView, SafeAreaView } from "react-native";
 import { RootStackParamList } from "types";
 import { DatePickerInput } from "react-native-paper-dates";
-import { Button } from "react-native-paper";
+import { Button, TextInput } from "react-native-paper";
 import MapWindow from "common/components/MapWindow";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import useNewTripForm from "../hooks/useNewTripForm";
@@ -26,6 +26,8 @@ export default function NewTripForm() {
     setSelectedLocation,
     handleSelectNewLocation,
     currentLocation,
+    locationName,
+    setLocationName,
   } = useNewTripForm(createNewTrip);
 
   if (!selectedLocation) {
@@ -38,7 +40,7 @@ export default function NewTripForm() {
         <View style={styles.dateTimeContainer}>
           <DatePickerInput
             locale="en"
-            label="Catch Date"
+            label="Trip Date"
             value={date}
             onChange={(d) => setDate(d)}
             inputMode="start"
@@ -72,12 +74,28 @@ export default function NewTripForm() {
             height={200}
           />
           <Button
-            mode="outlined"
+            mode="contained"
             style={styles.modifyLocationButton}
             onPress={handleSelectNewLocation}
           >
             Modify Location
           </Button>
+        </View>
+
+        <View>
+          <TextInput
+            label="Location Name"
+            value={locationName}
+            onChangeText={setLocationName}
+            style={[
+              styles.input,
+              inputError?.inputId === "locationName" && styles.errorInput,
+              { marginRight: 8 },
+            ]}
+          />
+          {inputError?.inputId === "locationName" && (
+            <Text style={styles.errorText}>{inputError.message}</Text>
+          )}
         </View>
 
         <View style={styles.waterSelectorContainer}>
@@ -108,7 +126,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollViewContainer: { padding: 16 },
-  modifyLocationButton: { padding: 8, opacity: 0.9 },
+  modifyLocationButton: { padding: 8 },
   form: {
     marginTop: 10,
     padding: 10,
