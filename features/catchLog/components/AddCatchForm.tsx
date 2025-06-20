@@ -16,6 +16,7 @@ import useAddCatchForm from "../hooks/useAddCatchForm";
 import { Button } from "react-native-paper";
 import MapWindow from "common/components/MapWindow";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import PrimaryButton from "common/components/buttons/PrimaryButton";
 
 type NewCatchRouteProp = RouteProp<RootStackParamList, "AddNewCatch">;
 
@@ -86,8 +87,7 @@ export default function AddCatchForm() {
         </View>
 
         <View style={styles.mapContainer}>
-          <Button
-            mode="contained"
+          <PrimaryButton
             icon="crosshairs-gps"
             onPress={() => {
               if (currentLocation) {
@@ -96,7 +96,7 @@ export default function AddCatchForm() {
             }}
           >
             Use My Location
-          </Button>
+          </PrimaryButton>
           <MapWindow
             isViewOnly={true}
             selectedLocation={selectedLocation}
@@ -125,9 +125,7 @@ export default function AddCatchForm() {
         >
           Cancel
         </Button>
-        <Button mode="contained" onPress={handleAddCatch}>
-          Log Catch
-        </Button>
+        <PrimaryButton onPress={handleAddCatch}>Log Catch</PrimaryButton>
       </View>
     </SafeAreaView>
   );

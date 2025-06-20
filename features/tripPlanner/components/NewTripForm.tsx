@@ -7,6 +7,7 @@ import MapWindow from "common/components/MapWindow";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import useNewTripForm from "../hooks/useNewTripForm";
 import WaterSelector from "features/catchLog/components/WaterSelector";
+import PrimaryButton from "common/components/buttons/PrimaryButton";
 
 type NewTripRouteProp = RouteProp<RootStackParamList, "NewTrip">;
 
@@ -57,8 +58,7 @@ export default function NewTripForm() {
         </View>
 
         <View style={styles.mapContainer}>
-          <Button
-            mode="contained"
+          <PrimaryButton
             icon="crosshairs-gps"
             onPress={() => {
               if (currentLocation) {
@@ -67,19 +67,15 @@ export default function NewTripForm() {
             }}
           >
             Use My Location
-          </Button>
+          </PrimaryButton>
           <MapWindow
             isViewOnly={true}
             selectedLocation={selectedLocation}
             height={200}
           />
-          <Button
-            mode="contained"
-            style={styles.modifyLocationButton}
-            onPress={handleSelectNewLocation}
-          >
+          <PrimaryButton onPress={handleSelectNewLocation}>
             Modify Location
-          </Button>
+          </PrimaryButton>
         </View>
 
         <View>
@@ -112,9 +108,7 @@ export default function NewTripForm() {
         >
           Cancel
         </Button>
-        <Button mode="contained" onPress={handleAddTrip}>
-          Complete
-        </Button>
+        <PrimaryButton onPress={handleAddTrip}>Complete</PrimaryButton>
       </View>
     </SafeAreaView>
   );

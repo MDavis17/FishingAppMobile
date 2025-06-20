@@ -2,6 +2,7 @@ import { FlatList, StyleSheet, View } from "react-native";
 import { Button, Text } from "react-native-paper";
 import useTripList from "../hooks/useTripList";
 import TripCard from "./TripCard";
+import PrimaryButton from "common/components/buttons/PrimaryButton";
 
 export default function TripList() {
   const { isLoading, trips, deleteTrip, openNewTripForm } = useTripList();
@@ -38,9 +39,7 @@ export default function TripList() {
         contentContainerStyle={styles.listContainer}
         ItemSeparatorComponent={() => <View style={{ height: 8 }} />}
       />
-      <Button mode="contained" onPress={openNewTripForm}>
-        Add New Trip
-      </Button>
+      <PrimaryButton onPress={openNewTripForm}>Add New Trip</PrimaryButton>
     </View>
   );
 }

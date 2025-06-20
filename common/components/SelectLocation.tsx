@@ -5,6 +5,7 @@ import MapWindow from "common/components/MapWindow";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { LatLng } from "react-native-maps";
 import { Button } from "react-native-paper";
+import PrimaryButton from "./buttons/PrimaryButton";
 
 type SelectLocationRouteProp = RouteProp<RootStackParamList, "SelectLocation">;
 
@@ -29,14 +30,7 @@ export default function SelectLocation() {
       <MapWindow selectedLocation={location} onLocationSelect={handlePress} />
       {location !== initialLocation && (
         <View style={styles.confirmButton}>
-          <Button
-            mode="contained"
-            style={styles.button}
-            textColor="white"
-            onPress={handleConfirm}
-          >
-            Confirm
-          </Button>
+          <PrimaryButton onPress={handleConfirm}>Confirm</PrimaryButton>
         </View>
       )}
     </View>
