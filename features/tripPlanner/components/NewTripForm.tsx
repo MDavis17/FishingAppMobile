@@ -8,6 +8,7 @@ import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import useNewTripForm from "../hooks/useNewTripForm";
 import WaterSelector from "features/catchLog/components/WaterSelector";
 import PrimaryButton from "common/components/buttons/PrimaryButton";
+import TertiaryButton from "common/components/buttons/TertiaryButton";
 
 type NewTripRouteProp = RouteProp<RootStackParamList, "NewTrip">;
 
@@ -99,15 +100,15 @@ export default function NewTripForm() {
         </View>
       </ScrollView>
       <View style={styles.buttonContainer}>
-        <Button
+        <TertiaryButton
           onPress={() => {
             setInputError(null);
             navigation.goBack();
           }}
-          labelStyle={{ color: "red" }}
+          textColor="red"
         >
           Cancel
-        </Button>
+        </TertiaryButton>
         <PrimaryButton onPress={handleAddTrip}>Complete</PrimaryButton>
       </View>
     </SafeAreaView>
