@@ -10,50 +10,43 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function LogNavigation() {
   const theme = useTheme();
+  const basicOptions = {
+    headerStyle: {
+      backgroundColor: theme.colors.primary,
+    },
+    headerTintColor: theme.colors.onPrimary,
+  };
+
   return (
     <Stack.Navigator>
       <Stack.Screen
         name="Fishing Log"
         component={LogListTabs}
-        options={{
-          headerStyle: {
-            backgroundColor: theme.colors.surfaceVariant,
-          },
-          headerTintColor: theme.colors.onSurface,
-        }}
+        options={basicOptions}
       />
       <Stack.Screen
         name="TripDetail"
         component={TripDetail}
         options={{
+          ...basicOptions,
           presentation: "modal",
-          headerStyle: {
-            backgroundColor: theme.colors.surfaceVariant,
-          },
-          headerTintColor: theme.colors.onSurface,
         }}
       />
       <Stack.Screen
         name="NewTrip"
         component={NewTripForm}
         options={{
+          ...basicOptions,
           presentation: "modal",
           title: "New Trip",
-          headerStyle: {
-            backgroundColor: theme.colors.surfaceVariant,
-          },
-          headerTintColor: theme.colors.onSurface,
         }}
       />
       <Stack.Screen
         name="SelectLocation"
         component={SelectLocation}
         options={{
+          ...basicOptions,
           title: "Select Location",
-          headerStyle: {
-            backgroundColor: theme.colors.surfaceVariant,
-          },
-          headerTintColor: theme.colors.onSurface,
         }}
       />
     </Stack.Navigator>

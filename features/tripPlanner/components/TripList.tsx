@@ -1,5 +1,5 @@
 import { FlatList, StyleSheet, View } from "react-native";
-import { Button, Text } from "react-native-paper";
+import { Text, useTheme } from "react-native-paper";
 import useTripList from "../hooks/useTripList";
 import TripCard from "./TripCard";
 import PrimaryButton from "common/components/buttons/PrimaryButton";
@@ -7,6 +7,7 @@ import SecondaryButton from "common/components/buttons/SecondaryButton";
 
 export default function TripList() {
   const { isLoading, trips, deleteTrip, openNewTripForm } = useTripList();
+  const theme = useTheme();
 
   const renderSkeletonItem = (_: any, index: number) => (
     <View key={index} style={styles.skeletonItem}>
@@ -30,7 +31,9 @@ export default function TripList() {
   }
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[styles.container, { backgroundColor: theme.colors.background }]}
+    >
       <FlatList
         data={trips}
         renderItem={({ item }) => (
