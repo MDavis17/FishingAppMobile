@@ -65,7 +65,6 @@ export default function TripCard({ trip, onDelete }: Props) {
 
   const mockTrip = {
     ...trip,
-    location: { coordinates: { ...trip.location }, name: "Home Beach" },
     catchList: [
       { species: "Halibut" } as CatchEntry,
       { species: "Surf Perch" } as CatchEntry,

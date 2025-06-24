@@ -11,10 +11,17 @@ export default function useNewTripForm(addNewTrip: (newTrip: Trip) => void) {
   const [inputError, setInputError] = useState<InputError | null>(null);
   const [selectedLocation, setSelectedLocation] = useState<LatLng | null>(null);
   const [currentLocation, setCurrentLocation] = useState<LatLng | null>(null);
+  const [locationName, setLocationName] = useState<string>("");
 
   const validateInputs = (): InputError | null => {
     if (!date) {
       return { inputId: "date", message: "Please select a valid trip date." };
+    }
+    if (!locationName.trim()) {
+      return {
+        inputId: "locationName",
+        message: "Please give your trip location a name.",
+      };
     }
     return null;
   };
@@ -39,8 +46,9 @@ export default function useNewTripForm(addNewTrip: (newTrip: Trip) => void) {
     const newTrip: Trip = {
       date: date.toISOString(),
       waterType,
-      location: selectedLocation,
+      location: { coordinates: selectedLocation, name: locationName },
       catchList: [],
+      catchSummary: "",
     };
 
     addNewTrip(newTrip);
@@ -89,5 +97,7 @@ export default function useNewTripForm(addNewTrip: (newTrip: Trip) => void) {
     setSelectedLocation,
     handleSelectNewLocation,
     currentLocation,
+    locationName,
+    setLocationName,
   };
 }
