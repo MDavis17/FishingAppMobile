@@ -2,6 +2,7 @@ import { FlatList, StyleSheet, View } from "react-native";
 import { Button, Text } from "react-native-paper";
 import useLogList from "../hooks/useLogList";
 import CatchCard from "./CatchCard";
+import PrimaryButton from "common/components/buttons/PrimaryButton";
 
 export default function LogList() {
   const { isLoading, logs, openNewCatchForm, deleteCatch } = useLogList();
@@ -38,9 +39,9 @@ export default function LogList() {
         contentContainerStyle={styles.listContainer}
         ItemSeparatorComponent={() => <View style={{ height: 8 }} />}
       />
-      <Button mode="contained" onPress={() => openNewCatchForm()}>
+      <PrimaryButton onPress={() => openNewCatchForm()}>
         Add New Catch
-      </Button>
+      </PrimaryButton>
     </View>
   );
 }
