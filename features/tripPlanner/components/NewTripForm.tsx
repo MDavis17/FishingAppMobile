@@ -7,6 +7,9 @@ import MapWindow from "common/components/MapWindow";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import useNewTripForm from "../hooks/useNewTripForm";
 import WaterSelector from "features/catchLog/components/WaterSelector";
+import PrimaryButton from "common/components/buttons/PrimaryButton";
+import TertiaryButton from "common/components/buttons/TertiaryButton";
+import SecondaryButton from "common/components/buttons/SecondaryButton";
 
 type NewTripRouteProp = RouteProp<RootStackParamList, "NewTrip">;
 
@@ -57,8 +60,7 @@ export default function NewTripForm() {
         </View>
 
         <View style={styles.mapContainer}>
-          <Button
-            mode="contained"
+          <SecondaryButton
             icon="crosshairs-gps"
             onPress={() => {
               if (currentLocation) {
@@ -67,19 +69,15 @@ export default function NewTripForm() {
             }}
           >
             Use My Location
-          </Button>
+          </SecondaryButton>
           <MapWindow
             isViewOnly={true}
             selectedLocation={selectedLocation}
             height={200}
           />
-          <Button
-            mode="contained"
-            style={styles.modifyLocationButton}
-            onPress={handleSelectNewLocation}
-          >
+          <SecondaryButton onPress={handleSelectNewLocation}>
             Modify Location
-          </Button>
+          </SecondaryButton>
         </View>
 
         <View>
@@ -103,18 +101,16 @@ export default function NewTripForm() {
         </View>
       </ScrollView>
       <View style={styles.buttonContainer}>
-        <Button
+        <TertiaryButton
           onPress={() => {
             setInputError(null);
             navigation.goBack();
           }}
-          labelStyle={{ color: "red" }}
+          textColor="red"
         >
           Cancel
-        </Button>
-        <Button mode="contained" onPress={handleAddTrip}>
-          Complete
-        </Button>
+        </TertiaryButton>
+        <PrimaryButton onPress={handleAddTrip}>Complete</PrimaryButton>
       </View>
     </SafeAreaView>
   );

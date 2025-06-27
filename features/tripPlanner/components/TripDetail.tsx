@@ -1,8 +1,9 @@
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import TertiaryButton from "common/components/buttons/TertiaryButton";
 import MapWindow from "common/components/MapWindow";
 import { useEffect } from "react";
-import { Button, StyleSheet, View } from "react-native";
-import { List, Text } from "react-native-paper";
+import { StyleSheet, View } from "react-native";
+import { List, Text, Button } from "react-native-paper";
 import { RootStackParamList } from "types";
 
 type TripDetailRouteProp = RouteProp<RootStackParamList, "TripDetail">;
@@ -70,7 +71,9 @@ export default function TripDetail() {
         </View>
       </View>
       <View style={styles.buttonContainer}>
-        <Button title="Delete" onPress={deleteTrip} color="red" />
+        <TertiaryButton onPress={deleteTrip} textColor="red">
+          Delete
+        </TertiaryButton>
       </View>
     </View>
   );
@@ -83,5 +86,6 @@ const styles = StyleSheet.create({
   dataContainer: { paddingTop: 8, paddingBottom: 8 },
   buttonContainer: {
     marginTop: 20,
+    marginBottom: 10,
   },
 });

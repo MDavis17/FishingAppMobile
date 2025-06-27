@@ -1,3 +1,4 @@
+import PrimaryButton from "common/components/buttons/PrimaryButton";
 import React from "react";
 import { View, StyleSheet, Dimensions, ViewStyle } from "react-native";
 import { Button } from "react-native-paper";
@@ -21,9 +22,9 @@ export default function Slide({
     <View style={styles.slide}>
       <View style={contentStyle}>{children}</View>
       <View style={styles.buttonContainer}>
-        <Button mode="contained" onPress={handleNext}>
+        <PrimaryButton onPress={handleNext}>
           {isLastSlide ? "Get Started" : "Next"}
-        </Button>
+        </PrimaryButton>
       </View>
     </View>
   );
