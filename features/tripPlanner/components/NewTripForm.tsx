@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, StyleSheet, Text, ScrollView, SafeAreaView } from "react-native";
-import { RootStackParamList } from "types";
+import { CatchEntry, RootStackParamList } from "types";
 import { DatePickerInput } from "react-native-paper-dates";
-import { Button, TextInput } from "react-native-paper";
+import { TextInput, useTheme } from "react-native-paper";
 import MapWindow from "common/components/MapWindow";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import useNewTripForm from "../hooks/useNewTripForm";
@@ -10,10 +10,12 @@ import WaterSelector from "features/catchLog/components/WaterSelector";
 import PrimaryButton from "common/components/buttons/PrimaryButton";
 import TertiaryButton from "common/components/buttons/TertiaryButton";
 import SecondaryButton from "common/components/buttons/SecondaryButton";
+import LogList from "features/catchLog/components/LogList";
 
 type NewTripRouteProp = RouteProp<RootStackParamList, "NewTrip">;
 
 export default function NewTripForm() {
+  const theme = useTheme();
   const navigation = useNavigation();
   const route = useRoute<NewTripRouteProp>();
   const { createNewTrip } = route.params;
@@ -33,13 +35,20 @@ export default function NewTripForm() {
     setLocationName,
   } = useNewTripForm(createNewTrip);
 
+  // const [catchList, setCatchList] = useState<CatchEntry[]>();
+
   if (!selectedLocation) {
     return;
   }
 
   return (
-    <SafeAreaView>
-      <ScrollView style={styles.scrollViewContainer}>
+    <SafeAreaView style={{ backgroundColor: theme.colors.background, flex: 1 }}>
+      <ScrollView
+        style={[
+          styles.scrollViewContainer,
+          { backgroundColor: theme.colors.background },
+        ]}
+      >
         <View style={styles.dateTimeContainer}>
           <DatePickerInput
             locale="en"
@@ -60,35 +69,38 @@ export default function NewTripForm() {
         </View>
 
         <View style={styles.mapContainer}>
-          <SecondaryButton
-            icon="crosshairs-gps"
-            onPress={() => {
-              if (currentLocation) {
-                setSelectedLocation(currentLocation);
-              }
-            }}
-          >
-            Use My Location
-          </SecondaryButton>
-          <MapWindow
-            isViewOnly={true}
-            selectedLocation={selectedLocation}
-            height={200}
-          />
-          <SecondaryButton onPress={handleSelectNewLocation}>
-            Modify Location
-          </SecondaryButton>
+          <MapWindow isViewOnly={true} selectedLocation={selectedLocation} />
+          <View style={styles.mapActionsContainer}>
+            <View style={styles.mapActionButton}>
+              <SecondaryButton
+                icon="crosshairs-gps"
+                onPress={() => {
+                  if (currentLocation) {
+                    setSelectedLocation(currentLocation);
+                  }
+                }}
+              >
+                Use My Location
+              </SecondaryButton>
+            </View>
+
+            <View style={styles.mapActionButton}>
+              <SecondaryButton onPress={handleSelectNewLocation}>
+                Modify Location
+              </SecondaryButton>
+            </View>
+          </View>
         </View>
 
         <View>
           <TextInput
+            mode="outlined"
             label="Location Name"
             value={locationName}
             onChangeText={setLocationName}
             style={[
               styles.input,
               inputError?.inputId === "locationName" && styles.errorInput,
-              { marginRight: 8 },
             ]}
           />
           {inputError?.inputId === "locationName" && (
@@ -99,8 +111,17 @@ export default function NewTripForm() {
         <View style={styles.waterSelectorContainer}>
           <WaterSelector waterType={waterType} setWaterType={setWaterType} />
         </View>
+
+        <View>
+          <LogList />
+        </View>
       </ScrollView>
-      <View style={styles.buttonContainer}>
+      <View
+        style={[
+          styles.buttonContainer,
+          { backgroundColor: theme.colors.background },
+        ]}
+      >
         <TertiaryButton
           onPress={() => {
             setInputError(null);
@@ -117,10 +138,6 @@ export default function NewTripForm() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    margin: 20,
-    flex: 1,
-  },
   scrollViewContainer: { padding: 16 },
   modifyLocationButton: { padding: 8 },
   form: {
@@ -135,6 +152,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     marginVertical: 6,
+    backgroundColor: "white",
   },
   textInput: {
     height: 40,
@@ -163,4 +181,10 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   waterSelectorContainer: { marginVertical: 12 },
+  mapActionsContainer: {
+    flexDirection: "row",
+    alignSelf: "center",
+    paddingVertical: 8,
+  },
+  mapActionButton: { marginHorizontal: 4 },
 });

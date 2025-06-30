@@ -4,43 +4,58 @@ import SelectLocation from "common/components/SelectLocation";
 import LogListTabs from "../components/LogListTabs";
 import TripDetail from "features/tripPlanner/components/TripDetail";
 import NewTripForm from "features/tripPlanner/components/NewTripForm";
+import { useTheme } from "react-native-paper";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function LogNavigation() {
+  const theme = useTheme();
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Fishing Log" component={LogListTabs} />
+      <Stack.Screen
+        name="Fishing Log"
+        component={LogListTabs}
+        options={{
+          headerStyle: {
+            backgroundColor: theme.colors.surfaceVariant,
+          },
+          headerTintColor: theme.colors.onSurface,
+        }}
+      />
       <Stack.Screen
         name="TripDetail"
         component={TripDetail}
-        options={{ presentation: "modal" }}
+        options={{
+          presentation: "modal",
+          headerStyle: {
+            backgroundColor: theme.colors.surfaceVariant,
+          },
+          headerTintColor: theme.colors.onSurface,
+        }}
       />
       <Stack.Screen
         name="NewTrip"
         component={NewTripForm}
-        options={{ presentation: "modal", title: "New Trip" }}
+        options={{
+          presentation: "modal",
+          title: "New Trip",
+          headerStyle: {
+            backgroundColor: theme.colors.surfaceVariant,
+          },
+          headerTintColor: theme.colors.onSurface,
+        }}
       />
       <Stack.Screen
         name="SelectLocation"
         component={SelectLocation}
-        options={{ title: "Select Location" }}
+        options={{
+          title: "Select Location",
+          headerStyle: {
+            backgroundColor: theme.colors.surfaceVariant,
+          },
+          headerTintColor: theme.colors.onSurface,
+        }}
       />
-      {/* <Stack.Screen
-        name="CatchDetail"
-        component={CatchDetail}
-        options={{ presentation: "modal" }}
-      />
-      <Stack.Screen
-        name="AddNewCatch"
-        component={AddCatchForm}
-        options={{ presentation: "modal", title: "New Catch" }}
-      />
-      <Stack.Screen
-        name="SelectLocation"
-        component={SelectLocation}
-        options={{ title: "Select Location" }}
-      /> */}
     </Stack.Navigator>
   );
 }
