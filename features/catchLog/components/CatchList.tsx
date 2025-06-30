@@ -1,11 +1,11 @@
 import { FlatList, StyleSheet, View } from "react-native";
 import { Text } from "react-native-paper";
-import useLogList from "../hooks/useLogList";
 import CatchCard from "./CatchCard";
 import SecondaryButton from "common/components/buttons/SecondaryButton";
+import useCatchList from "../hooks/useCatchList";
 
-export default function LogList() {
-  const { isLoading, logs, openNewCatchForm, deleteCatch } = useLogList();
+export default function CatchList() {
+  const { isLoading, logs, openNewCatchForm, deleteCatch } = useCatchList();
 
   const renderSkeletonItem = (_: any, index: number) => (
     <View key={index} style={styles.skeletonItem}>

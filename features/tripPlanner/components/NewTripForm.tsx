@@ -10,7 +10,7 @@ import WaterSelector from "features/catchLog/components/WaterSelector";
 import PrimaryButton from "common/components/buttons/PrimaryButton";
 import TertiaryButton from "common/components/buttons/TertiaryButton";
 import SecondaryButton from "common/components/buttons/SecondaryButton";
-import LogList from "features/catchLog/components/LogList";
+import CatchList from "features/catchLog/components/CatchList";
 
 type NewTripRouteProp = RouteProp<RootStackParamList, "NewTrip">;
 
@@ -34,8 +34,6 @@ export default function NewTripForm() {
     locationName,
     setLocationName,
   } = useNewTripForm(createNewTrip);
-
-  // const [catchList, setCatchList] = useState<CatchEntry[]>();
 
   if (!selectedLocation) {
     return;
@@ -113,7 +111,7 @@ export default function NewTripForm() {
         </View>
 
         <View>
-          <LogList />
+          <CatchList />
         </View>
       </ScrollView>
       <View

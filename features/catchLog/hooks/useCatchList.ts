@@ -1,12 +1,14 @@
 import { useState, useEffect, useCallback } from "react";
-import { CatchEntry } from "../../../types";
+import { CatchEntry, RootStackParamList } from "../../../types";
 import { getCatchLogs } from "../api/getCatchLogs";
 import { deleteCatchLogById } from "../api/deleteCatchLogById";
 import { addNewCatchLog } from "../api/addNewCatchLog";
 import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
-export default function useLogList() {
-  const navigation = useNavigation();
+export default function useCatchList() {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [logs, setLogs] = useState<CatchEntry[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
