@@ -1,8 +1,8 @@
 import { FlatList, StyleSheet, View } from "react-native";
-import { Button, Text } from "react-native-paper";
+import { Text } from "react-native-paper";
 import useLogList from "../hooks/useLogList";
 import CatchCard from "./CatchCard";
-import PrimaryButton from "common/components/buttons/PrimaryButton";
+import SecondaryButton from "common/components/buttons/SecondaryButton";
 
 export default function LogList() {
   const { isLoading, logs, openNewCatchForm, deleteCatch } = useLogList();
@@ -39,9 +39,9 @@ export default function LogList() {
         contentContainerStyle={styles.listContainer}
         ItemSeparatorComponent={() => <View style={{ height: 8 }} />}
       />
-      <PrimaryButton onPress={() => openNewCatchForm()}>
+      <SecondaryButton onPress={() => openNewCatchForm()}>
         Add New Catch
-      </PrimaryButton>
+      </SecondaryButton>
     </View>
   );
 }
@@ -51,7 +51,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     padding: 8,
-    backgroundColor: "white",
   },
   loadingText: {
     marginBottom: 20,
