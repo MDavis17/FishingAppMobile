@@ -4,10 +4,18 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import AnglerHome from "features/anglerHome/AnglerHome";
 import LogNavigation from "features/catchLog/navigation/LogNavigation";
 import PlannerNavigation from "features/tripPlanner/navigation/PlannerNavigation";
+import { useTheme } from "react-native-paper";
 
 const Tab = createBottomTabNavigator();
 
 export default function MainAppTabs() {
+  const theme = useTheme();
+  const basicScreenOptions = {
+    headerStyle: {
+      backgroundColor: theme.colors.primary,
+    },
+    headerTintColor: theme.colors.onPrimary,
+  };
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -30,11 +38,16 @@ export default function MainAppTabs() {
             />
           );
         },
-        tabBarActiveTintColor: "#0077cc",
-        tabBarInactiveTintColor: "gray",
+        tabBarActiveTintColor: theme.colors.primary,
+        tabBarInactiveTintColor: theme.colors.onSurface,
+        tabBarStyle: { backgroundColor: theme.colors.surface },
       })}
     >
-      <Tab.Screen name="Home" component={AnglerHome} />
+      <Tab.Screen
+        name="Home"
+        component={AnglerHome}
+        options={basicScreenOptions}
+      />
       <Tab.Screen
         name="Fishing Log"
         component={LogNavigation}

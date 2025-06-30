@@ -46,9 +46,9 @@ export default function LogListTabs() {
         <TabBar
           {...props}
           indicatorStyle={{ backgroundColor: theme.colors.primary }}
-          style={{ backgroundColor: theme.colors.background }}
+          style={{ backgroundColor: theme.colors.secondary }}
           activeColor={theme.colors.primary}
-          inactiveColor={"black"}
+          inactiveColor={"white"}
         />
       )}
     />
