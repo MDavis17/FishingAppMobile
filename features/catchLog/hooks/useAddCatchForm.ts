@@ -3,10 +3,10 @@ import { CatchEntry, CatchTime, WaterType, InputError } from "../../../types";
 import { useNavigation } from "@react-navigation/native";
 import * as Location from "expo-location";
 import { LatLng } from "react-native-maps";
+import { useTripContext } from "features/tripPlanner/components/TripContext";
 
 export default function useAddCatchForm(
   time: CatchTime,
-  tripId: number,
   addNewCatch: (tripId: number, newCatch: CatchEntry) => void
 ) {
   const navigation = useNavigation();
@@ -16,6 +16,7 @@ export default function useAddCatchForm(
   const [inputError, setInputError] = useState<InputError | null>(null);
   const [selectedLocation, setSelectedLocation] = useState<LatLng | null>(null);
   const [currentLocation, setCurrentLocation] = useState<LatLng | null>(null);
+  const { trip } = useTripContext();
 
   const validateInputs = (): InputError | null => {
     if (!date) {
@@ -56,7 +57,12 @@ export default function useAddCatchForm(
       location: { coordinates: selectedLocation, name: "" },
     };
 
-    addNewCatch(tripId, newCatch);
+    if (!trip) {
+      console.warn("No trip context available");
+      return;
+    }
+
+    addNewCatch(trip.id, newCatch);
     resetForm();
   };
 

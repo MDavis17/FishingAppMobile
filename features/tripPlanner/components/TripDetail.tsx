@@ -6,10 +6,12 @@ import { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import { Text } from "react-native-paper";
 import { RootStackParamList } from "types";
+import { useTripContext } from "./TripContext";
 
 type TripDetailRouteProp = RouteProp<RootStackParamList, "TripDetail">;
 
 export default function TripDetail() {
+  const { setTrip } = useTripContext();
   const navigation = useNavigation();
 
   const route = useRoute<TripDetailRouteProp>();
@@ -19,6 +21,7 @@ export default function TripDetail() {
   useEffect(() => {
     const formattedDate = new Date(date).toLocaleDateString();
     navigation.setOptions({ title: formattedDate });
+    setTrip(trip);
   }, [date, navigation]);
 
   return (
