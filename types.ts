@@ -12,7 +12,7 @@ export interface CatchEntry {
   weight?: number;
   length?: number;
   waterType: WaterType;
-  location?: LatLng;
+  location?: Location;
 }
 
 export interface Trip {
@@ -44,7 +44,10 @@ export type RootStackParamList = {
   Home: undefined;
   Logs: undefined;
   CatchDetail: { catchItem: CatchEntry; deleteCatch: () => void };
-  AddNewCatch: { addNewCatch: (catchData: CatchEntry) => void };
+  AddNewCatch: {
+    tripId: number;
+    addNewCatch: (tripId: number, catchData: CatchEntry) => void;
+  };
   SelectLocation: {
     initialLocation: LatLng;
     onLocationSelected: (newLocation: LatLng) => void;

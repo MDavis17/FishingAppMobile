@@ -1,16 +1,15 @@
 import { useState, useEffect, useCallback } from "react";
 import { CatchEntry, RootStackParamList } from "../../../types";
 import { deleteCatchLogById } from "../api/deleteCatchLogById";
-// import { addNewCatchToTrip } from "../api/addNewCatchToTrip";
+import { addNewCatchToTrip } from "../api/addNewCatchToTrip";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { getCatchListForTrip } from "../api/getCatchListForTrip";
-import { addNewCatchLog } from "../api/addNewCatchLog";
 
 export default function useCatchList(tripId: number | null) {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-  const [logs, setLogs] = useState<CatchEntry[]>([]);
+  const [catches, setCatches] = useState<CatchEntry[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const fetchCatches = useCallback(async () => {
@@ -28,7 +27,7 @@ export default function useCatchList(tripId: number | null) {
         throw new Error("Something went wrong");
       }
 
-      setLogs(response.data);
+      setCatches(response.data);
     } catch (error) {
       console.error("Error fetching logs:", error);
     } finally {
@@ -41,16 +40,21 @@ export default function useCatchList(tripId: number | null) {
   }, [fetchCatches]);
 
   const openNewCatchForm = () => {
-    navigation.navigate("AddNewCatch", { addNewCatch });
+    if (!tripId) {
+      console.error("No tripId provided to openNewCatchForm");
+      return;
+    }
+
+    navigation.navigate("AddNewCatch", { tripId, addNewCatch });
   };
 
-  const addNewCatch = async (newCatch: CatchEntry) => {
+  const addNewCatch = async (tripId: number, newCatch: CatchEntry) => {
     if (!newCatch.species || !newCatch.dateTime) {
       return;
     }
 
     try {
-      const response = await addNewCatchLog(newCatch);
+      const response = await addNewCatchToTrip(tripId, newCatch);
 
       if (!response.ok) {
         throw new Error("Something went wrong");
@@ -71,7 +75,7 @@ export default function useCatchList(tripId: number | null) {
         throw new Error("Something went wrong");
       }
 
-      setLogs((prevLogs) => prevLogs.filter((log) => log.id != catchId));
+      setCatches((prevLogs) => prevLogs.filter((log) => log.id != catchId));
     } catch (error) {
       console.error("Error delete log:", error);
       throw error;
@@ -80,7 +84,7 @@ export default function useCatchList(tripId: number | null) {
 
   return {
     isLoading,
-    logs,
+    catches,
     openNewCatchForm,
     deleteCatch,
     addNewCatch,

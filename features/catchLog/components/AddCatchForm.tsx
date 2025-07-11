@@ -23,7 +23,7 @@ type NewCatchRouteProp = RouteProp<RootStackParamList, "AddNewCatch">;
 export default function AddCatchForm() {
   const navigation = useNavigation();
   const route = useRoute<NewCatchRouteProp>();
-  const { addNewCatch } = route.params;
+  const { tripId, addNewCatch } = route.params;
   const { time, setTime } = useTimeInputField();
   const {
     date,
@@ -39,7 +39,7 @@ export default function AddCatchForm() {
     setSelectedLocation,
     handleSelectNewLocation,
     currentLocation,
-  } = useAddCatchForm(time, addNewCatch);
+  } = useAddCatchForm(time, tripId, addNewCatch);
 
   if (!selectedLocation) {
     return;

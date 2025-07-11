@@ -14,7 +14,7 @@ export default function TripDetail() {
 
   const route = useRoute<TripDetailRouteProp>();
   const { trip, deleteTrip } = route.params;
-  const { date, waterType, location, catchList } = trip;
+  const { date, waterType, location } = trip;
 
   useEffect(() => {
     const formattedDate = new Date(date).toLocaleDateString();
