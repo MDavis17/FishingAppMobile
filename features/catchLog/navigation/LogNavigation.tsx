@@ -5,7 +5,6 @@ import LogListTabs from "../components/LogListTabs";
 import TripDetail from "features/tripPlanner/components/TripDetail";
 import NewTripForm from "features/tripPlanner/components/NewTripForm";
 import { useTheme } from "react-native-paper";
-import { TripProvider } from "features/tripPlanner/components/TripContext";
 import AddCatchForm from "../components/AddCatchForm";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -20,48 +19,46 @@ export default function LogNavigation() {
   };
 
   return (
-    <TripProvider>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Fishing Log"
-          component={LogListTabs}
-          options={basicOptions}
-        />
-        <Stack.Screen
-          name="TripDetail"
-          component={TripDetail}
-          options={{
-            ...basicOptions,
-            presentation: "modal",
-          }}
-        />
-        <Stack.Screen
-          name="NewTrip"
-          component={NewTripForm}
-          options={{
-            ...basicOptions,
-            presentation: "modal",
-            title: "New Trip",
-          }}
-        />
-        <Stack.Screen
-          name="SelectLocation"
-          component={SelectLocation}
-          options={{
-            ...basicOptions,
-            title: "Select Location",
-          }}
-        />
-        <Stack.Screen
-          name="AddNewCatch"
-          component={AddCatchForm}
-          options={{
-            ...basicOptions,
-            presentation: "modal",
-            title: "New Catch",
-          }}
-        />
-      </Stack.Navigator>
-    </TripProvider>
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Fishing Log"
+        component={LogListTabs}
+        options={basicOptions}
+      />
+      <Stack.Screen
+        name="TripDetail"
+        component={TripDetail}
+        options={{
+          ...basicOptions,
+          presentation: "modal",
+        }}
+      />
+      <Stack.Screen
+        name="NewTrip"
+        component={NewTripForm}
+        options={{
+          ...basicOptions,
+          presentation: "modal",
+          title: "New Trip",
+        }}
+      />
+      <Stack.Screen
+        name="SelectLocation"
+        component={SelectLocation}
+        options={{
+          ...basicOptions,
+          title: "Select Location",
+        }}
+      />
+      <Stack.Screen
+        name="AddNewCatch"
+        component={AddCatchForm}
+        options={{
+          ...basicOptions,
+          presentation: "modal",
+          title: "New Catch",
+        }}
+      />
+    </Stack.Navigator>
   );
 }

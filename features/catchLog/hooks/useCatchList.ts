@@ -1,10 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
 import { CatchEntry, RootStackParamList } from "../../../types";
 import { deleteCatchLogById } from "../api/deleteCatchLogById";
-import { addNewCatchToTrip } from "../api/addNewCatchToTrip";
+// import { addNewCatchToTrip } from "../api/addNewCatchToTrip";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { getCatchListForTrip } from "../api/getCatchListForTrip";
+import { addNewCatchLog } from "../api/addNewCatchLog";
 
 export default function useCatchList(tripId: number | null) {
   const navigation =
@@ -49,7 +50,7 @@ export default function useCatchList(tripId: number | null) {
     }
 
     try {
-      const response = await addNewCatchToTrip(tripId, newCatch);
+      const response = await addNewCatchLog(newCatch);
 
       if (!response.ok) {
         throw new Error("Something went wrong");
