@@ -10,8 +10,7 @@ interface Props {
 }
 
 export default function CatchList({ tripId }: Props) {
-  const { isLoading, logs, openNewCatchForm, deleteCatch, addNewCatch } =
-    useCatchList(tripId);
+  const { isLoading, catches, openNewCatchForm } = useCatchList(tripId);
 
   const renderSkeletonItem = (_: any, index: number) => (
     <View key={index} style={styles.skeletonItem}>
@@ -58,7 +57,7 @@ export default function CatchList({ tripId }: Props) {
   return (
     <View style={styles.container}>
       <FlatList
-        data={logs.catchList}
+        data={catches}
         renderItem={({ item }) => (
           // <CatchCard catchItem={item} onDelete={(id) => deleteCatch(id)} />
           <Text>{item.species}</Text>

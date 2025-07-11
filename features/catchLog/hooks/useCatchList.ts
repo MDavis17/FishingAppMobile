@@ -10,7 +10,7 @@ import { addNewCatchLog } from "../api/addNewCatchLog";
 export default function useCatchList(tripId: number | null) {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-  const [logs, setLogs] = useState<CatchEntry[]>([]);
+  const [catches, setCatches] = useState<CatchEntry[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const fetchCatches = useCallback(async () => {
@@ -28,7 +28,7 @@ export default function useCatchList(tripId: number | null) {
         throw new Error("Something went wrong");
       }
 
-      setLogs(response.data);
+      setCatches(response.data);
     } catch (error) {
       console.error("Error fetching logs:", error);
     } finally {
@@ -71,7 +71,7 @@ export default function useCatchList(tripId: number | null) {
         throw new Error("Something went wrong");
       }
 
-      setLogs((prevLogs) => prevLogs.filter((log) => log.id != catchId));
+      setCatches((prevLogs) => prevLogs.filter((log) => log.id != catchId));
     } catch (error) {
       console.error("Error delete log:", error);
       throw error;
@@ -80,7 +80,7 @@ export default function useCatchList(tripId: number | null) {
 
   return {
     isLoading,
-    logs,
+    catches,
     openNewCatchForm,
     deleteCatch,
     addNewCatch,
