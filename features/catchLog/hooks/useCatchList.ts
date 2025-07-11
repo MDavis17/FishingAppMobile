@@ -1,20 +1,27 @@
 import { useState, useEffect, useCallback } from "react";
-import { CatchEntry } from "../../../types";
-import { getCatchLogs } from "../api/getCatchLogs";
+import { CatchEntry, RootStackParamList } from "../../../types";
 import { deleteCatchLogById } from "../api/deleteCatchLogById";
-import { addNewCatchLog } from "../api/addNewCatchLog";
+import { addNewCatchToTrip } from "../api/addNewCatchToTrip";
 import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { getCatchListForTrip } from "../api/getCatchListForTrip";
 
-export default function useLogList() {
-  const navigation = useNavigation();
+export default function useCatchList(tripId: number | null) {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [logs, setLogs] = useState<CatchEntry[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const fetchLogs = useCallback(async () => {
+  const fetchCatches = useCallback(async () => {
     setIsLoading(true);
 
+    if (!tripId) {
+      console.error("No tripId provided");
+      return;
+    }
+
     try {
-      const response = await getCatchLogs();
+      const response = await getCatchListForTrip(tripId);
 
       if (!response.ok) {
         throw new Error("Something went wrong");
@@ -29,8 +36,8 @@ export default function useLogList() {
   }, []);
 
   useEffect(() => {
-    fetchLogs();
-  }, [fetchLogs]);
+    fetchCatches();
+  }, [fetchCatches]);
 
   const openNewCatchForm = () => {
     navigation.navigate("AddNewCatch", { addNewCatch });
@@ -42,15 +49,15 @@ export default function useLogList() {
     }
 
     try {
-      const response = await addNewCatchLog(newCatch);
+      const response = await addNewCatchToTrip(tripId, newCatch);
 
       if (!response.ok) {
         throw new Error("Something went wrong");
       }
 
-      await fetchLogs();
+      await fetchCatches();
     } catch (error) {
-      console.error("Error creating log:", error);
+      console.error("Error adding catch:", error);
       throw error;
     }
   };
@@ -75,5 +82,6 @@ export default function useLogList() {
     logs,
     openNewCatchForm,
     deleteCatch,
+    addNewCatch,
   };
 }

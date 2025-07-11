@@ -16,7 +16,7 @@ export interface CatchEntry {
 }
 
 export interface Trip {
-  id?: number;
+  id: number;
   date: string;
   waterType: WaterType;
   location: Location;
