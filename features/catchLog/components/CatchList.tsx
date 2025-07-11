@@ -1,6 +1,6 @@
 import { FlatList, StyleSheet, View } from "react-native";
 import { Text } from "react-native-paper";
-// import CatchCard from "./CatchCard";
+import CatchCard from "./CatchCard";
 import SecondaryButton from "common/components/buttons/SecondaryButton";
 import useCatchList from "../hooks/useCatchList";
 // import { addNewCatchToTrip } from "../api/addNewCatchToTrip";
@@ -10,7 +10,8 @@ interface Props {
 }
 
 export default function CatchList({ tripId }: Props) {
-  const { isLoading, catches, openNewCatchForm } = useCatchList(tripId);
+  const { isLoading, catches, openNewCatchForm, deleteCatch } =
+    useCatchList(tripId);
 
   const renderSkeletonItem = (_: any, index: number) => (
     <View key={index} style={styles.skeletonItem}>
@@ -59,8 +60,7 @@ export default function CatchList({ tripId }: Props) {
       <FlatList
         data={catches}
         renderItem={({ item }) => (
-          // <CatchCard catchItem={item} onDelete={(id) => deleteCatch(id)} />
-          <Text>{item.species}</Text>
+          <CatchCard catchItem={item} onDelete={(id) => deleteCatch(id)} />
         )}
         keyExtractor={(item) => item.dateTime}
         contentContainerStyle={styles.listContainer}
