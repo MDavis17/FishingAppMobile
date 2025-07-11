@@ -6,7 +6,8 @@ import { LatLng } from "react-native-maps";
 
 export default function useAddCatchForm(
   time: CatchTime,
-  addNewCatch: (newCatch: CatchEntry) => void
+  tripId: number,
+  addNewCatch: (tripId: number, newCatch: CatchEntry) => void
 ) {
   const navigation = useNavigation();
   const [date, setDate] = useState<Date | undefined>(new Date());
@@ -52,10 +53,10 @@ export default function useAddCatchForm(
       dateTime: combinedDateTime.toISOString(),
       species,
       waterType,
-      location: selectedLocation,
+      location: { coordinates: selectedLocation, name: "" },
     };
 
-    addNewCatch(newCatch);
+    addNewCatch(tripId, newCatch);
     resetForm();
   };
 
