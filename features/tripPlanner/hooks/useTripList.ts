@@ -75,5 +75,6 @@ export default function useTripList() {
     trips,
     openNewTripForm,
     deleteTrip,
+    fetchTrips,
   };
 }
