@@ -1,9 +1,10 @@
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import TertiaryButton from "common/components/buttons/TertiaryButton";
 import MapWindow from "common/components/MapWindow";
+import CatchList from "features/catchLog/components/CatchList";
 import { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
-import { List, Text, Button } from "react-native-paper";
+import { Text } from "react-native-paper";
 import { RootStackParamList } from "types";
 
 type TripDetailRouteProp = RouteProp<RootStackParamList, "TripDetail">;
@@ -37,37 +38,9 @@ export default function TripDetail() {
           <Text variant="titleMedium" style={{ marginBottom: 8 }}>
             Catch List
           </Text>
-          <List.Section>
-            {catchList.length === 0 ? (
-              <Text>No catches recorded.</Text>
-            ) : (
-              catchList.map((catchItem, index) => (
-                <List.Item
-                  key={index}
-                  title={catchItem.species}
-                  description={() => (
-                    <View>
-                      <Text>{catchItem.species}</Text>
-                      {catchItem.length && (
-                        <Text>Length: {catchItem.length} in</Text>
-                      )}
-                      {catchItem.weight && (
-                        <Text>Weight: {catchItem.weight} lb</Text>
-                      )}
-                      <Text>
-                        Time:{" "}
-                        {new Date(catchItem.dateTime).toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </Text>
-                    </View>
-                  )}
-                  left={(props) => <List.Icon {...props} icon="fish" />}
-                />
-              ))
-            )}
-          </List.Section>
+          <View>
+            <CatchList tripId={trip.id} />
+          </View>
         </View>
       </View>
       <View style={styles.buttonContainer}>

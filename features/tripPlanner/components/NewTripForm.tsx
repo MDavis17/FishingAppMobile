@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { View, StyleSheet, Text, ScrollView, SafeAreaView } from "react-native";
-import { CatchEntry, RootStackParamList } from "types";
+import { RootStackParamList } from "types";
 import { DatePickerInput } from "react-native-paper-dates";
 import { TextInput, useTheme } from "react-native-paper";
 import MapWindow from "common/components/MapWindow";
@@ -10,7 +10,6 @@ import WaterSelector from "features/catchLog/components/WaterSelector";
 import PrimaryButton from "common/components/buttons/PrimaryButton";
 import TertiaryButton from "common/components/buttons/TertiaryButton";
 import SecondaryButton from "common/components/buttons/SecondaryButton";
-import LogList from "features/catchLog/components/LogList";
 
 type NewTripRouteProp = RouteProp<RootStackParamList, "NewTrip">;
 
@@ -34,8 +33,6 @@ export default function NewTripForm() {
     locationName,
     setLocationName,
   } = useNewTripForm(createNewTrip);
-
-  // const [catchList, setCatchList] = useState<CatchEntry[]>();
 
   if (!selectedLocation) {
     return;
@@ -110,10 +107,6 @@ export default function NewTripForm() {
 
         <View style={styles.waterSelectorContainer}>
           <WaterSelector waterType={waterType} setWaterType={setWaterType} />
-        </View>
-
-        <View>
-          <LogList />
         </View>
       </ScrollView>
       <View
