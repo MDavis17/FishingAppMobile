@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { TouchableOpacity, Alert, StyleSheet, View } from "react-native";
 import { Swipeable } from "react-native-gesture-handler";
 import { FontAwesome } from "@expo/vector-icons";
-import { CatchEntry, RootStackParamList, Trip, WaterType } from "types";
+import { RootStackParamList, Trip, WaterType } from "types";
 import { List, Text, useTheme } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -63,16 +63,6 @@ export default function TripCard({ trip, onDelete }: Props) {
     </TouchableOpacity>
   );
 
-  const mockTrip = {
-    ...trip,
-    catchList: [
-      { species: "Halibut" } as CatchEntry,
-      { species: "Surf Perch" } as CatchEntry,
-      { species: "Surf Perch" } as CatchEntry,
-    ],
-    catchSummary: "Halibut, Surf Perch (2)",
-  };
-
   return (
     <Swipeable
       ref={swipeableRef}
@@ -80,7 +70,7 @@ export default function TripCard({ trip, onDelete }: Props) {
       onSwipeableOpen={() => setIsSwiping(true)}
       onSwipeableClose={() => setIsSwiping(false)}
     >
-      <TouchableOpacity onPress={() => handleSelectCatch(mockTrip)}>
+      <TouchableOpacity onPress={() => handleSelectCatch(trip)}>
         <View
           style={[
             styles.itemContainer,
@@ -97,12 +87,12 @@ export default function TripCard({ trip, onDelete }: Props) {
               style={styles.icon}
             />
             <Text style={[styles.tripTitle, { color: theme.colors.onSurface }]}>
-              {mockTrip.location.name}
+              {trip.location.name}
             </Text>
           </View>
           <View style={styles.tripContentContainer}>
             <Text>{formattedDate}</Text>
-            {mockTrip.catchList.length > 0 && (
+            {trip.catchList.length > 0 && (
               <Text
                 style={{
                   color: theme.colors.onSurfaceVariant,
@@ -111,7 +101,7 @@ export default function TripCard({ trip, onDelete }: Props) {
                 numberOfLines={2}
                 ellipsizeMode="tail"
               >
-                {mockTrip.catchSummary}
+                {trip.catchSummary}
               </Text>
             )}
           </View>
