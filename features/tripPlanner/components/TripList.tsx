@@ -3,10 +3,12 @@ import { Text, useTheme } from "react-native-paper";
 import useTripList from "../hooks/useTripList";
 import TripCard from "./TripCard";
 import PrimaryButton from "common/components/buttons/PrimaryButton";
-import SecondaryButton from "common/components/buttons/SecondaryButton";
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback } from "react";
 
 export default function TripList() {
-  const { isLoading, trips, deleteTrip, openNewTripForm } = useTripList();
+  const { isLoading, trips, deleteTrip, openNewTripForm, fetchTrips } =
+    useTripList();
   const theme = useTheme();
 
   const renderSkeletonItem = (_: any, index: number) => (
@@ -17,6 +19,12 @@ export default function TripList() {
         <View style={[styles.skeletonText, styles.skeletonTextShort]} />
       </View>
     </View>
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchTrips();
+    }, [fetchTrips])
   );
 
   if (isLoading) {
