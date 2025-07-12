@@ -84,15 +84,13 @@ export default function useAddCatchForm(
       }
 
       const loc = await Location.getCurrentPositionAsync({});
+      const currentLatLong = {
+        latitude: loc.coords.latitude,
+        longitude: loc.coords.longitude,
+      };
 
-      setCurrentLocation({
-        latitude: loc.coords.latitude,
-        longitude: loc.coords.longitude,
-      });
-      setSelectedLocation({
-        latitude: loc.coords.latitude,
-        longitude: loc.coords.longitude,
-      });
+      setCurrentLocation(currentLatLong);
+      setSelectedLocation(trip?.location.coordinates || currentLatLong);
     })();
   }, []);
 
