@@ -3,19 +3,19 @@ import { CatchEntry, CatchTime, WaterType, InputError } from "../../../types";
 import { useNavigation } from "@react-navigation/native";
 import * as Location from "expo-location";
 import { LatLng } from "react-native-maps";
+import { useTripContext } from "features/tripPlanner/components/TripContext";
 
 export default function useAddCatchForm(
   time: CatchTime,
-  tripId: number,
   addNewCatch: (tripId: number, newCatch: CatchEntry) => void
 ) {
   const navigation = useNavigation();
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [species, setSpecies] = useState("");
-  const [waterType, setWaterType] = useState<WaterType>(WaterType.Freshwater);
   const [inputError, setInputError] = useState<InputError | null>(null);
   const [selectedLocation, setSelectedLocation] = useState<LatLng | null>(null);
   const [currentLocation, setCurrentLocation] = useState<LatLng | null>(null);
+  const { trip } = useTripContext();
 
   const validateInputs = (): InputError | null => {
     if (!date) {
@@ -29,7 +29,6 @@ export default function useAddCatchForm(
 
   const resetForm = () => {
     setSpecies("");
-    setWaterType(WaterType.Freshwater);
     setSelectedLocation(currentLocation);
     navigation.goBack();
   };
@@ -52,11 +51,16 @@ export default function useAddCatchForm(
     const newCatch: CatchEntry = {
       dateTime: combinedDateTime.toISOString(),
       species,
-      waterType,
+      waterType: trip?.waterType || WaterType.Freshwater,
       location: { coordinates: selectedLocation, name: "" },
     };
 
-    addNewCatch(tripId, newCatch);
+    if (!trip) {
+      console.warn("No trip context available");
+      return;
+    }
+
+    addNewCatch(trip.id, newCatch);
     resetForm();
   };
 
@@ -78,15 +82,13 @@ export default function useAddCatchForm(
       }
 
       const loc = await Location.getCurrentPositionAsync({});
+      const currentLatLong = {
+        latitude: loc.coords.latitude,
+        longitude: loc.coords.longitude,
+      };
 
-      setCurrentLocation({
-        latitude: loc.coords.latitude,
-        longitude: loc.coords.longitude,
-      });
-      setSelectedLocation({
-        latitude: loc.coords.latitude,
-        longitude: loc.coords.longitude,
-      });
+      setCurrentLocation(currentLatLong);
+      setSelectedLocation(trip?.location.coordinates || currentLatLong);
     })();
   }, []);
 
@@ -95,8 +97,6 @@ export default function useAddCatchForm(
     setDate,
     species,
     setSpecies,
-    waterType,
-    setWaterType,
     inputError,
     setInputError,
     handleAddCatch,

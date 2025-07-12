@@ -46,7 +46,7 @@ export type RootStackParamList = {
   CatchDetail: { catchItem: CatchEntry; deleteCatch: () => void };
   AddNewCatch: {
     tripId: number;
-    addNewCatch: (tripId: number, catchData: CatchEntry) => void;
+    addNewCatch: (catchData: CatchEntry) => void;
   };
   SelectLocation: {
     initialLocation: LatLng;
