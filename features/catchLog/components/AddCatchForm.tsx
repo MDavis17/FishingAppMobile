@@ -9,7 +9,6 @@ import {
 } from "react-native";
 import { RootStackParamList } from "types";
 import { DatePickerInput } from "react-native-paper-dates";
-import WaterSelector from "./WaterSelector";
 import { TimeInputField } from "./TimeInputField";
 import useTimeInputField from "../hooks/useTimeInputField";
 import useAddCatchForm from "../hooks/useAddCatchForm";
@@ -30,8 +29,6 @@ export default function AddCatchForm() {
     setDate,
     species,
     setSpecies,
-    waterType,
-    setWaterType,
     inputError,
     setInputError,
     handleAddCatch,
@@ -109,10 +106,6 @@ export default function AddCatchForm() {
           >
             Modify Location
           </Button>
-        </View>
-
-        <View style={styles.waterSelectorContainer}>
-          <WaterSelector waterType={waterType} setWaterType={setWaterType} />
         </View>
       </ScrollView>
       <View style={styles.buttonContainer}>
