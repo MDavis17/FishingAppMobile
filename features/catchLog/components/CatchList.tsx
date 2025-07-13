@@ -3,7 +3,6 @@ import { Text } from "react-native-paper";
 import CatchCard from "./CatchCard";
 import SecondaryButton from "common/components/buttons/SecondaryButton";
 import useCatchList from "../hooks/useCatchList";
-// import { addNewCatchToTrip } from "../api/addNewCatchToTrip";
 
 interface Props {
   tripId: number;
@@ -33,27 +32,6 @@ export default function CatchList({ tripId }: Props) {
       </View>
     );
   }
-
-  // const mockAddNewCatch = async () => {
-  //   const newCatch = {
-  //     dateTime: "2023-10-26 15:30:00",
-  //     species: "Halibut",
-  //     waterType: "Saltwater",
-  //   };
-
-  //   try {
-  //     const response = await addNewCatchToTrip(tripId, newCatch);
-
-  //     if (!response.ok) {
-  //       throw new Error("Something went wrong");
-  //     }
-
-  //     // await fetchLogs();
-  //   } catch (error) {
-  //     console.error("Error creating log:", error);
-  //     throw error;
-  //   }
-  // };
 
   return (
     <View style={styles.container}>

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { CatchEntry, RootStackParamList } from "../../../types";
-import { deleteCatchLogById } from "../api/deleteCatchLogById";
+import { deleteCatchById } from "../api/deleteCatchById";
 import { addNewCatchToTrip } from "../api/addNewCatchToTrip";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -69,7 +69,7 @@ export default function useCatchList(tripId: number | null) {
 
   const deleteCatch = async (catchId: number) => {
     try {
-      const response = await deleteCatchLogById(catchId);
+      const response = await deleteCatchById(catchId);
 
       if (!response.ok) {
         throw new Error("Something went wrong");
