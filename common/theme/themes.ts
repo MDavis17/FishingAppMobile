@@ -24,7 +24,7 @@ export const YellowfinTunaTheme: AppTheme = {
   colors: {
     primary: "#0077BE",
     secondary: "#FFD700",
-    background: "#F0F8FF",
+    background: defaultLightOnPrimary,
     surface: "#E6F1F7",
     surfaceVariant: "#C2DFF1",
     onPrimary: defaultLightOnPrimary,
@@ -41,7 +41,7 @@ export const SalmonTheme: AppTheme = {
   colors: {
     primary: "#FA8072",
     secondary: "#5B8C5A",
-    background: "#FFF5F2",
+    background: defaultLightOnPrimary,
     surface: "#F9E3DC",
     surfaceVariant: "#EAD4C4",
     onPrimary: defaultLightOnPrimary,
@@ -58,7 +58,7 @@ export const LargemouthBassTheme: AppTheme = {
   colors: {
     primary: "#4B6043",
     secondary: "#A3C586",
-    background: "#F5FAF3",
+    background: defaultLightOnPrimary,
     surface: "#E1F0DC",
     surfaceVariant: "#C5D8B9",
     onPrimary: defaultLightOnPrimary,
@@ -75,7 +75,7 @@ export const RainbowTroutTheme: AppTheme = {
   colors: {
     primary: "#A14A76",
     secondary: "#6BA292",
-    background: "#F8F8FA",
+    background: defaultLightOnPrimary,
     surface: "#EDE7F0",
     surfaceVariant: "#D2D6D8",
     onPrimary: defaultLightOnPrimary,
@@ -92,7 +92,7 @@ export const HalibutTheme: AppTheme = {
   colors: {
     primary: "#4E4A45",
     secondary: "#BFB3A4",
-    background: "#F4F2F0",
+    background: defaultLightOnPrimary,
     surface: "#E0DBD6",
     surfaceVariant: "#CAC2B8",
     onPrimary: defaultLightOnPrimary,
@@ -109,7 +109,7 @@ export const KelpForestTheme: AppTheme = {
   colors: {
     primary: "#2E5E4E",
     secondary: "#88A35D",
-    background: "#F1F7F3",
+    background: defaultLightOnPrimary,
     surface: "#D6E5DC",
     surfaceVariant: "#B7D1BF",
     onPrimary: defaultLightOnPrimary,
