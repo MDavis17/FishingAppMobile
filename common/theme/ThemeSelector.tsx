@@ -13,18 +13,18 @@ export default function ThemeSelector() {
       onDismiss={() => setVisible(false)}
       anchor={
         <Button mode="outlined" onPress={() => setVisible(true)}>
-          {themeName || "Choose theme"}
+          {themes[themeName].name || "Choose theme"}
         </Button>
       }
     >
-      {Object.entries(themes).map(([key]) => (
+      {Object.entries(themes).map(([key, value]) => (
         <Menu.Item
           key={key}
           onPress={() => {
             setThemeName(key as keyof typeof themes);
             setVisible(false);
           }}
-          title={key}
+          title={value.name}
         />
       ))}
     </Menu>
