@@ -33,17 +33,12 @@ export default function TripDetail() {
           isViewOnly
         />
       </View>
-      <View style={styles.flex2}>
-        <View style={styles.dataContainer}>
-          <Text>{waterType}</Text>
-        </View>
-        <View style={styles.dataContainer}>
-          <Text variant="titleMedium" style={{ marginBottom: 8 }}>
-            Catch List
-          </Text>
-          <View>
-            <CatchList tripId={trip.id} />
-          </View>
+      <View style={styles.catchListContainer}>
+        <Text variant="titleMedium" style={styles.catchListTitle}>
+          Catch List
+        </Text>
+        <View style={{ flex: 2 }}>
+          <CatchList tripId={trip.id} />
         </View>
       </View>
       <View style={styles.buttonContainer}>
@@ -58,8 +53,8 @@ export default function TripDetail() {
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16, backgroundColor: "white" },
   mapContainer: { flex: 1 },
-  flex2: { flex: 2 },
-  dataContainer: { paddingTop: 8, paddingBottom: 8 },
+  catchListTitle: { marginBottom: 8 },
+  catchListContainer: { flex: 2, paddingTop: 8, paddingBottom: 8 },
   buttonContainer: {
     marginTop: 20,
     marginBottom: 10,

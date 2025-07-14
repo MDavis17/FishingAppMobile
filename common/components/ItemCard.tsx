@@ -45,7 +45,7 @@ export default function ItemCard({
             isSwiping && styles.itemContainerSwiping,
             {
               backgroundColor: theme.colors.background,
-              borderColor: theme.colors.surfaceVariant,
+              borderColor: theme.colors.primary,
             },
           ]}
         >
