@@ -88,7 +88,15 @@ export default function useAddCatchForm(
       };
 
       setCurrentLocation(currentLatLong);
+
+      if (!trip) {
+        setSelectedLocation(currentLatLong);
+        setDate(new Date());
+        return;
+      }
+
       setSelectedLocation(trip?.location.coordinates || currentLatLong);
+      setDate(new Date(trip?.date) || new Date());
     })();
   }, []);
 
