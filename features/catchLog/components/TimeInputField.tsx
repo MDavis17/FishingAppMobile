@@ -20,6 +20,7 @@ export function TimeInputField({ time, setTime }: Props) {
     <View>
       <TouchableRipple onPress={() => setVisible(true)}>
         <TextInput
+          mode="outlined"
           label="Time"
           value={formattedTime}
           editable={false}

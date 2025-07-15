@@ -1,32 +1,24 @@
 import React from "react";
-import {
-  View,
-  StyleSheet,
-  TextInput,
-  Text,
-  ScrollView,
-  SafeAreaView,
-} from "react-native";
+import { View, StyleSheet, Text, ScrollView, SafeAreaView } from "react-native";
 import { RootStackParamList } from "types";
-import { DatePickerInput } from "react-native-paper-dates";
 import { TimeInputField } from "./TimeInputField";
 import useTimeInputField from "../hooks/useTimeInputField";
 import useAddCatchForm from "../hooks/useAddCatchForm";
-import { Button } from "react-native-paper";
+import { TextInput, Button, useTheme } from "react-native-paper";
 import MapWindow from "common/components/MapWindow";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import PrimaryButton from "common/components/buttons/PrimaryButton";
+import SecondaryButton from "common/components/buttons/SecondaryButton";
 
 type NewCatchRouteProp = RouteProp<RootStackParamList, "AddNewCatch">;
 
 export default function AddCatchForm() {
   const navigation = useNavigation();
+  const theme = useTheme();
   const route = useRoute<NewCatchRouteProp>();
   const { addNewCatch } = route.params;
   const { time, setTime } = useTimeInputField();
   const {
-    date,
-    setDate,
     species,
     setSpecies,
     inputError,
@@ -43,69 +35,55 @@ export default function AddCatchForm() {
   }
 
   return (
-    <SafeAreaView>
-      <ScrollView style={styles.scrollViewContainer}>
-        <View style={styles.input}>
-          <TextInput
-            placeholder="Species"
-            value={species}
-            onChangeText={setSpecies}
-            style={[
-              styles.textInput,
-              inputError?.inputId === "species" && styles.errorInput,
-            ]}
-          />
-          {inputError?.inputId === "species" && (
-            <Text style={styles.errorText}>{inputError.message}</Text>
-          )}
-        </View>
-
+    <SafeAreaView style={{ backgroundColor: theme.colors.background, flex: 1 }}>
+      <ScrollView
+        style={[
+          styles.scrollViewContainer,
+          { backgroundColor: theme.colors.background },
+        ]}
+      >
         <View style={styles.dateTimeContainer}>
-          <DatePickerInput
-            locale="en"
-            label="Catch Date"
-            value={date}
-            onChange={(d) => setDate(d)}
-            inputMode="start"
-            mode="outlined"
-            style={[
-              styles.input,
-              inputError?.inputId === "date" && styles.errorInput,
-              { marginRight: 8 },
-            ]}
-          />
-          {inputError?.inputId === "date" && (
-            <Text style={styles.errorText}>{inputError.message}</Text>
-          )}
-
-          <View style={[styles.input, styles.borderRadius]}>
+          <View style={styles.flex}>
+            <TextInput
+              mode="outlined"
+              label="Species"
+              value={species}
+              onChangeText={setSpecies}
+              style={[
+                styles.input,
+                inputError?.inputId === "species" && styles.errorInput,
+              ]}
+            />
+            {inputError?.inputId === "species" && (
+              <Text style={styles.errorText}>{inputError.message}</Text>
+            )}
+          </View>
+          <View style={[styles.input, styles.borderRadius, styles.timeInput]}>
             <TimeInputField time={time} setTime={setTime} />
           </View>
         </View>
-
         <View style={styles.mapContainer}>
-          <PrimaryButton
-            icon="crosshairs-gps"
-            onPress={() => {
-              if (currentLocation) {
-                setSelectedLocation(currentLocation);
-              }
-            }}
-          >
-            Use My Location
-          </PrimaryButton>
-          <MapWindow
-            isViewOnly={true}
-            selectedLocation={selectedLocation}
-            height={200}
-          />
-          <Button
-            mode="outlined"
-            style={styles.modifyLocationButton}
-            onPress={handleSelectNewLocation}
-          >
-            Modify Location
-          </Button>
+          <MapWindow isViewOnly={true} selectedLocation={selectedLocation} />
+          <View style={styles.mapActionsContainer}>
+            <View style={styles.mapActionButton}>
+              <SecondaryButton
+                icon="crosshairs-gps"
+                onPress={() => {
+                  if (currentLocation) {
+                    setSelectedLocation(currentLocation);
+                  }
+                }}
+              >
+                Use My Location
+              </SecondaryButton>
+            </View>
+
+            <View style={styles.mapActionButton}>
+              <SecondaryButton onPress={handleSelectNewLocation}>
+                Modify Location
+              </SecondaryButton>
+            </View>
+          </View>
         </View>
       </ScrollView>
       <View style={styles.buttonContainer}>
@@ -114,7 +92,7 @@ export default function AddCatchForm() {
             setInputError(null);
             navigation.goBack();
           }}
-          labelStyle={{ color: "red" }}
+          labelStyle={styles.redButton}
         >
           Cancel
         </Button>
@@ -143,14 +121,9 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     marginVertical: 6,
+    backgroundColor: "white",
   },
-  textInput: {
-    height: 40,
-    borderColor: "#ccc",
-    borderWidth: 1,
-    paddingHorizontal: 10,
-    borderRadius: 5,
-  },
+  timeInput: { marginLeft: 8, backgroundColor: "white" },
   errorInput: {
     borderColor: "red",
   },
@@ -171,4 +144,12 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   waterSelectorContainer: { marginVertical: 12 },
+  mapActionsContainer: {
+    flexDirection: "row",
+    alignSelf: "center",
+    paddingVertical: 8,
+  },
+  mapActionButton: { marginHorizontal: 4 },
+  flex: { flex: 1 },
+  redButton: { color: "red" },
 });
