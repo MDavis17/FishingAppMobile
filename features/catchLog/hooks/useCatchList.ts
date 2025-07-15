@@ -45,7 +45,7 @@ export default function useCatchList(tripId: number | null) {
       return;
     }
 
-    navigation.navigate("AddNewCatch", { tripId, addNewCatch });
+    navigation.navigate("AddNewCatch", { addNewCatch });
   };
 
   const addNewCatch = async (tripId: number, newCatch: CatchEntry) => {
