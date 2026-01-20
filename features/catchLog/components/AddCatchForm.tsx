@@ -19,6 +19,8 @@ export default function AddCatchForm() {
   const { addNewCatch } = route.params;
   const { time, setTime } = useTimeInputField();
   const {
+    bait,
+    setBait,
     species,
     setSpecies,
     inputError,
@@ -61,6 +63,15 @@ export default function AddCatchForm() {
           <View style={[styles.input, styles.borderRadius, styles.timeInput]}>
             <TimeInputField time={time} setTime={setTime} />
           </View>
+        </View>
+        <View style={styles.flex}>
+          <TextInput
+            mode="outlined"
+            label="Bait"
+            value={bait}
+            onChangeText={setBait}
+            style={styles.input}
+          />
         </View>
         <View style={styles.mapContainer}>
           <MapWindow isViewOnly={true} selectedLocation={selectedLocation} />

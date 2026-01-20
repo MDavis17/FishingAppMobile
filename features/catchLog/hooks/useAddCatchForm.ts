@@ -12,6 +12,7 @@ export default function useAddCatchForm(
   const navigation = useNavigation();
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [species, setSpecies] = useState("");
+  const [bait, setBait] = useState("");
   const [inputError, setInputError] = useState<InputError | null>(null);
   const [selectedLocation, setSelectedLocation] = useState<LatLng | null>(null);
   const [currentLocation, setCurrentLocation] = useState<LatLng | null>(null);
@@ -53,6 +54,7 @@ export default function useAddCatchForm(
       species,
       waterType: trip?.waterType || WaterType.Freshwater,
       location: { coordinates: selectedLocation, name: "" },
+      bait,
     };
 
     if (!trip) {
@@ -101,8 +103,8 @@ export default function useAddCatchForm(
   }, []);
 
   return {
-    date,
-    setDate,
+    bait,
+    setBait,
     species,
     setSpecies,
     inputError,

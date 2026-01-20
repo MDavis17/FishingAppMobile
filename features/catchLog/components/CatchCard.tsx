@@ -46,7 +46,7 @@ export default function CatchCard({ catchItem, onDelete }: Props) {
         <Text style={[styles.fishName, { color: theme.colors.onSurface }]}>
           {catchItem.species}
         </Text>
-        <Text style={styles.bait}>*Bait</Text>
+        <Text style={styles.bait}>{catchItem.bait}</Text>
       </View>
     </ItemCard>
   );
