@@ -5,6 +5,7 @@ type Config = {
   api: string;
 };
 
+// use react native config or something to manage these
 export const GooglePlacesAPIKey = "AIzaSyAIFMv0a-wViRjrkAmzPwG_RuLBOPergy8";
 
 // export class ConfigurationManager {
