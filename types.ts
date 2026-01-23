@@ -13,6 +13,7 @@ export interface CatchEntry {
   length?: number;
   waterType: WaterType;
   location?: Location;
+  bait?: string;
 }
 
 export interface Trip {
