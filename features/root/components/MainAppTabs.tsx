@@ -5,6 +5,7 @@ import AnglerHome from "features/anglerHome/components/AnglerHome";
 import LogNavigation from "features/catchLog/navigation/LogNavigation";
 import PlannerNavigation from "features/tripPlanner/navigation/PlannerNavigation";
 import { useTheme } from "react-native-paper";
+import { StyleSheet, TouchableOpacity } from "react-native";
 
 const Tab = createBottomTabNavigator();
 
@@ -46,7 +47,18 @@ export default function MainAppTabs() {
       <Tab.Screen
         name="Home"
         component={AnglerHome}
-        options={basicScreenOptions}
+        options={{
+          ...basicScreenOptions,
+          headerRight: () => (
+            <TouchableOpacity style={styles.settingsButton} onPress={() => {}}>
+              <MaterialCommunityIcons
+                name="cog"
+                size={24}
+                color={theme.colors.onPrimary}
+              />
+            </TouchableOpacity>
+          ),
+        }}
       />
       <Tab.Screen
         name="Fishing Log"
@@ -61,3 +73,7 @@ export default function MainAppTabs() {
     </Tab.Navigator>
   );
 }
+
+const styles = StyleSheet.create({
+  settingsButton: { paddingRight: 16 },
+});
