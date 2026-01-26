@@ -8,6 +8,8 @@ interface Props {
   height?: number | string;
   width?: number | string;
   selectedLocation: LatLng;
+  latDelta?: number;
+  lngDelta?: number;
   onLocationSelect?: (newLocation: LatLng) => void;
   isViewOnly?: boolean;
 }
@@ -16,6 +18,8 @@ export default function MapWindow({
   height = "100%",
   width = "100%",
   selectedLocation,
+  latDelta = 0.0922,
+  lngDelta = 0.0421,
   onLocationSelect,
   isViewOnly = false,
 }: Props) {
@@ -53,8 +57,8 @@ export default function MapWindow({
         style={{ width, height }}
         initialRegion={{
           ...selectedLocation,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
+          latitudeDelta: latDelta ?? 0.0922,
+          longitudeDelta: lngDelta ?? 0.0421,
         }}
         scrollEnabled={!isViewOnly}
         zoomEnabled={!isViewOnly}
