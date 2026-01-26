@@ -1,7 +1,7 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import AnglerHome from "features/anglerHome/AnglerHome";
+import AnglerHome from "features/anglerHome/components/AnglerHome";
 import LogNavigation from "features/catchLog/navigation/LogNavigation";
 import PlannerNavigation from "features/tripPlanner/navigation/PlannerNavigation";
 import { useTheme } from "react-native-paper";

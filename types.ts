@@ -54,3 +54,13 @@ export type RootStackParamList = {
   TripDetail: { trip: Trip; deleteTrip: () => void };
   NewTrip: { createNewTrip: (newTrip: Trip) => void };
 };
+
+export enum UserUnits {
+  Imperial = "Imperial",
+  Metric = "Metric",
+}
+
+export enum TempUnits {
+  Fahrenheit = "F",
+  Celsius = "C",
+}
