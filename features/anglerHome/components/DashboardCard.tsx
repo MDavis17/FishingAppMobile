@@ -1,4 +1,5 @@
 import PrimaryButton from "common/components/buttons/PrimaryButton";
+import Divider from "common/components/Divider";
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { useTheme } from "react-native-paper";
@@ -33,7 +34,7 @@ export default function DashboardCard({
       <View style={styles.contentContainer}>{content}</View>
       {!hideActionFooter && (
         <>
-          <View style={styles.divider} />
+          <Divider />
           <View style={styles.actionFooter}>
             <PrimaryButton onPress={onActionPress}>
               {actionButtonText ?? ""}
@@ -67,14 +68,12 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 14,
   },
-  contentContainer: { paddingHorizontal: 24, paddingVertical: 10 },
+  contentContainer: {
+    paddingHorizontal: 24,
+    paddingVertical: 10,
+  },
   actionFooter: {
     paddingHorizontal: 24,
     paddingBottom: 10,
-  },
-  divider: {
-    height: 1,
-    backgroundColor: "#ccc",
-    marginVertical: 10,
   },
 });

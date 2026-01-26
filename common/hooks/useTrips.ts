@@ -8,6 +8,7 @@ export default function useTrips() {
   const [trips, setTrips] = useState<Trip[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [upcomingTrips, setUpcomingTrips] = useState<Trip[]>([]);
+  const mockWeather = { temp: 72, condition: "Sunny" };
 
   const fetchTrips = useCallback(async () => {
     setIsLoading(true);
@@ -42,5 +43,6 @@ export default function useTrips() {
     setTrips,
     fetchTrips,
     upcomingTrips,
+    weather: mockWeather,
   };
 }
