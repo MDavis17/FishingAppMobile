@@ -53,6 +53,8 @@ export type RootStackParamList = {
   Plan: undefined;
   TripDetail: { trip: Trip; deleteTrip: () => void };
   NewTrip: { createNewTrip: (newTrip: Trip) => void };
+  Settings: undefined;
+  ThemeSettings: undefined;
 };
 
 export enum UserUnits {

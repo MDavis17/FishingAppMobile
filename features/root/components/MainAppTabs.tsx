@@ -1,22 +1,16 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import AnglerHome from "features/anglerHome/components/AnglerHome";
 import LogNavigation from "features/catchLog/navigation/LogNavigation";
 import PlannerNavigation from "features/tripPlanner/navigation/PlannerNavigation";
 import { useTheme } from "react-native-paper";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet } from "react-native";
+import HomeNavigation from "features/anglerHome/navigation/HomeNavigation";
 
 const Tab = createBottomTabNavigator();
 
 export default function MainAppTabs() {
   const theme = useTheme();
-  const basicScreenOptions = {
-    headerStyle: {
-      backgroundColor: theme.colors.primary,
-    },
-    headerTintColor: theme.colors.onPrimary,
-  };
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -46,19 +40,8 @@ export default function MainAppTabs() {
     >
       <Tab.Screen
         name="Home"
-        component={AnglerHome}
-        options={{
-          ...basicScreenOptions,
-          headerRight: () => (
-            <TouchableOpacity style={styles.settingsButton} onPress={() => {}}>
-              <MaterialCommunityIcons
-                name="cog"
-                size={24}
-                color={theme.colors.onPrimary}
-              />
-            </TouchableOpacity>
-          ),
-        }}
+        component={HomeNavigation}
+        options={{ headerShown: false }}
       />
       <Tab.Screen
         name="Fishing Log"
