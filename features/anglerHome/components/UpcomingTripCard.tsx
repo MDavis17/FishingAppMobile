@@ -31,7 +31,14 @@ export default function UpcomingTripCard() {
     );
   };
 
-  return <DashboardCard title={"Upcoming Trip"} content={content()} />;
+  return (
+    <DashboardCard
+      title={"Upcoming Trip"}
+      content={content()}
+      actionButtonText="Prep for your trip"
+      onActionPress={() => {}}
+    />
+  );
 }
 
 const styles = StyleSheet.create({
