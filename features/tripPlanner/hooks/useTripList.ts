@@ -1,36 +1,12 @@
-import { useState, useEffect, useCallback } from "react";
 import { Trip } from "../../../types";
 import { useNavigation } from "@react-navigation/native";
-import { getTrips } from "../api/getTrips";
 import { deleteTripById } from "../api/deleteTripById";
 import { addNewTrip } from "../api/addNewTrip";
+import useTrips from "common/hooks/useTrips";
 
 export default function useTripList() {
   const navigation = useNavigation();
-  const [trips, setTrips] = useState<Trip[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-
-  const fetchTrips = useCallback(async () => {
-    setIsLoading(true);
-
-    try {
-      const response = await getTrips();
-
-      if (!response.ok) {
-        throw new Error("Something went wrong");
-      }
-
-      setTrips(response.data);
-    } catch (error) {
-      console.error("Error fetching logs:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchTrips();
-  }, [fetchTrips]);
+  const { isLoading, trips, setTrips, fetchTrips } = useTrips();
 
   const openNewTripForm = () => {
     navigation.navigate("NewTrip", { createNewTrip });
