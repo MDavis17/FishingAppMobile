@@ -5,12 +5,11 @@ import useTrips from "common/hooks/useTrips";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "types";
-import { createNewTrip } from "common/api/createNewTrip";
 
 export default function UpcomingTripCard() {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-  const { upcomingTrips } = useTrips();
+  const { upcomingTrips, createNewTrip } = useTrips();
 
   const hasUpcomingTrip = upcomingTrips.length > 0;
   console.log("UpcomingTripCard - hasUpcomingTrip:", hasUpcomingTrip);
