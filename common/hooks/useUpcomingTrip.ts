@@ -20,7 +20,6 @@ export default function useUpcomingTrip() {
       }
 
       setUpcomingTrip(response.data);
-      setIsLoading(false);
     } catch (error) {
       console.error("Error fetching upcoming trip:", error);
     } finally {
