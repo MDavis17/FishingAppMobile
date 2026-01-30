@@ -12,6 +12,7 @@ export default function useNewTripForm(addNewTrip: (newTrip: Trip) => void) {
   const [selectedLocation, setSelectedLocation] = useState<LatLng | null>(null);
   const [currentLocation, setCurrentLocation] = useState<LatLng | null>(null);
   const [locationName, setLocationName] = useState<string>("");
+  const [status, setStatus] = useState<"Planned" | "Completed">("Planned");
 
   const validateInputs = (): InputError | null => {
     if (!date) {
@@ -49,6 +50,7 @@ export default function useNewTripForm(addNewTrip: (newTrip: Trip) => void) {
       location: { coordinates: selectedLocation, name: locationName },
       catchList: [],
       catchSummary: "",
+      status,
     };
 
     addNewTrip(newTrip);

@@ -7,7 +7,7 @@ export const internalUrlFormatter = (path: string) => {
   let urlPath = `${config.api}${cleanPath}`;
 
   if (process.env.ENV === "LOCAL") {
-    urlPath = `http://api.local.trainheroic.com:8888/${cleanPath}`;
+    urlPath = `http://localhost.com:8000/${cleanPath}`;
   }
 
   return urlPath;
