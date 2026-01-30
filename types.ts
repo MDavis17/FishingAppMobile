@@ -23,6 +23,7 @@ export interface Trip {
   location: Location;
   catchList: CatchEntry[];
   catchSummary: string;
+  status: "Planned" | "Completed";
 }
 
 export interface CatchTime {

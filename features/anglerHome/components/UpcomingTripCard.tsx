@@ -1,28 +1,25 @@
 import React from "react";
 import DashboardCard from "./DashboardCard";
 import UpcomingTripPreview from "./UpcomingTripPreview";
-import useTrips from "common/hooks/useTrips";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "types";
+import useUpcomingTrip from "common/hooks/useUpcomingTrip";
 
 export default function UpcomingTripCard() {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-  const { upcomingTrips, createNewTrip } = useTrips();
-
-  const hasUpcomingTrip = upcomingTrips.length > 0;
-  console.log("UpcomingTripCard - hasUpcomingTrip:", hasUpcomingTrip);
+  const { upcomingTrip, createNewTrip } = useUpcomingTrip();
 
   const actionText = () => {
-    if (hasUpcomingTrip) {
+    if (upcomingTrip) {
       return "Prep for your Trip";
     }
     return "Plan a Trip";
   };
 
   const onActionPress = () => {
-    if (hasUpcomingTrip) {
+    if (upcomingTrip) {
       navigation.navigate("Plan");
     } else {
       navigation.navigate("Fishing Log", {

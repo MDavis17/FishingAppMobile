@@ -1,5 +1,4 @@
 import React from "react";
-import useTrips from "common/hooks/useTrips";
 import { ActivityIndicator, Text } from "react-native-paper";
 import { StyleSheet, View } from "react-native";
 import Divider from "common/components/Divider";
@@ -7,14 +6,15 @@ import MapWindow from "common/components/MapWindow";
 import { TempUnits, UserUnits } from "types";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { getWeatherIconName } from "common/utils/WeatherUtils";
+import useUpcomingTrip from "common/hooks/useUpcomingTrip";
 
 export default function UpcomingTripPreview() {
-  const { isLoading, upcomingTrips, weather } = useTrips();
+  const { isLoading, upcomingTrip, weather } = useUpcomingTrip();
   if (isLoading) {
     return <ActivityIndicator />;
   }
 
-  if (upcomingTrips.length === 0) {
+  if (!upcomingTrip) {
     return (
       <View>
         <Text
@@ -30,12 +30,11 @@ export default function UpcomingTripPreview() {
     );
   }
 
-  const firstTrip = upcomingTrips[0];
   const formattedDate = new Intl.DateTimeFormat("en-US", {
     weekday: "long",
     month: "short",
     day: "numeric",
-  }).format(new Date(firstTrip.date));
+  }).format(new Date(upcomingTrip.date));
   let degreeSymbol = "\u00B0";
 
   const userUnits = UserUnits.Imperial;
@@ -45,7 +44,7 @@ export default function UpcomingTripPreview() {
       <View style={styles.locationContainer}>
         <View style={styles.locationDescription}>
           <Text style={styles.date}>{formattedDate}</Text>
-          <Text style={styles.heading}>{firstTrip.location.name}</Text>
+          <Text style={styles.heading}>{upcomingTrip.location.name}</Text>
           <Divider />
           <View style={styles.weatherContainer}>
             <MaterialCommunityIcons
@@ -64,7 +63,7 @@ export default function UpcomingTripPreview() {
         </View>
         <View style={styles.locationThumbnail}>
           <MapWindow
-            selectedLocation={firstTrip.location.coordinates}
+            selectedLocation={upcomingTrip.location.coordinates}
             isViewOnly
           />
         </View>
