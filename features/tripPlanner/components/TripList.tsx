@@ -1,10 +1,11 @@
-import { FlatList, StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 import useTripList from "../hooks/useTripList";
 import TripCard from "./TripCard";
 import PrimaryButton from "common/components/buttons/PrimaryButton";
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback } from "react";
+import { Trip } from "types";
 
 export default function TripList() {
   const { isLoading, trips, deleteTrip, openNewTripForm, fetchTrips, markTripComplete } =
@@ -40,17 +41,13 @@ export default function TripList() {
 
   return (
     <View
-      style={[styles.container, { backgroundColor: theme.colors.background }]}
+      style={styles.container}
     >
-      <FlatList
-        data={trips}
-        renderItem={({ item }) => (
-          <TripCard trip={item} onDelete={(id) => deleteTrip(id)} onMarkTripComplete={(id) => markTripComplete(id)} />
-        )}
-        keyExtractor={(item) => item.date}
-        contentContainerStyle={styles.listContainer}
-        ItemSeparatorComponent={() => <View style={{ height: 8 }} />}
-      />
+      <ScrollView style={styles.flex1}>
+        {trips.map((trip: Trip) => {
+          return <TripCard trip={trip} onDelete={(id) => deleteTrip(id)} onMarkTripComplete={(id) => markTripComplete(id)} />
+        })}
+      </ScrollView>
       <PrimaryButton onPress={openNewTripForm}>Add New Trip</PrimaryButton>
     </View>
   );
@@ -61,7 +58,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     padding: 8,
-    backgroundColor: "white",
+  },
+  flex1: {
+    flex: 1
   },
   loadingText: {
     marginBottom: 20,

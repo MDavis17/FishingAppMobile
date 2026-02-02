@@ -7,6 +7,7 @@ import RootNavigation from "features/root/navigation/RootNavigation";
 import { useColorScheme } from "react-native";
 import { ThemeProvider, useAppTheme } from "common/theme/ThemeContext";
 import { TripProvider } from "features/tripPlanner/components/TripContext";
+import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 
 const ThemedApp = () => {
   const { themeName, theme } = useAppTheme();
@@ -23,13 +24,15 @@ export default function App() {
   const colorScheme = useColorScheme();
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <TripProvider>
-        <SafeAreaProvider>
-          <ThemeProvider>
-            <ThemedApp />
-          </ThemeProvider>
-        </SafeAreaProvider>
-      </TripProvider>
+      <ActionSheetProvider>
+        <TripProvider>
+          <SafeAreaProvider>
+            <ThemeProvider>
+              <ThemedApp />
+            </ThemeProvider>
+          </SafeAreaProvider>
+        </TripProvider>
+      </ActionSheetProvider>
     </GestureHandlerRootView>
   );
 }

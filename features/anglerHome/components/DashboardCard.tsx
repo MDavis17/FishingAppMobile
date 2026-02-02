@@ -8,7 +8,7 @@ interface Props {
   title: string;
   content?: React.ReactNode;
   hideActionFooter?: boolean;
-  actionButtonText: string;
+  actionButtonText?: string;
   onActionPress?: () => void;
 }
 
