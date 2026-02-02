@@ -16,7 +16,6 @@ export default function LogListTabs() {
 
   const pageStyles = [
     styles.scene,
-    { backgroundColor: theme.colors.background },
   ];
 
   const AllLogsRoute = () => (
