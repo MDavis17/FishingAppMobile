@@ -45,6 +45,7 @@ export enum WaterType {
 export type RootStackParamList = {
   Home: undefined;
   Logs: undefined;
+  "Fishing Log": { initialTab?: string } | undefined;
   CatchDetail: { catchItem: CatchEntry; deleteCatch: () => void };
   AddNewCatch: { addNewCatch: (catchData: CatchEntry) => void };
   SelectLocation: {

@@ -11,7 +11,10 @@ export default function RecentTripCard() {
 
 
   const onActionPress = () => {
-      navigation.navigate("Plan");
+      (navigation as any).navigate("Fishing Log", {
+        screen: "Fishing Log",
+        params: { initialTab: "analysis" },
+      });
   };
 
   return (
