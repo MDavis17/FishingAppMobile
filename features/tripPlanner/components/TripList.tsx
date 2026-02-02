@@ -7,7 +7,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { useCallback } from "react";
 
 export default function TripList() {
-  const { isLoading, trips, deleteTrip, openNewTripForm, fetchTrips } =
+  const { isLoading, trips, deleteTrip, openNewTripForm, fetchTrips, markTripComplete } =
     useTripList();
   const theme = useTheme();
 
@@ -45,7 +45,7 @@ export default function TripList() {
       <FlatList
         data={trips}
         renderItem={({ item }) => (
-          <TripCard trip={item} onDelete={(id) => deleteTrip(id)} />
+          <TripCard trip={item} onDelete={(id) => deleteTrip(id)} onMarkTripComplete={(id) => markTripComplete(id)} />
         )}
         keyExtractor={(item) => item.date}
         contentContainerStyle={styles.listContainer}
