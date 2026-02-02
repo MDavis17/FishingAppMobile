@@ -1,15 +1,16 @@
 import React from "react";
-import { Alert, StyleSheet, View } from "react-native";
-import { RootStackParamList, Trip, WaterType } from "types";
-import { List, Text, useTheme } from "react-native-paper";
+import { Alert, TouchableOpacity, View } from "react-native";
+import { RootStackParamList, Trip } from "types";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { format } from "date-fns";
-import ItemCard from "common/components/ItemCard";
+import DashboardCard from "features/anglerHome/components/DashboardCard";
+import TripPreview from "./TripPreview";
+import { useActionSheet } from '@expo/react-native-action-sheet';
 
 interface Props {
   trip: Trip;
   onDelete: (id: number) => void;
+  onMarkTripComplete: (id: number) => void;
 }
 
 type PlanScreenNavigationProp = NativeStackNavigationProp<
@@ -17,17 +18,18 @@ type PlanScreenNavigationProp = NativeStackNavigationProp<
   "Plan"
 >;
 
-export default function TripCard({ trip, onDelete }: Props) {
+export default function TripCard({ trip, onDelete, onMarkTripComplete }: Props) {
   const navigation = useNavigation<PlanScreenNavigationProp>();
-  const theme = useTheme();
-
-  const formattedDate = format(new Date(trip.date), "EEEE M/d/yyyy h:mm a");
+  const { showActionSheetWithOptions } = useActionSheet();
 
   const selectTrip = () => {
     navigation.navigate("TripDetail", {
       trip,
       deleteTrip: () => {
         confirmDelete(true);
+      },
+      markTripComplete: () => {
+        onMarkTripComplete(trip.id);
       },
     });
   };
@@ -48,49 +50,31 @@ export default function TripCard({ trip, onDelete }: Props) {
     ]);
   };
 
-  return (
-    <ItemCard handleSelect={selectTrip} confirmDelete={confirmDelete}>
-      <View style={styles.tripHeader}>
-        <List.Icon
-          icon={trip.waterType === WaterType.Saltwater ? "waves" : "wave"}
-          style={styles.icon}
-        />
-        <Text style={[styles.tripTitle, { color: theme.colors.onSurface }]}>
-          {trip.location.name}
-        </Text>
-      </View>
-      <View style={styles.tripContentContainer}>
-        <Text>{formattedDate}</Text>
-        {trip.catchList.length > 0 && (
-          <Text
-            style={{
-              color: theme.colors.onSurfaceVariant,
-              marginTop: 4,
-            }}
-            numberOfLines={2}
-            ellipsizeMode="tail"
-          >
-            {trip.catchSummary}
-          </Text>
-        )}
-      </View>
-    </ItemCard>
-  );
-}
+  const onShowTripMenu = () => {
+    const options = ['Delete', 'Cancel'];
+    const destructiveButtonIndex = 0;
+    const cancelButtonIndex = 1;
 
-const styles = StyleSheet.create({
-  icon: { marginRight: 12 },
-  tripHeader: {
-    paddingHorizontal: 16,
-    flexDirection: "row",
-  },
-  tripTitle: {
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-  tripContentContainer: {
-    paddingTop: 4,
-    alignItems: "flex-start",
-    paddingLeft: 52,
-  },
-});
+    showActionSheetWithOptions({
+      options,
+      cancelButtonIndex,
+      destructiveButtonIndex
+    }, (selectedIndex: number) => {
+      switch (selectedIndex) {
+        case destructiveButtonIndex:
+          confirmDelete();
+          break;
+        case cancelButtonIndex:
+      }});
+  }
+
+  return <View>
+    <TouchableOpacity onPress={selectTrip} onLongPress={onShowTripMenu}>
+      <DashboardCard
+        title={trip.status}
+        content={<TripPreview trip={trip} />}
+        hideActionFooter
+      />
+    </TouchableOpacity>
+  </View>
+}

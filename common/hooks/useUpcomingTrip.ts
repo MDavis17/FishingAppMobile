@@ -1,27 +1,27 @@
 import { useFocusEffect } from "@react-navigation/native";
 import { addNewTrip } from "features/tripPlanner/api/addNewTrip";
-import { getTrips } from "features/tripPlanner/api/getTrips";
+import { getUpcomingTrip } from "features/tripPlanner/api/getUpcomingTrip";
 import { useState, useCallback } from "react";
 import { Trip } from "types";
 
-export default function useTrips() {
-  const [trips, setTrips] = useState<Trip[]>([]);
+export default function useUpcomingTrip() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [upcomingTrip, setUpcomingTrip] = useState<Trip | null>(null);
   const mockWeather = { temp: 72, condition: "Sunny" };
 
-  const fetchTrips = useCallback(async () => {
+  const fetchUpcomingTrip = useCallback(async () => {
     setIsLoading(true);
 
     try {
-      const response = await getTrips();
+      const response = await getUpcomingTrip();
 
       if (!response.ok) {
         throw new Error("Something went wrong");
       }
 
-      setTrips(response.data);
+      setUpcomingTrip(response.data);
     } catch (error) {
-      console.error("Error fetching logs:", error);
+      console.error("Error fetching upcoming trip:", error);
     } finally {
       setIsLoading(false);
     }
@@ -46,15 +46,15 @@ export default function useTrips() {
 
   useFocusEffect(
     useCallback(() => {
-      fetchTrips();
-    }, [fetchTrips])
+      fetchUpcomingTrip();
+    }, [fetchUpcomingTrip])
   );
 
   return {
     isLoading,
-    trips,
-    setTrips,
-    fetchTrips,
+    fetchUpcomingTrip,
     createNewTrip,
+    upcomingTrip,
+    weather: mockWeather,
   };
 }

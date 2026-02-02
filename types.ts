@@ -23,6 +23,7 @@ export interface Trip {
   location: Location;
   catchList: CatchEntry[];
   catchSummary: string;
+  status: "Planned" | "Completed";
 }
 
 export interface CatchTime {
@@ -51,7 +52,7 @@ export type RootStackParamList = {
     onLocationSelected: (newLocation: LatLng) => void;
   };
   Plan: undefined;
-  TripDetail: { trip: Trip; deleteTrip: () => void };
+  TripDetail: { trip: Trip; deleteTrip: () => void; markTripComplete: () => void };
   NewTrip: { createNewTrip: (newTrip: Trip) => void };
   Settings: undefined;
   ThemeSettings: undefined;
