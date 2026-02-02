@@ -3,6 +3,7 @@ import { useNavigation } from "@react-navigation/native";
 import { deleteTripById } from "../api/deleteTripById";
 import { addNewTrip } from "../api/addNewTrip";
 import useTrips from "common/hooks/useTrips";
+import { markTripCompletedById } from "../api/markTripCompletedById";
 
 export default function useTripList() {
   const navigation = useNavigation();
@@ -46,11 +47,23 @@ export default function useTripList() {
     }
   };
 
+  const markTripComplete = async (tripId: number) => {
+    try {
+      await markTripCompletedById(tripId);
+      await fetchTrips();
+
+    } catch (error) {
+      console.error("Error mark trip complete:", error);
+      throw error;
+    }
+  };
+
   return {
     isLoading,
     trips,
     openNewTripForm,
     deleteTrip,
+    markTripComplete,
     fetchTrips,
   };
 }

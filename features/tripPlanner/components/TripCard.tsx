@@ -10,6 +10,7 @@ import ItemCard from "common/components/ItemCard";
 interface Props {
   trip: Trip;
   onDelete: (id: number) => void;
+  onMarkTripComplete: (id: number) => void;
 }
 
 type PlanScreenNavigationProp = NativeStackNavigationProp<
@@ -17,7 +18,7 @@ type PlanScreenNavigationProp = NativeStackNavigationProp<
   "Plan"
 >;
 
-export default function TripCard({ trip, onDelete }: Props) {
+export default function TripCard({ trip, onDelete, onMarkTripComplete }: Props) {
   const navigation = useNavigation<PlanScreenNavigationProp>();
   const theme = useTheme();
 
@@ -28,6 +29,9 @@ export default function TripCard({ trip, onDelete }: Props) {
       trip,
       deleteTrip: () => {
         confirmDelete(true);
+      },
+      markTripComplete: () => {
+        onMarkTripComplete(trip.id);
       },
     });
   };
