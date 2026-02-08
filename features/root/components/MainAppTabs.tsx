@@ -6,6 +6,7 @@ import PlannerNavigation from "features/tripPlanner/navigation/PlannerNavigation
 import { useTheme } from "react-native-paper";
 import { StyleSheet } from "react-native";
 import HomeNavigation from "features/anglerHome/navigation/HomeNavigation";
+import AnalysisNavigation from "features/analysis/navigation/AnalysisNavigation";
 
 const Tab = createBottomTabNavigator();
 
@@ -20,6 +21,8 @@ export default function MainAppTabs() {
           if (route.name === "Home") {
             iconName = "home";
           } else if (route.name === "Fishing Log") {
+            iconName = "book-outline";
+          } else if (route.name === "Analysis") {
             iconName = "book-outline";
           } else if (route.name === "Plan") {
             iconName = "map-clock-outline";
@@ -46,6 +49,11 @@ export default function MainAppTabs() {
       <Tab.Screen
         name="Fishing Log"
         component={LogNavigation}
+        options={{ headerShown: false }}
+      />
+      <Tab.Screen
+        name="Analysis"
+        component={AnalysisNavigation}
         options={{ headerShown: false }}
       />
       <Tab.Screen

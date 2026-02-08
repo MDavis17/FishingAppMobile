@@ -1,11 +1,11 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { RootStackParamList } from "types";
 import SelectLocation from "common/components/SelectLocation";
-import LogListTabs from "../components/LogListTabs";
 import TripDetail from "features/tripPlanner/components/TripDetail";
 import NewTripForm from "features/tripPlanner/components/NewTripForm";
 import { useTheme } from "react-native-paper";
 import AddCatchForm from "../components/AddCatchForm";
+import TripList from "features/tripPlanner/components/TripList";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -22,7 +22,7 @@ export default function LogNavigation() {
     <Stack.Navigator>
       <Stack.Screen
         name="Fishing Log"
-        component={LogListTabs}
+        component={TripList}
         options={basicOptions}
       />
       <Stack.Screen
