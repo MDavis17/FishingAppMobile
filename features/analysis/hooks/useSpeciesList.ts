@@ -1,5 +1,5 @@
 import { useFocusEffect } from "@react-navigation/native";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Species } from "types";
 import { getSpecies } from "../api/getSpecies";
 
@@ -25,11 +25,9 @@ export default function useSpeciesList() {
     }
   }, []);
 
-  useFocusEffect(
-    useCallback(() => {
-      fetchSpecies();
-    }, [fetchSpecies])
-  );
+  useEffect(() => {
+    fetchSpecies();
+  },[]);
 
   return {
     isLoading,
