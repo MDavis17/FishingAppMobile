@@ -49,6 +49,13 @@ export interface Trip {
   status: "Planned" | "Completed";
 }
 
+export interface Species {
+  id: number,
+  name: string,
+  region: string,
+  image: string
+}
+
 export interface CatchTime {
   hours: number;
   minutes: number;
@@ -80,6 +87,7 @@ export type RootStackParamList = {
   NewTrip: { createNewTrip: (newTrip: Trip) => void };
   Settings: undefined;
   ThemeSettings: undefined;
+  Analysis: undefined;
 };
 
 export enum UserUnits {
