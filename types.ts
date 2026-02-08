@@ -1,5 +1,28 @@
 import { LatLng } from "react-native-maps";
 
+export interface WeatherForecast {
+  forecastDays: ForecastDay[]
+}
+
+export interface ForecastDay {
+  daytimeForecast: {
+    weatherCondition: WeatherCondition;
+  }
+  displayDate: {
+    day: number;
+    month: number;
+    year: number;
+  };
+}
+
+export interface WeatherCondition {
+  iconBaseUri: string;
+  description: {
+    text: string;
+  };
+  type: string;
+}
+
 export interface Location {
   name: string;
   coordinates: LatLng;

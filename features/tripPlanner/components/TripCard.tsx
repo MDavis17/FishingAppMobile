@@ -1,5 +1,5 @@
 import React from "react";
-import { Alert, TouchableOpacity, View } from "react-native";
+import { Alert, StyleSheet, TouchableOpacity, View } from "react-native";
 import { RootStackParamList, Trip } from "types";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -68,7 +68,7 @@ export default function TripCard({ trip, onDelete, onMarkTripComplete }: Props) 
       }});
   }
 
-  return <View>
+  return <View style={styles.container}>
     <TouchableOpacity onPress={selectTrip} onLongPress={onShowTripMenu}>
       <DashboardCard
         title={trip.status}
@@ -78,3 +78,9 @@ export default function TripCard({ trip, onDelete, onMarkTripComplete }: Props) 
     </TouchableOpacity>
   </View>
 }
+
+const styles = StyleSheet.create({
+  container: {
+    paddingVertical: 6
+  }
+});
