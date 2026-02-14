@@ -6,9 +6,11 @@ import useTimeInputField from "../hooks/useTimeInputField";
 import useAddCatchForm from "../hooks/useAddCatchForm";
 import { TextInput, Button, useTheme } from "react-native-paper";
 import MapWindow from "common/components/MapWindow";
+import SearchableDropdownInput from "common/components/SearchableDropdownInput";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import PrimaryButton from "common/components/buttons/PrimaryButton";
 import SecondaryButton from "common/components/buttons/SecondaryButton";
+import useSpeciesList from "features/analysis/hooks/useSpeciesList";
 
 type NewCatchRouteProp = RouteProp<RootStackParamList, "AddNewCatch">;
 
@@ -31,6 +33,7 @@ export default function AddCatchForm() {
     handleSelectNewLocation,
     currentLocation,
   } = useAddCatchForm(time, addNewCatch);
+  const { speciesList } = useSpeciesList();
 
   if (!selectedLocation) {
     return;
@@ -46,15 +49,16 @@ export default function AddCatchForm() {
       >
         <View style={styles.dateTimeContainer}>
           <View style={styles.flex}>
-            <TextInput
-              mode="outlined"
+            <SearchableDropdownInput
+              options={speciesList}
+              value={speciesList.find((s) => s.name === species) ?? null}
+              onSelect={(s) => setSpecies(s ? s.name : "")}
+              getOptionLabel={(s) => s.name}
+              getOptionKey={(s) => s.id}
+              placeholder="Search species..."
               label="Species"
-              value={species}
-              onChangeText={setSpecies}
-              style={[
-                styles.input,
-                inputError?.inputId === "species" && styles.errorInput,
-              ]}
+              fuzzy
+              error={inputError?.inputId === "species"}
             />
             {inputError?.inputId === "species" && (
               <Text style={styles.errorText}>{inputError.message}</Text>
