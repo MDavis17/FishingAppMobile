@@ -1,7 +1,7 @@
 import { ActivityIndicator, StyleSheet, View } from "react-native";
 import useSpeciesList from "../hooks/useSpeciesList";
 import SpeciesCard from "./SpeciesCard";
-import SearchableList from "./SearchableList";
+import SearchableList from "../../../common/components/SearchableList";
 
 export default function SpeciesList() {
   const { isLoading, speciesList } = useSpeciesList();
