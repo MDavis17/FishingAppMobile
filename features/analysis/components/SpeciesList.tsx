@@ -1,26 +1,22 @@
-import { ActivityIndicator, ScrollView, StyleSheet, View } from "react-native";
-import { Species } from "types";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
 import useSpeciesList from "../hooks/useSpeciesList";
 import SpeciesCard from "./SpeciesCard";
+import SearchableList from "./SearchableList";
 
 export default function SpeciesList() {
-  const { isLoading, speciesList} = useSpeciesList();
+  const { isLoading, speciesList } = useSpeciesList();
 
   if (isLoading) {
-    return (
-      <ActivityIndicator />
-    );
+    return <ActivityIndicator />;
   }
 
   return (
-    <View
-      style={styles.container}
-    >
-      <ScrollView style={styles.listContainer}>
-        {speciesList.map((fish: Species) => {
-          return <SpeciesCard species={fish} key={`species-item-${fish.id}`}/>
-        })}
-      </ScrollView>
+    <View style={styles.container}>
+      <SearchableList
+        list={speciesList}
+        placeholderText="Search Species..."
+        renderItem={(species) => <SpeciesCard species={species.item} />}
+      />
     </View>
   );
 }
