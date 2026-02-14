@@ -48,7 +48,7 @@ export default function AddCatchForm() {
         ]}
       >
         <View style={styles.dateTimeContainer}>
-          <View style={styles.flex}>
+          <View style={styles.input}>
             <SearchableDropdownInput
               options={speciesList}
               value={speciesList.find((s) => s.name === species) ?? null}
