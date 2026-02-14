@@ -18,6 +18,9 @@ export type AppTheme = {
 const defaultTextColor = "#000000";
 const defaultLightOnPrimary = "#ffffff";
 
+export const SALTWATER_COLOR = "#1E5EFF";
+export const FRESHWATER_COLOR = "#2E8B57";
+
 export const YellowfinTunaTheme: AppTheme = {
   name: "Yellowfin Tuna",
   dark: false,
