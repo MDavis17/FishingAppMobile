@@ -52,6 +52,7 @@ export interface Trip {
 export interface Species {
   id: number,
   name: string,
+  waterType: WaterType
   region: string,
   image: string
 }

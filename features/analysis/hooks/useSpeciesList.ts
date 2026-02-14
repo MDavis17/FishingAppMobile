@@ -1,4 +1,3 @@
-import { useFocusEffect } from "@react-navigation/native";
 import { useState, useCallback, useEffect } from "react";
 import { Species } from "types";
 import { getSpecies } from "../api/getSpecies";
