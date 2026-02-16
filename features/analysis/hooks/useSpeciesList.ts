@@ -5,6 +5,7 @@ import { toggleSpeciesFavorite } from "../api/toggleSpeciesFavorite";
 
 export default function useSpeciesList() {
   const [speciesList, setSpeciesList] = useState<Species[]>([]);
+  const [favoriteSpeciesList, setFavoriteSpeciesList] = useState<Species[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const fetchSpecies = useCallback(async () => {
@@ -17,7 +18,8 @@ export default function useSpeciesList() {
         throw new Error("Something went wrong");
       }
 
-      setSpeciesList(response.data);
+      setSpeciesList(response.data.species);
+      setFavoriteSpeciesList(response.data.favoriteSpecies);
     } catch (error) {
       console.error("Error fetching species:", error);
     } finally {
@@ -44,6 +46,7 @@ export default function useSpeciesList() {
             : species,
         ),
       );
+      fetchSpecies();
     } catch (error) {
       console.error("Error toggling species favorite:", error);
       throw error;
@@ -53,7 +56,9 @@ export default function useSpeciesList() {
   return {
     isLoading,
     speciesList,
+    favoriteSpeciesList,
     setSpeciesList,
+    setFavoriteSpeciesList,
     fetchSpecies,
     toggleFavorite,
   };

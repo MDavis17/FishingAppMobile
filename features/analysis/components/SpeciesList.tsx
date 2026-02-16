@@ -2,9 +2,15 @@ import { ActivityIndicator, StyleSheet, View } from "react-native";
 import useSpeciesList from "../hooks/useSpeciesList";
 import SpeciesCard from "./SpeciesCard";
 import SearchableList from "../../../common/components/SearchableList";
+import { useMemo } from "react";
 
 export default function SpeciesList() {
-  const { isLoading, speciesList, toggleFavorite } = useSpeciesList();
+  const { isLoading, speciesList, favoriteSpeciesList, toggleFavorite } =
+    useSpeciesList();
+
+  const combinedSpeciesList = useMemo(() => {
+    return [...favoriteSpeciesList, ...speciesList];
+  }, [favoriteSpeciesList, speciesList]);
 
   if (isLoading) {
     return <ActivityIndicator />;
@@ -13,7 +19,7 @@ export default function SpeciesList() {
   return (
     <View style={styles.container}>
       <SearchableList
-        list={speciesList}
+        list={combinedSpeciesList}
         placeholderText="Search Species..."
         renderItem={(species) => (
           <SpeciesCard
