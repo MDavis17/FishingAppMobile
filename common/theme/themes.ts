@@ -20,6 +20,7 @@ const defaultLightOnPrimary = "#ffffff";
 
 export const SALTWATER_COLOR = "#1E5EFF";
 export const FRESHWATER_COLOR = "#2E8B57";
+export const FAVORITE_GOLD = "#FFD700";
 
 export const YellowfinTunaTheme: AppTheme = {
   name: "Yellowfin Tuna",

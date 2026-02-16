@@ -1,13 +1,13 @@
 import { LatLng } from "react-native-maps";
 
 export interface WeatherForecast {
-  forecastDays: ForecastDay[]
+  forecastDays: ForecastDay[];
 }
 
 export interface ForecastDay {
   daytimeForecast: {
     weatherCondition: WeatherCondition;
-  }
+  };
   displayDate: {
     day: number;
     month: number;
@@ -50,11 +50,12 @@ export interface Trip {
 }
 
 export interface Species {
-  id: number,
-  name: string,
-  waterType: WaterType
-  region: string,
-  image: string
+  id: number;
+  name: string;
+  waterType: WaterType;
+  region: string;
+  image: string;
+  isFavorite: boolean;
 }
 
 export interface CatchTime {
@@ -84,7 +85,11 @@ export type RootStackParamList = {
     onLocationSelected: (newLocation: LatLng) => void;
   };
   Plan: undefined;
-  TripDetail: { trip: Trip; deleteTrip: () => void; markTripComplete: () => void };
+  TripDetail: {
+    trip: Trip;
+    deleteTrip: () => void;
+    markTripComplete: () => void;
+  };
   NewTrip: { createNewTrip: (newTrip: Trip) => void };
   Settings: undefined;
   ThemeSettings: undefined;

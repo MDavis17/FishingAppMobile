@@ -1,26 +1,42 @@
 import { Image, StyleSheet, View } from "react-native";
-import { Text, useTheme } from "react-native-paper";
+import { IconButton, Text, useTheme } from "react-native-paper";
 import { Species, WaterType } from "types";
 import Card from "common/components/Card";
 import Divider from "common/components/Divider";
 import { speciesImageUri } from "../utils/imageUtils";
-import { FRESHWATER_COLOR, SALTWATER_COLOR } from "common/theme/themes";
+import {
+  FAVORITE_GOLD,
+  FRESHWATER_COLOR,
+  SALTWATER_COLOR,
+} from "common/theme/themes";
 
 interface Props {
   species: Species;
+  onToggleFavorite?: (speciesId: number) => void;
 }
 
-export default function SpeciesCard({ species }: Props) {
+export default function SpeciesCard({ species, onToggleFavorite }: Props) {
   const theme = useTheme();
   const isSaltwater = species.waterType === WaterType.Saltwater;
   const imageUri = speciesImageUri(species.image);
+  const isFavorite = species.isFavorite === true;
 
   return (
     <View style={styles.outerPadding}>
       <Card>
         <View style={styles.contentContainer}>
           <View style={styles.header}>
-            <Text style={styles.title}>{species.name}</Text>
+            <View style={styles.titleRow}>
+              <Text style={styles.title}>{species.name}</Text>
+              {onToggleFavorite ? (
+                <IconButton
+                  icon={isFavorite ? "star" : "star-outline"}
+                  iconColor={isFavorite ? FAVORITE_GOLD : theme.colors.outline}
+                  size={22}
+                  onPress={() => onToggleFavorite(species.id)}
+                />
+              ) : null}
+            </View>
             <View
               style={[
                 styles.waterTypeTag,
@@ -59,6 +75,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+  },
+  titleRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    flex: 1,
   },
   waterTypeTag: {
     borderRadius: 20,
