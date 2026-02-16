@@ -4,9 +4,11 @@ import { Species, WaterType } from "types";
 import Card from "common/components/Card";
 import Divider from "common/components/Divider";
 import { speciesImageUri } from "../utils/imageUtils";
-import { FRESHWATER_COLOR, SALTWATER_COLOR } from "common/theme/themes";
-
-const FAVORITE_GOLD = "#FFD700";
+import {
+  FAVORITE_GOLD,
+  FRESHWATER_COLOR,
+  SALTWATER_COLOR,
+} from "common/theme/themes";
 
 interface Props {
   species: Species;
