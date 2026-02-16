@@ -4,7 +4,7 @@ import SpeciesCard from "./SpeciesCard";
 import SearchableList from "../../../common/components/SearchableList";
 
 export default function SpeciesList() {
-  const { isLoading, speciesList } = useSpeciesList();
+  const { isLoading, speciesList, toggleFavorite } = useSpeciesList();
 
   if (isLoading) {
     return <ActivityIndicator />;
@@ -15,7 +15,12 @@ export default function SpeciesList() {
       <SearchableList
         list={speciesList}
         placeholderText="Search Species..."
-        renderItem={(species) => <SpeciesCard species={species.item} />}
+        renderItem={(species) => (
+          <SpeciesCard
+            species={species.item}
+            onToggleFavorite={toggleFavorite}
+          />
+        )}
       />
     </View>
   );
