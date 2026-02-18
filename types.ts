@@ -49,6 +49,11 @@ export interface Trip {
   status: "Planned" | "Completed";
 }
 
+export interface Bait {
+  name: string;
+  imageUrl?: string;
+}
+
 export interface Species {
   id: number;
   name: string;
@@ -56,6 +61,10 @@ export interface Species {
   region: string;
   image: string;
   isFavorite: boolean;
+  description?: string;
+  rangeMapUrl?: string;
+  bestMonths?: number[];
+  bestBaits?: Bait[];
 }
 
 export interface CatchTime {
@@ -94,6 +103,7 @@ export type RootStackParamList = {
   Settings: undefined;
   ThemeSettings: undefined;
   Analysis: undefined;
+  SpeciesDetail: { species: Species };
 };
 
 export enum UserUnits {
