@@ -1,4 +1,4 @@
-import { Image, StyleSheet, View } from "react-native";
+import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import { IconButton, Text, useTheme } from "react-native-paper";
 import { Species, WaterType } from "types";
 import Card from "common/components/Card";
@@ -13,9 +13,14 @@ import {
 interface Props {
   species: Species;
   onToggleFavorite?: (speciesId: number) => void;
+  onPress?: () => void;
 }
 
-export default function SpeciesCard({ species, onToggleFavorite }: Props) {
+export default function SpeciesCard({
+  species,
+  onToggleFavorite,
+  onPress,
+}: Props) {
   const theme = useTheme();
   const isSaltwater = species.waterType === WaterType.Saltwater;
   const imageUri = speciesImageUri(species.image);
@@ -23,46 +28,51 @@ export default function SpeciesCard({ species, onToggleFavorite }: Props) {
 
   return (
     <View style={styles.outerPadding}>
-      <Card>
-        <View style={styles.contentContainer}>
-          <View style={styles.header}>
-            <View style={styles.titleRow}>
-              <Text style={styles.title}>{species.name}</Text>
-              {onToggleFavorite ? (
-                <IconButton
-                  icon={isFavorite ? "star" : "star-outline"}
-                  iconColor={isFavorite ? FAVORITE_GOLD : theme.colors.outline}
-                  size={22}
-                  onPress={() => onToggleFavorite(species.id)}
-                />
-              ) : null}
+      <TouchableOpacity onPress={onPress}>
+        <Card>
+          <View style={styles.contentContainer}>
+            <View style={styles.header}>
+              <View style={styles.titleRow}>
+                <Text style={styles.title}>{species.name}</Text>
+                {onToggleFavorite ? (
+                  <IconButton
+                    icon={isFavorite ? "star" : "star-outline"}
+                    iconColor={
+                      isFavorite ? FAVORITE_GOLD : theme.colors.outline
+                    }
+                    size={22}
+                    onPress={() => onToggleFavorite(species.id)}
+                  />
+                ) : null}
+              </View>
+              <View
+                style={[
+                  styles.waterTypeTag,
+                  {
+                    backgroundColor: isSaltwater
+                      ? SALTWATER_COLOR
+                      : FRESHWATER_COLOR,
+                  },
+                ]}
+              >
+                <Text
+                  style={[styles.tagText, { color: theme.colors.onPrimary }]}
+                >
+                  {species.waterType}
+                </Text>
+              </View>
             </View>
-            <View
-              style={[
-                styles.waterTypeTag,
-                {
-                  backgroundColor: isSaltwater
-                    ? SALTWATER_COLOR
-                    : FRESHWATER_COLOR,
-                },
-              ]}
-            >
-              <Text style={[styles.tagText, { color: theme.colors.onPrimary }]}>
-                {species.waterType}
-              </Text>
-            </View>
+            <Divider styleOveride={{ marginTop: 0 }} />
+            {imageUri ? (
+              <Image
+                source={{ uri: imageUri }}
+                style={styles.image}
+                resizeMode="cover"
+              />
+            ) : null}
           </View>
-
-          <Divider />
-          {imageUri ? (
-            <Image
-              source={{ uri: imageUri }}
-              style={styles.image}
-              resizeMode="cover"
-            />
-          ) : null}
-        </View>
-      </Card>
+        </Card>
+      </TouchableOpacity>
     </View>
   );
 }
