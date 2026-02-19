@@ -3,8 +3,7 @@ import { Text, useTheme } from "react-native-paper";
 import useTripList from "../hooks/useTripList";
 import TripCard from "./TripCard";
 import PrimaryButton from "common/components/buttons/PrimaryButton";
-import { useFocusEffect } from "@react-navigation/native";
-import { useCallback } from "react";
+import { useEffect } from "react";
 import { Trip } from "types";
 
 export default function TripList() {
@@ -22,11 +21,9 @@ export default function TripList() {
     </View>
   );
 
-  useFocusEffect(
-    useCallback(() => {
-      fetchTrips();
-    }, [fetchTrips])
-  );
+  useEffect(() => {
+    fetchTrips();
+  },[])
 
   if (isLoading) {
     return (

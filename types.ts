@@ -1,5 +1,28 @@
 import { LatLng } from "react-native-maps";
 
+export interface WeatherForecast {
+  forecastDays: ForecastDay[];
+}
+
+export interface ForecastDay {
+  daytimeForecast: {
+    weatherCondition: WeatherCondition;
+  };
+  displayDate: {
+    day: number;
+    month: number;
+    year: number;
+  };
+}
+
+export interface WeatherCondition {
+  iconBaseUri: string;
+  description: {
+    text: string;
+  };
+  type: string;
+}
+
 export interface Location {
   name: string;
   coordinates: LatLng;
@@ -26,6 +49,24 @@ export interface Trip {
   status: "Planned" | "Completed";
 }
 
+export interface Bait {
+  name: string;
+  imageUrl?: string;
+}
+
+export interface Species {
+  id: number;
+  name: string;
+  waterType: WaterType;
+  region: string;
+  image: string;
+  isFavorite: boolean;
+  description?: string;
+  rangeMapUrl?: string;
+  bestMonths?: number[];
+  bestBaits?: Bait[];
+}
+
 export interface CatchTime {
   hours: number;
   minutes: number;
@@ -45,6 +86,7 @@ export enum WaterType {
 export type RootStackParamList = {
   Home: undefined;
   Logs: undefined;
+  "Fishing Log": { initialTab?: string } | undefined;
   CatchDetail: { catchItem: CatchEntry; deleteCatch: () => void };
   AddNewCatch: { addNewCatch: (catchData: CatchEntry) => void };
   SelectLocation: {
@@ -52,10 +94,16 @@ export type RootStackParamList = {
     onLocationSelected: (newLocation: LatLng) => void;
   };
   Plan: undefined;
-  TripDetail: { trip: Trip; deleteTrip: () => void; markTripComplete: () => void };
+  TripDetail: {
+    trip: Trip;
+    deleteTrip: () => void;
+    markTripComplete: () => void;
+  };
   NewTrip: { createNewTrip: (newTrip: Trip) => void };
   Settings: undefined;
   ThemeSettings: undefined;
+  Analysis: undefined;
+  SpeciesDetail: { species: Species };
 };
 
 export enum UserUnits {

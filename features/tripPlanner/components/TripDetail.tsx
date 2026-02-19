@@ -8,6 +8,7 @@ import { Text } from "react-native-paper";
 import { RootStackParamList } from "types";
 import { useTripContext } from "./TripContext";
 import PrimaryButton from "common/components/buttons/PrimaryButton";
+import TripWeather from "./TripWeather";
 
 type TripDetailRouteProp = RouteProp<RootStackParamList, "TripDetail">;
 
@@ -18,7 +19,7 @@ export default function TripDetail() {
 
   const route = useRoute<TripDetailRouteProp>();
   const { trip, deleteTrip, markTripComplete } = route.params;
-  const { date, waterType, location } = trip;
+  const { date, location } = trip;
 
   useEffect(() => {
     const formattedDate = new Date(date).toLocaleDateString();
@@ -37,9 +38,11 @@ export default function TripDetail() {
       <View style={styles.mapContainer}>
         <MapWindow
           selectedLocation={location.coordinates}
-          height={200}
           isViewOnly
         />
+      </View>
+      <View style={styles.weatherContainer}>
+        <TripWeather location={location} date={date}/>
       </View>
       <View style={styles.catchListContainer}>
         <Text variant="titleMedium" style={styles.catchListTitle}>
@@ -61,11 +64,14 @@ export default function TripDetail() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16, backgroundColor: "white" },
-  mapContainer: { flex: 1 },
+  mapContainer: { flex: 2 },
   catchListTitle: { marginBottom: 8 },
   catchListContainer: { flex: 2, paddingTop: 8, paddingBottom: 8 },
   footerContainer: {
     marginTop: 20,
     marginBottom: 10,
   },
+  weatherContainer: {
+    flex: 1
+  }
 });

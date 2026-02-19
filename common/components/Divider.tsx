@@ -1,8 +1,12 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 
-export default function Divider() {
-  return <View style={styles.divider} />;
+interface Props {
+  styleOveride?: StyleProp<ViewStyle>;
+}
+
+export default function Divider({ styleOveride }: Props) {
+  return <View style={[styles.divider, styleOveride]} />;
 }
 
 const styles = StyleSheet.create({

@@ -1,4 +1,4 @@
-import { config, GooglePlacesApiBaseUrl, GooglePlacesAPIKey } from "./config";
+import { config, GooglePlacesApiBaseUrl, GooglePlacesAPIKey, GoogleWeatherApiBaseUrl, GoogleWeatherAPIKey } from "./config";
 import { HTTP_STATUS } from "./constants";
 import { RequestHeaders, RequestMethod } from "./types";
 
@@ -170,6 +170,43 @@ export async function googlePlacesFetch(
       GooglePlacesApiBaseUrl,
       url,
       `${queryString}&key=${GooglePlacesAPIKey}`
+    ),
+    requestOptions
+  );
+
+  console.log(`Network: Received ${url}`, response);
+
+  const responseJson = await response.json();
+  return { ok: response.status === HTTP_STATUS.OK, data: responseJson };
+}
+
+export async function googleWeatherFetch(
+  url: string,
+  queryString: string,
+  options: { method: RequestMethod; body?: string } = {
+    method: RequestMethod.GET,
+  }
+) {
+  const requestOptions: RequestHeaders = { ...options };
+
+  if (!requestOptions.headers) {
+    requestOptions.headers = {};
+  }
+
+  if (
+    options.method !== RequestMethod.GET &&
+    requestOptions.headers["Content-Type"] === undefined
+  ) {
+    requestOptions.headers["Content-Type"] = "application/json";
+  }
+
+  console.log(`Network: ${options.method} request to ${url}`, requestOptions);
+
+  let response = await fetch(
+    externalUrlFormatter(
+      GoogleWeatherApiBaseUrl,
+      url,
+      `${queryString}&key=${GoogleWeatherAPIKey}`
     ),
     requestOptions
   );

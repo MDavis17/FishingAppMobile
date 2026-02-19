@@ -1,37 +1,52 @@
 import React from "react";
 import { Text } from "react-native-paper";
-import { StyleSheet, View } from "react-native";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
 import Divider from "common/components/Divider";
 import MapWindow from "common/components/MapWindow";
-import useTrips from "common/hooks/useTrips";
+import useRecentTrip from "common/hooks/useRecentTrip";
 
 export default function RecentTripPreview() {
-  // new hook and route
-  const { trips } = useTrips()
+  const { isLoading, recentTrip } = useRecentTrip();
 
-  if(trips.length === 0 ) {
-    return null;
+  if (isLoading) {
+    return <ActivityIndicator />;
   }
-  const trip = trips[0];
+
+  if (!recentTrip) {
+    return (
+      <View>
+        <Text
+          style={[styles.heading, styles.centeredText, { paddingBottom: 4 }]}
+        >
+          No recent trips completed
+        </Text>
+        <Text style={styles.centeredText}>
+          When you complete a trip, it'll show up here so you can analyze it.
+        </Text>
+      </View>
+    );
+  }
+
+  const tripHasCatches = recentTrip.catchList.length > 0;
 
   const formattedDate = new Intl.DateTimeFormat("en-US", {
     weekday: "long",
     month: "short",
     day: "numeric",
-  }).format(new Date(trips[0].date));
+  }).format(new Date(recentTrip.date));
 
   return (
     <View>
       <View style={styles.locationContainer}>
         <View style={styles.locationDescription}>
           <Text style={styles.date}>{formattedDate}</Text>
-          <Text style={styles.heading}>{trip.location.name}</Text>
+          <Text style={styles.heading}>{recentTrip.location.name}</Text>
           <Divider />
-          <Text>{trip.catchSummary}</Text>
+          <Text>{tripHasCatches ? recentTrip.catchSummary : "No Catches"}</Text>
         </View>
         <View style={styles.locationThumbnail}>
           <MapWindow
-            selectedLocation={trip.location.coordinates}
+            selectedLocation={recentTrip.location.coordinates}
             isViewOnly
           />
         </View>
@@ -46,11 +61,5 @@ const styles = StyleSheet.create({
   locationThumbnail: { flex: 1, paddingLeft: 24 },
   date: { fontSize: 16, paddingBottom: 4 },
   heading: { fontSize: 16, fontWeight: "bold" },
-  weatherContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    alignContent: "center",
-    gap: 8,
-  },
   centeredText: { textAlign: "center" },
 });
