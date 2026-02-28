@@ -3,14 +3,12 @@ import { Image, ScrollView, StyleSheet, View } from "react-native";
 import { Icon, Text, useTheme } from "react-native-paper";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { RootStackParamList, WaterType, CatchEntry } from "types";
-import Card from "common/components/Card";
 import { speciesImageUri } from "../utils/imageUtils";
 import { FRESHWATER_COLOR, SALTWATER_COLOR } from "common/theme/themes";
 import { getCatchLogs } from "features/catchLog/api/getCatchLogs";
 import { format } from "date-fns";
 import Divider from "common/components/Divider";
 import TargetMonths from "./TargetMonths";
-import VerticalDivider from "common/components/VerticalDivider";
 import BestBaits from "./BestBaits";
 import CatchHistory from "./CatchHistory";
 
@@ -21,8 +19,8 @@ export default function SpeciesDetail() {
   const route = useRoute<SpeciesAnalysisRouteProp>();
   const { species } = route.params;
 
-  const [catchHistory, setCatchHistory] = useState<CatchEntry[]>([]);
-  const [catchHistoryLoading, setCatchHistoryLoading] = useState(true);
+  // const [catchHistory, setCatchHistory] = useState<CatchEntry[]>([]);
+  // const [catchHistoryLoading, setCatchHistoryLoading] = useState(true);
 
   // const fetchCatchHistory = useCallback(async () => {
   //   setCatchHistoryLoading(true);
@@ -118,26 +116,24 @@ export default function SpeciesDetail() {
         <Text variant="bodyLarge" style={{ color: theme.colors.onSurface }}>
           {description}
         </Text>
-      </View>
+        {rangeMapImageUrl ? (
+          <View style={styles.regionContainer}>
+            <Text variant="titleMedium" style={styles.sectionTitle}>
+              Region
+            </Text>
 
-      <Divider />
-
-      <View style={styles.detailsContainer}>
-        <View style={styles.regionContainer}>
-          <Text variant="titleMedium" style={styles.sectionTitle}>
-            Region
-          </Text>
-          {rangeMapImageUrl ? (
             <Image
               source={{ uri: rangeMapImageUrl }}
               style={styles.regionImage}
               resizeMode="cover"
             />
-          ) : null}
-        </View>
+          </View>
+        ) : null}
+      </View>
 
-        <VerticalDivider />
+      <Divider />
 
+      <View style={styles.detailsContainer}>
         <View style={styles.targetsContainer}>
           <View>
             <Text variant="titleMedium" style={styles.sectionTitle}>
@@ -208,8 +204,8 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   regionImage: {
-    height: 150,
-    width: 175,
+    width: "100%",
+    height: 200,
     borderRadius: 8,
   },
   detailsContainer: {
