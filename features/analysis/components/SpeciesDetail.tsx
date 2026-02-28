@@ -1,16 +1,16 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React from "react";
 import { Image, ScrollView, StyleSheet, View } from "react-native";
-import { Icon, Text, useTheme } from "react-native-paper";
+import { Text, useTheme } from "react-native-paper";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { RootStackParamList, WaterType, CatchEntry } from "types";
 import { speciesImageUri } from "../utils/imageUtils";
 import { FRESHWATER_COLOR, SALTWATER_COLOR } from "common/theme/themes";
-import { getCatchLogs } from "features/catchLog/api/getCatchLogs";
-import { format } from "date-fns";
 import Divider from "common/components/Divider";
 import TargetMonths from "./TargetMonths";
 import BestBaits from "./BestBaits";
 import CatchHistory from "./CatchHistory";
+import useSpeciesRange from "../hooks/useSpeciesRange";
+import MapWindow from "common/components/MapWindow";
 
 type SpeciesAnalysisRouteProp = RouteProp<RootStackParamList, "SpeciesDetail">;
 
@@ -18,6 +18,8 @@ export default function SpeciesDetail() {
   const theme = useTheme();
   const route = useRoute<SpeciesAnalysisRouteProp>();
   const { species } = route.params;
+
+  const { rangeData } = useSpeciesRange(species.id);
 
   // const [catchHistory, setCatchHistory] = useState<CatchEntry[]>([]);
   // const [catchHistoryLoading, setCatchHistoryLoading] = useState(true);
@@ -55,7 +57,6 @@ export default function SpeciesDetail() {
 
   const isSaltwater = species.waterType === WaterType.Saltwater;
   const imageUri = speciesImageUri(species.image);
-  const rangeMapImageUrl = speciesImageUri(species.rangeMapUrl ?? "");
   const description = species.description || "No description available.";
   // const bestMonths = species.bestMonths ?? [];
   const bestMonths = [6, 7, 8, 9];
@@ -116,19 +117,14 @@ export default function SpeciesDetail() {
         <Text variant="bodyLarge" style={{ color: theme.colors.onSurface }}>
           {description}
         </Text>
-        {rangeMapImageUrl ? (
-          <View style={styles.regionContainer}>
-            <Text variant="titleMedium" style={styles.sectionTitle}>
-              Region
-            </Text>
-
-            <Image
-              source={{ uri: rangeMapImageUrl }}
-              style={styles.regionImage}
-              resizeMode="cover"
-            />
-          </View>
-        ) : null}
+        <View style={{ flex: 1, alignItems: "center" }}>
+          <MapWindow
+            height={200}
+            width={350}
+            rangeData={rangeData ?? undefined}
+            isViewOnly
+          />
+        </View>
       </View>
 
       <Divider />
@@ -203,33 +199,14 @@ const styles = StyleSheet.create({
     height: 200,
     borderRadius: 8,
   },
-  regionImage: {
-    width: "100%",
-    height: 200,
-    borderRadius: 8,
-  },
   detailsContainer: {
     flex: 1,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
   },
-  regionContainer: { flex: 1 },
-  regionImageContainer: {
-    flex: 1,
-    height: 150,
-    width: "100%",
-    backgroundColor: "red",
-  },
   targetsContainer: { flex: 1 },
   sectionTitle: { marginBottom: 8, fontWeight: "bold" },
-  // timeToTargetContainer: { flex: 1 },
   bestBaitsContainer: { flex: 1 },
-  bestMonthsContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  monthsRangeContainer: { paddingHorizontal: 16 },
   historyContainer: { flex: 1 },
 });
