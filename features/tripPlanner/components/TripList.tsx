@@ -1,7 +1,13 @@
 import { ScrollView, StyleSheet, View } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 import useTripList from "../hooks/useTripList";
+import useMarineConditions from "../hooks/useMarineConditions";
 import TripCard from "./TripCard";
+import MarineConditionsCard from "./MarineConditionsCard";
+import WeatherCard from "./WeatherCard";
+import TideCard from "./TideCard";
+import AstronomyCard from "./AstronomyCard";
+import KelpCard from "./KelpCard";
 import PrimaryButton from "common/components/buttons/PrimaryButton";
 import { useEffect } from "react";
 import { Trip } from "types";
@@ -9,6 +15,7 @@ import { Trip } from "types";
 export default function TripList() {
   const { isLoading, trips, deleteTrip, openNewTripForm, fetchTrips, markTripComplete } =
     useTripList();
+  const marine = useMarineConditions();
   const theme = useTheme();
 
   const renderSkeletonItem = (_: any, index: number) => (
@@ -23,7 +30,7 @@ export default function TripList() {
 
   useEffect(() => {
     fetchTrips();
-  },[])
+  }, []);
 
   if (isLoading) {
     return (
@@ -37,13 +44,49 @@ export default function TripList() {
   }
 
   return (
-    <View
-      style={styles.container}
-    >
+    <View style={styles.container}>
       <ScrollView style={styles.flex1}>
-        {trips.map((trip: Trip) => {
-          return <TripCard trip={trip} onDelete={(id) => deleteTrip(id)} onMarkTripComplete={(id) => markTripComplete(id)} />
-        })}
+        {/* Marine conditions section */}
+        <View style={styles.marineSection}>
+          {marine.locationName && (
+            <Text style={[styles.locationLabel, { color: theme.colors.onSurfaceVariant }]}>
+              Current conditions near {marine.locationName}
+            </Text>
+          )}
+          <MarineConditionsCard
+            conditions={marine.conditions}
+            isLoading={marine.isLoading}
+          />
+          <WeatherCard
+            weather={marine.weather}
+            isLoading={marine.isLoading}
+          />
+          <TideCard
+            tides={marine.tides}
+            isLoading={marine.isLoading}
+          />
+          <AstronomyCard
+            astronomy={marine.astronomy}
+            isLoading={marine.isLoading}
+          />
+          <KelpCard
+            kelp={marine.kelp}
+            isLoading={marine.isLoading}
+          />
+        </View>
+
+        {/* Trip list section */}
+        <Text style={[styles.sectionHeader, { color: theme.colors.onSurfaceVariant }]}>
+          Your Trips
+        </Text>
+        {trips.map((trip: Trip) => (
+          <TripCard
+            key={trip.id}
+            trip={trip}
+            onDelete={(id) => deleteTrip(id)}
+            onMarkTripComplete={(id) => markTripComplete(id)}
+          />
+        ))}
       </ScrollView>
       <PrimaryButton onPress={openNewTripForm}>Add New Trip</PrimaryButton>
     </View>
@@ -57,7 +100,23 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   flex1: {
-    flex: 1
+    flex: 1,
+  },
+  marineSection: {
+    marginBottom: 8,
+  },
+  locationLabel: {
+    fontSize: 12,
+    marginBottom: 6,
+    marginLeft: 2,
+  },
+  sectionHeader: {
+    fontSize: 12,
+    fontWeight: "600",
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
+    marginBottom: 6,
+    marginLeft: 2,
   },
   loadingText: {
     marginBottom: 20,
