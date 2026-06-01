@@ -4,9 +4,9 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import LogNavigation from "features/catchLog/navigation/LogNavigation";
 import PlannerNavigation from "features/tripPlanner/navigation/PlannerNavigation";
 import { useTheme } from "react-native-paper";
-import { StyleSheet } from "react-native";
 import HomeNavigation from "features/anglerHome/navigation/HomeNavigation";
 import AnalysisNavigation from "features/analysis/navigation/AnalysisNavigation";
+import AppHeader from "common/components/AppHeader";
 
 const Tab = createBottomTabNavigator();
 
@@ -39,32 +39,25 @@ export default function MainAppTabs() {
         tabBarActiveTintColor: theme.colors.primary,
         tabBarInactiveTintColor: theme.colors.onSurface,
         tabBarStyle: { backgroundColor: theme.colors.surface },
+        header: () => <AppHeader />,
       })}
     >
       <Tab.Screen
         name="Home"
         component={HomeNavigation}
-        options={{ headerShown: false }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Fishing Log"
         component={LogNavigation}
-        options={{ headerShown: false }}
       />
       <Tab.Screen
         name="Analysis"
         component={AnalysisNavigation}
-        options={{ headerShown: false }}
       />
       <Tab.Screen
         name="Plan"
         component={PlannerNavigation}
-        options={{ headerShown: false }}
-      />
+      /> */}
     </Tab.Navigator>
   );
 }
-
-const styles = StyleSheet.create({
-  settingsButton: { paddingRight: 16 },
-});

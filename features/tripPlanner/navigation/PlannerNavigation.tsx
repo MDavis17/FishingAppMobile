@@ -9,7 +9,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function PlannerNavigation() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Plan" component={TripList} />
       <Stack.Screen
         name="TripDetail"
@@ -19,12 +19,11 @@ export default function PlannerNavigation() {
       <Stack.Screen
         name="NewTrip"
         component={NewTripForm}
-        options={{ presentation: "modal", title: "New Trip" }}
+        options={{ presentation: "modal" }}
       />
       <Stack.Screen
         name="SelectLocation"
         component={SelectLocation}
-        options={{ title: "Select Location" }}
       />
     </Stack.Navigator>
   );
