@@ -117,6 +117,7 @@ export type RootStackParamList = {
   ThemeSettings: undefined;
   Analysis: undefined;
   SpeciesDetail: { species: Species };
+  Conditions: undefined;
 };
 
 export enum UserUnits {
