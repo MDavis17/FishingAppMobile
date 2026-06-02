@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, ScrollView, View } from "react-native";
 import { useLocation } from "common/context/LocationContext";
 import useConditionsWeather from "../hooks/useConditionsWeather";
-import TemperatureCard from "./TemperatureCard";
+import TemperatureCardStatic from "./TemperatureCardStatic";
 
 export default function Conditions() {
   const { location } = useLocation();
@@ -11,7 +11,7 @@ export default function Conditions() {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.cardContainer}>
-        <TemperatureCard
+        <TemperatureCardStatic
           weather={weather}
           isLoading={isLoading}
           error={error}

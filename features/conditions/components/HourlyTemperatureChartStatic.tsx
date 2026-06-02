@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { View, StyleSheet, Dimensions } from "react-native";
-import { Text, useTheme } from "react-native-paper";
+import { useTheme } from "react-native-paper";
 import { LineChart } from "react-native-gifted-charts";
 import { HourlyDataPoint } from "common/api/getMarineWeather";
 
@@ -9,11 +9,14 @@ interface Props {
 }
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
-const CHART_WIDTH = SCREEN_WIDTH - 100; // account for card padding and y-axis
-const CHART_HEIGHT = 140;
+const CHART_WIDTH = SCREEN_WIDTH / 1.55;
+const CHART_HEIGHT = 80;
+const INITIAL_SPACING = 8;
+const END_SPACING = 8;
+
+const LABEL_HOURS = new Set([0, 6, 12, 18]);
 
 function formatHourLabel(timeStr: string): string {
-  // timeStr format: "2026-06-01T14:00"
   const hourStr = timeStr.split("T")[1];
   if (!hourStr) return "";
   const hour = parseInt(hourStr.split(":")[0], 10);
@@ -24,18 +27,26 @@ function formatHourLabel(timeStr: string): string {
 
 function getCurrentHourIndex(hourly: HourlyDataPoint[]): number {
   const now = new Date();
-  const nowStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}T${String(now.getHours()).padStart(2, "0")}:00`;
+  const nowStr =
+    `${now.getFullYear()}-` +
+    `${String(now.getMonth() + 1).padStart(2, "0")}-` +
+    `${String(now.getDate()).padStart(2, "0")}T` +
+    `${String(now.getHours()).padStart(2, "0")}:00`;
   const idx = hourly.findIndex((p) => p.time === nowStr);
   return idx >= 0 ? idx : -1;
 }
 
-// Show labels only at 6-hour intervals to avoid crowding
-const LABEL_HOURS = new Set([0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22]);
-
-export default function HourlyTemperatureChart({ hourly }: Props) {
+export default function HourlyTemperatureChartStatic({ hourly }: Props) {
   const theme = useTheme();
 
   const currentIdx = useMemo(() => getCurrentHourIndex(hourly), [hourly]);
+
+  const spacing = useMemo(() => {
+    if (hourly.length <= 1) return CHART_WIDTH;
+    return Math.floor(
+      (CHART_WIDTH - INITIAL_SPACING - END_SPACING) / (hourly.length - 1),
+    );
+  }, [hourly.length]);
 
   const chartData = useMemo(() => {
     return hourly.map((point, i) => {
@@ -43,18 +54,21 @@ export default function HourlyTemperatureChart({ hourly }: Props) {
         (point.time.split("T")[1] ?? "00").split(":")[0],
         10,
       );
-      const showLabel = LABEL_HOURS.has(hour);
+      const shouldShowLabel = LABEL_HOURS.has(hour);
       return {
         value: point.temperature_f ?? 0,
-        label: showLabel ? formatHourLabel(point.time) : "",
-        dataPointColor:
-          i === currentIdx ? theme.colors.secondary : theme.colors.primary,
-        dataPointRadius: i === currentIdx ? 6 : 3,
+        label: shouldShowLabel ? formatHourLabel(point.time) : undefined,
         showStrip: i === currentIdx,
         stripColor: theme.colors.primary,
-        stripWidth: 2,
+        stripWidth: 1,
         stripHeight: CHART_HEIGHT,
-        stripOpacity: 0.8,
+        stripOpacity: 0.6,
+        labelTextStyle: {
+          color: theme.colors.onSurfaceVariant,
+          fontSize: 10,
+          width: shouldShowLabel ? 50 : 0,
+          textAlign: "left" as const,
+        },
       };
     });
   }, [hourly, currentIdx, theme]);
@@ -74,31 +88,32 @@ export default function HourlyTemperatureChart({ hourly }: Props) {
         data={chartData}
         width={CHART_WIDTH}
         height={CHART_HEIGHT}
+        spacing={spacing}
+        initialSpacing={INITIAL_SPACING}
+        endSpacing={END_SPACING}
         curved
         color={theme.colors.primary}
-        thickness={2}
+        thickness={1}
         noOfSections={4}
         yAxisColor="transparent"
         yAxisOffset={minTemp}
         xAxisColor={theme.colors.surfaceVariant}
         rulesColor={theme.colors.surfaceVariant}
-        yAxisTextStyle={{ color: theme.colors.onSurfaceVariant, fontSize: 10 }}
         yAxisLabelSuffix="°"
+        yAxisTextStyle={{ color: theme.colors.onSurfaceVariant, fontSize: 10 }}
         xAxisLabelTextStyle={{
           color: theme.colors.onSurfaceVariant,
           fontSize: 10,
         }}
-        hideDataPoints={false}
+        hideDataPoints={true}
+        disableScroll
         isAnimated
-        animationDuration={400}
+        animationDuration={600}
         startFillColor={theme.colors.primary}
         endFillColor={theme.colors.primary}
         startOpacity={0.3}
         endOpacity={0.01}
         areaChart
-        initialSpacing={12}
-        endSpacing={4}
-        scrollToIndex={currentIdx - 2}
       />
     </View>
   );
@@ -106,15 +121,6 @@ export default function HourlyTemperatureChart({ hourly }: Props) {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 8,
-  },
-  label: {
-    marginBottom: 6,
-    fontWeight: "600",
-  },
-  nowLabel: {
-    marginTop: 4,
-    textAlign: "right",
-    fontWeight: "600",
+    overflow: "hidden",
   },
 });
