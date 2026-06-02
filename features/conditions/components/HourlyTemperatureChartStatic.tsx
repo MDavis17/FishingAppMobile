@@ -100,6 +100,7 @@ export default function HourlyTemperatureChartStatic({ hourly }: Props) {
         xAxisColor={theme.colors.surfaceVariant}
         rulesColor={theme.colors.surfaceVariant}
         yAxisLabelSuffix="°"
+        formatYLabel={(label) => String(Math.round(Number(label)))}
         yAxisTextStyle={{ color: theme.colors.onSurfaceVariant, fontSize: 10 }}
         xAxisLabelTextStyle={{
           color: theme.colors.onSurfaceVariant,
