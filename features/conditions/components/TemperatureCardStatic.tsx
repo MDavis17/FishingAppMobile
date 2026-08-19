@@ -18,10 +18,7 @@ function CardContent({ weather, isLoading, error }: Props) {
     return (
       <View style={styles.centered}>
         <ActivityIndicator size="small" color={theme.colors.primary} />
-        <Text
-          variant="bodySmall"
-          style={[styles.statusText, { color: theme.colors.onSurfaceVariant }]}
-        >
+        <Text variant="bodySmall" style={styles.statusText}>
           Loading temperature...
         </Text>
       </View>
@@ -31,10 +28,7 @@ function CardContent({ weather, isLoading, error }: Props) {
   if (error) {
     return (
       <View style={styles.centered}>
-        <Text
-          variant="bodySmall"
-          style={[styles.statusText, { color: theme.colors.onSurfaceVariant }]}
-        >
+        <Text variant="bodySmall" style={styles.statusText}>
           {error}
         </Text>
       </View>
@@ -44,10 +38,7 @@ function CardContent({ weather, isLoading, error }: Props) {
   if (!weather) {
     return (
       <View style={styles.centered}>
-        <Text
-          variant="bodySmall"
-          style={[styles.statusText, { color: theme.colors.onSurfaceVariant }]}
-        >
+        <Text variant="bodySmall" style={styles.statusText}>
           Set a location to see conditions.
         </Text>
       </View>
@@ -62,26 +53,17 @@ function CardContent({ weather, isLoading, error }: Props) {
           weather.air_temp_f_max !== null && (
             <>
               <View style={styles.statBlock}>
-                <Text
-                  variant="headlineMedium"
-                  style={[styles.tempValue, { color: theme.colors.primary }]}
-                >
+                <Text variant="headlineMedium" style={styles.tempValue}>
                   {Math.round(weather.air_temp_f)}°F
                 </Text>
               </View>
               <View style={styles.statBlock}>
-                <Text
-                  variant="bodySmall"
-                  style={{ color: theme.colors.primary }}
-                >
+                <Text variant="bodySmall" style={styles.tempValue}>
                   Hi: {Math.round(weather.air_temp_f_max)}°F
                 </Text>
               </View>
               <View style={styles.statBlock}>
-                <Text
-                  variant="bodySmall"
-                  style={{ color: theme.colors.primary }}
-                >
+                <Text variant="bodySmall" style={styles.tempValue}>
                   Lo: {Math.round(weather.air_temp_f_min)}°F
                 </Text>
               </View>
