@@ -67,6 +67,19 @@ export interface Species {
   bestBaits?: Bait[];
 }
 
+export interface RangeData {
+  polygons: RangePolygon[];
+  centerLatitude: number;
+  centerLongitude: number;
+  latDelta: number;
+  lngDelta: number;
+}
+
+export interface RangePolygon {
+  coordinates: LatLng[];
+  occurrenceProbability: number;
+}
+
 export interface CatchTime {
   hours: number;
   minutes: number;
@@ -104,6 +117,7 @@ export type RootStackParamList = {
   ThemeSettings: undefined;
   Analysis: undefined;
   SpeciesDetail: { species: Species };
+  Conditions: undefined;
 };
 
 export enum UserUnits {

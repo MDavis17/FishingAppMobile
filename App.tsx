@@ -8,6 +8,7 @@ import { useColorScheme } from "react-native";
 import { ThemeProvider, useAppTheme } from "common/theme/ThemeContext";
 import { TripProvider } from "features/tripPlanner/components/TripContext";
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
+import { LocationProvider } from "common/context/LocationContext";
 
 const ThemedApp = () => {
   const { themeName, theme } = useAppTheme();
@@ -28,7 +29,9 @@ export default function App() {
         <TripProvider>
           <SafeAreaProvider>
             <ThemeProvider>
-              <ThemedApp />
+              <LocationProvider>
+                <ThemedApp />
+              </LocationProvider>
             </ThemeProvider>
           </SafeAreaProvider>
         </TripProvider>
