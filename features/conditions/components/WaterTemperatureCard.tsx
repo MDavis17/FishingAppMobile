@@ -18,10 +18,7 @@ function CardContent({ conditions, isLoading, error }: Props) {
     return (
       <View style={styles.centered}>
         <ActivityIndicator size="small" color={theme.colors.primary} />
-        <Text
-          variant="bodySmall"
-          style={[styles.statusText, { color: theme.colors.onSurfaceVariant }]}
-        >
+        <Text variant="bodySmall" style={styles.statusText}>
           Loading temperature...
         </Text>
       </View>
@@ -31,10 +28,7 @@ function CardContent({ conditions, isLoading, error }: Props) {
   if (error) {
     return (
       <View style={styles.centered}>
-        <Text
-          variant="bodySmall"
-          style={[styles.statusText, { color: theme.colors.onSurfaceVariant }]}
-        >
+        <Text variant="bodySmall" style={styles.statusText}>
           {error}
         </Text>
       </View>
@@ -44,10 +38,7 @@ function CardContent({ conditions, isLoading, error }: Props) {
   if (!conditions) {
     return (
       <View style={styles.centered}>
-        <Text
-          variant="bodySmall"
-          style={[styles.statusText, { color: theme.colors.onSurfaceVariant }]}
-        >
+        <Text variant="bodySmall" style={styles.statusText}>
           Set a location to see conditions.
         </Text>
       </View>
@@ -62,32 +53,13 @@ function CardContent({ conditions, isLoading, error }: Props) {
         {conditions.water_temp_f !== null ? (
           <>
             <View style={styles.statBlock}>
-              <Text
-                variant="headlineMedium"
-                style={[styles.tempValue, { color: theme.colors.primary }]}
-              >
+              <Text variant="headlineMedium" style={styles.tempValue}>
                 {Math.round(conditions.water_temp_f)}°F
               </Text>
             </View>
-            {/* {conditions.water_temp_source !== null && (
-              <View style={styles.statBlock}>
-                <Text
-                  variant="bodySmall"
-                  style={{ color: theme.colors.onSurfaceVariant }}
-                >
-                  {conditions.water_temp_source}
-                </Text>
-              </View>
-            )} */}
           </>
         ) : (
-          <Text
-            variant="bodySmall"
-            style={[
-              styles.statusText,
-              { color: theme.colors.onSurfaceVariant },
-            ]}
-          >
+          <Text variant="bodySmall" style={styles.statusText}>
             Water temperature unavailable.
           </Text>
         )}
