@@ -1,11 +1,6 @@
 import React from "react";
-import {
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import { TextInput, useTheme } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import MapWindow from "common/components/MapWindow";
@@ -19,6 +14,8 @@ export default function PlanTripModal() {
   const theme = useTheme();
   const navigation = useNavigation();
   const {
+    date,
+    onDateTimeChange,
     selectedLocation,
     setSelectedLocation,
     currentLocation,
@@ -85,6 +82,21 @@ export default function PlanTripModal() {
             ]}
           />
           {inputError?.inputId === "locationName" && (
+            <Text style={styles.errorText}>{inputError.message}</Text>
+          )}
+        </View>
+
+        <View>
+          <Text variant="titleMedium" style={styles.label}>
+            Trip Date & Time
+          </Text>
+          <DateTimePicker
+            value={date ?? new Date()}
+            mode="datetime"
+            display="default"
+            onChange={(_, selectedDate) => onDateTimeChange(selectedDate)}
+          />
+          {inputError?.inputId === "date" && (
             <Text style={styles.errorText}>{inputError.message}</Text>
           )}
         </View>
@@ -158,5 +170,8 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     flexDirection: "row",
     justifyContent: "space-between",
+  },
+  label: {
+    marginBottom: 6,
   },
 });

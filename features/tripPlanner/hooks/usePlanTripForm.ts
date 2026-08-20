@@ -8,6 +8,7 @@ import { InputError, RootStackParamList, Species, Trip } from "types";
 export default function usePlanTripForm() {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const [date, setDate] = useState<Date | undefined>(new Date());
   const [selectedLocation, setSelectedLocation] = useState<LatLng | null>(null);
   const [currentLocation, setCurrentLocation] = useState<LatLng | null>(null);
   const [locationName, setLocationName] = useState("");
@@ -29,7 +30,20 @@ export default function usePlanTripForm() {
       };
     }
 
+    if (!date) {
+      return { inputId: "date", message: "Please select a valid trip date." };
+    }
+
     return null;
+  };
+
+  const onDateTimeChange = (selectedDate?: Date) => {
+    if (selectedDate) {
+      setDate(selectedDate);
+      if (inputError?.inputId === "date") {
+        setInputError(null);
+      }
+    }
   };
 
   const handleSelectNewLocation = () => {
@@ -52,13 +66,13 @@ export default function usePlanTripForm() {
       return;
     }
 
-    if (!selectedLocation) {
+    if (!selectedLocation || !date) {
       return;
     }
 
     const plannedTrip: Trip = {
       id: 0,
-      date: new Date().toISOString(),
+      date: date.toISOString(),
       location: {
         coordinates: selectedLocation,
         name: locationName.trim(),
@@ -93,6 +107,8 @@ export default function usePlanTripForm() {
   }, []);
 
   return {
+    date,
+    onDateTimeChange,
     selectedLocation,
     setSelectedLocation,
     currentLocation,
