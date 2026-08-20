@@ -9,7 +9,7 @@ import useUpcomingTrip from "common/hooks/useUpcomingTrip";
 export default function UpcomingTripCard() {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-  const { upcomingTrip, createNewTrip } = useUpcomingTrip();
+  const { upcomingTrip } = useUpcomingTrip();
 
   const actionText = () => {
     if (upcomingTrip) {
@@ -22,11 +22,7 @@ export default function UpcomingTripCard() {
     if (upcomingTrip) {
       navigation.navigate("Plan");
     } else {
-      navigation.navigate("Fishing Log", {
-        screen: "NewTrip",
-        params: { createNewTrip },
-        options: { presentation: "modal", title: "New Trip" },
-      });
+      navigation.navigate("PlanTrip");
     }
   };
 

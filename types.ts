@@ -42,11 +42,11 @@ export interface CatchEntry {
 export interface Trip {
   id: number;
   date: string;
-  waterType: WaterType;
   location: Location;
   catchList: CatchEntry[];
   catchSummary: string;
   status: "Planned" | "Completed";
+  targetSpecies?: Species[];
 }
 
 export interface Bait {
@@ -113,6 +113,7 @@ export type RootStackParamList = {
     markTripComplete: () => void;
   };
   NewTrip: { createNewTrip: (newTrip: Trip) => void };
+  PlanTrip: undefined;
   Settings: undefined;
   ThemeSettings: undefined;
   Analysis: undefined;
