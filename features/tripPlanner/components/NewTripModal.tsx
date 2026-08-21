@@ -1,7 +1,7 @@
 import React from "react";
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { TextInput, useTheme } from "react-native-paper";
+import { SegmentedButtons, Text, TextInput, useTheme } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import MapWindow from "common/components/MapWindow";
 import PrimaryButton from "common/components/buttons/PrimaryButton";
@@ -15,6 +15,8 @@ export default function NewTripModal() {
   const navigation = useNavigation();
   const {
     date,
+    status,
+    setStatus,
     onDateTimeChange,
     selectedLocation,
     setSelectedLocation,
@@ -103,6 +105,27 @@ export default function NewTripModal() {
           )}
         </View>
 
+        <View>
+          <Text variant="titleMedium" style={styles.label}>
+            Trip Status
+          </Text>
+          <SegmentedButtons
+            value={status}
+            onValueChange={(value) => setStatus(value as "Planned" | "Completed")}
+            buttons={[
+              { value: "Planned", label: "Planned" },
+              { value: "Completed", label: "Completed" },
+            ]}
+            theme={{
+              colors: {
+                secondaryContainer: theme.colors.secondary,
+                onSecondaryContainer: theme.colors.onSecondary,
+              },
+            }}
+            style={styles.statusButtons}
+          />
+        </View>
+
         <SpeciesChipSelector
           selectedSpecies={targetSpecies}
           onSelectedSpeciesChange={setTargetSpecies}
@@ -178,5 +201,8 @@ const styles = StyleSheet.create({
   },
   label: {
     marginBottom: 6,
+  },
+  statusButtons: {
+    marginBottom: 12,
   },
 });
