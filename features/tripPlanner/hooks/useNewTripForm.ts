@@ -4,12 +4,13 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import * as Location from "expo-location";
 import { LatLng } from "react-native-maps";
 import { InputError, RootStackParamList, Species } from "types";
-import { addNewTrip } from "../api/addNewTrip";
+import { addNewTrip, CreateTripPayload } from "../api/addNewTrip";
 
 export default function useNewTripForm() {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [date, setDate] = useState<Date | undefined>(new Date());
+  const [status, setStatus] = useState<CreateTripPayload["status"]>("Planned");
   const [selectedLocation, setSelectedLocation] = useState<LatLng | null>(null);
   const [currentLocation, setCurrentLocation] = useState<LatLng | null>(null);
   const [locationName, setLocationName] = useState("");
@@ -83,7 +84,7 @@ export default function useNewTripForm() {
           coordinates: selectedLocation,
           name: locationName.trim(),
         },
-        status: "Planned",
+        status,
         targetSpecies: targetSpecies.map(({ id, name }) => ({ id, name })),
       });
 
@@ -93,7 +94,7 @@ export default function useNewTripForm() {
 
       navigation.goBack();
     } catch (error) {
-      console.error("Error saving planned trip:", error);
+      console.error("Error saving trip:", error);
       setSaveError("Failed to save trip. Please try again.");
     } finally {
       setIsSaving(false);
@@ -121,6 +122,8 @@ export default function useNewTripForm() {
 
   return {
     date,
+    status,
+    setStatus,
     onDateTimeChange,
     selectedLocation,
     setSelectedLocation,
