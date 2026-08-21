@@ -112,7 +112,7 @@ export type RootStackParamList = {
     deleteTrip: () => void;
     markTripComplete: () => void;
   };
-  PlanTrip: undefined;
+  NewTrip: undefined;
   Settings: undefined;
   ThemeSettings: undefined;
   Analysis: undefined;

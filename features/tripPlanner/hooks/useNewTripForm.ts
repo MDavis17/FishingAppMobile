@@ -6,7 +6,7 @@ import { LatLng } from "react-native-maps";
 import { InputError, RootStackParamList, Species } from "types";
 import { addNewTrip } from "../api/addNewTrip";
 
-export default function usePlanTripForm() {
+export default function useNewTripForm() {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [date, setDate] = useState<Date | undefined>(new Date());
