@@ -1,8 +1,6 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import LogNavigation from "features/catchLog/navigation/LogNavigation";
-import PlannerNavigation from "features/tripPlanner/navigation/PlannerNavigation";
 import { useTheme } from "react-native-paper";
 import HomeNavigation from "features/anglerHome/navigation/HomeNavigation";
 import AnalysisNavigation from "features/analysis/navigation/AnalysisNavigation";
@@ -21,12 +19,8 @@ export default function MainAppTabs() {
 
           if (route.name === "Home") {
             iconName = "home";
-          } else if (route.name === "Fishing Log") {
-            iconName = "book-outline";
           } else if (route.name === "Analysis") {
             iconName = "book-outline";
-          } else if (route.name === "Plan") {
-            iconName = "map-clock-outline";
           } else if (route.name === "Conditions") {
             iconName = "weather-cloudy";
           }
@@ -48,16 +42,8 @@ export default function MainAppTabs() {
       <Tab.Screen name="Home" component={HomeNavigation} />
       <Tab.Screen name="Conditions" component={ConditionsNavigation} />
       {/* <Tab.Screen
-        name="Fishing Log"
-        component={LogNavigation}
-      />
-      <Tab.Screen
         name="Analysis"
         component={AnalysisNavigation}
-      />
-      <Tab.Screen
-        name="Plan"
-        component={PlannerNavigation}
       /> */}
     </Tab.Navigator>
   );
