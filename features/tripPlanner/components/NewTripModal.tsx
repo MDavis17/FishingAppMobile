@@ -116,6 +116,12 @@ export default function NewTripModal() {
               { value: "Planned", label: "Planned" },
               { value: "Completed", label: "Completed" },
             ]}
+            theme={{
+              colors: {
+                secondaryContainer: theme.colors.secondary,
+                onSecondaryContainer: theme.colors.onSecondary,
+              },
+            }}
             style={styles.statusButtons}
           />
         </View>
