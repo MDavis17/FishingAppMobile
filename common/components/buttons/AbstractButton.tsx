@@ -10,6 +10,7 @@ interface Props {
   textColor?: string;
   mode?: "text" | "contained" | "outlined" | "elevated" | "contained-tonal";
   borderColor?: string;
+  disabled?: boolean;
 }
 
 export default function AbstractButton({
@@ -19,6 +20,7 @@ export default function AbstractButton({
   textColor,
   mode,
   borderColor,
+  disabled,
 }: Props) {
   return (
     <Button
@@ -27,6 +29,7 @@ export default function AbstractButton({
       icon={icon}
       textColor={textColor}
       style={{ borderColor: borderColor }}
+      disabled={disabled}
     >
       {children}
     </Button>
