@@ -27,6 +27,8 @@ export default function PlanTripModal() {
     setInputError,
     handleSelectNewLocation,
     handleSave,
+    isSaving,
+    saveError,
   } = usePlanTripForm();
 
   if (!selectedLocation) {
@@ -105,6 +107,7 @@ export default function PlanTripModal() {
           selectedSpecies={targetSpecies}
           onSelectedSpeciesChange={setTargetSpecies}
         />
+        {saveError && <Text style={styles.errorText}>{saveError}</Text>}
       </ScrollView>
 
       <View
@@ -122,7 +125,9 @@ export default function PlanTripModal() {
         >
           Cancel
         </TertiaryButton>
-        <PrimaryButton onPress={handleSave}>Save Trip</PrimaryButton>
+        <PrimaryButton onPress={handleSave} disabled={isSaving}>
+          {isSaving ? "Saving..." : "Save Trip"}
+        </PrimaryButton>
       </View>
     </SafeAreaView>
   );

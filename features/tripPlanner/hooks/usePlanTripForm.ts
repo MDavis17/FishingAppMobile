@@ -3,7 +3,8 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import * as Location from "expo-location";
 import { LatLng } from "react-native-maps";
-import { InputError, RootStackParamList, Species, Trip } from "types";
+import { InputError, RootStackParamList, Species } from "types";
+import { addNewTrip } from "../api/addNewTrip";
 
 export default function usePlanTripForm() {
   const navigation =
@@ -14,6 +15,8 @@ export default function usePlanTripForm() {
   const [locationName, setLocationName] = useState("");
   const [targetSpecies, setTargetSpecies] = useState<Species[]>([]);
   const [inputError, setInputError] = useState<InputError | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   const validateInputs = (): InputError | null => {
     if (!selectedLocation) {
@@ -59,7 +62,7 @@ export default function usePlanTripForm() {
     });
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const error = validateInputs();
     if (error) {
       setInputError(error);
@@ -70,21 +73,31 @@ export default function usePlanTripForm() {
       return;
     }
 
-    const plannedTrip: Trip = {
-      id: 0,
-      date: date.toISOString(),
-      location: {
-        coordinates: selectedLocation,
-        name: locationName.trim(),
-      },
-      catchList: [],
-      catchSummary: "",
-      status: "Planned",
-      targetSpecies,
-    };
+    setIsSaving(true);
+    setSaveError(null);
 
-    console.log("Planned trip (UI only):", plannedTrip);
-    navigation.goBack();
+    try {
+      const response = await addNewTrip({
+        date: date.toISOString(),
+        location: {
+          coordinates: selectedLocation,
+          name: locationName.trim(),
+        },
+        status: "Planned",
+        targetSpecies: targetSpecies.map(({ id, name }) => ({ id, name })),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to save trip");
+      }
+
+      navigation.goBack();
+    } catch (error) {
+      console.error("Error saving planned trip:", error);
+      setSaveError("Failed to save trip. Please try again.");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   useEffect(() => {
@@ -120,5 +133,7 @@ export default function usePlanTripForm() {
     setInputError,
     handleSelectNewLocation,
     handleSave,
+    isSaving,
+    saveError,
   };
 }
