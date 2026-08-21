@@ -22,7 +22,7 @@ export default function UpcomingTripCard() {
     if (upcomingTrip) {
       navigation.navigate("Plan");
     } else {
-      navigation.navigate("PlanTrip");
+      navigation.navigate("NewTrip");
     }
   };
 

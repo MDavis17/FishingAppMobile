@@ -7,10 +7,10 @@ import MapWindow from "common/components/MapWindow";
 import PrimaryButton from "common/components/buttons/PrimaryButton";
 import SecondaryButton from "common/components/buttons/SecondaryButton";
 import TertiaryButton from "common/components/buttons/TertiaryButton";
-import usePlanTripForm from "../hooks/usePlanTripForm";
+import useNewTripForm from "../hooks/useNewTripForm";
 import SpeciesChipSelector from "./SpeciesChipSelector";
 
-export default function PlanTripModal() {
+export default function NewTripModal() {
   const theme = useTheme();
   const navigation = useNavigation();
   const {
@@ -29,7 +29,7 @@ export default function PlanTripModal() {
     handleSave,
     isSaving,
     saveError,
-  } = usePlanTripForm();
+  } = useNewTripForm();
 
   if (!selectedLocation) {
     return null;
