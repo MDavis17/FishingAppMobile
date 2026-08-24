@@ -2,7 +2,7 @@ import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import TertiaryButton from "common/components/buttons/TertiaryButton";
 import MapWindow from "common/components/MapWindow";
 import CatchList from "features/catchLog/components/CatchList";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Text } from "react-native-paper";
 import { RootStackParamList } from "types";
@@ -21,12 +21,14 @@ export default function TripDetail() {
   const { trip, deleteTrip, markTripComplete } = route.params;
   const { date, location } = trip;
 
+  useLayoutEffect(() => {
+    navigation.setOptions({ title: location.name });
+  }, [location.name, navigation]);
+
   useEffect(() => {
-    const formattedDate = new Date(date).toLocaleDateString();
-    navigation.setOptions({ title: formattedDate });
     setStatus(trip.status);
     setTrip(trip);
-  }, [date, navigation]);
+  }, [setTrip, trip]);
 
   const handleCompleteTrip = () => {
     markTripComplete();
