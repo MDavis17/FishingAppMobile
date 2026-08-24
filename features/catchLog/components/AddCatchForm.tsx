@@ -1,8 +1,7 @@
 import React from "react";
 import { View, StyleSheet, Text, ScrollView, SafeAreaView } from "react-native";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import { RootStackParamList } from "types";
-import { TimeInputField } from "./TimeInputField";
-import useTimeInputField from "../hooks/useTimeInputField";
 import useAddCatchForm from "../hooks/useAddCatchForm";
 import { TextInput, Button, useTheme } from "react-native-paper";
 import MapWindow from "common/components/MapWindow";
@@ -19,12 +18,13 @@ export default function AddCatchForm() {
   const theme = useTheme();
   const route = useRoute<NewCatchRouteProp>();
   const { addNewCatch } = route.params;
-  const { time, setTime } = useTimeInputField();
   const {
     bait,
     setBait,
     species,
     setSpecies,
+    date,
+    onTimeChange,
     inputError,
     setInputError,
     handleAddCatch,
@@ -32,7 +32,7 @@ export default function AddCatchForm() {
     setSelectedLocation,
     handleSelectNewLocation,
     currentLocation,
-  } = useAddCatchForm(time, addNewCatch);
+  } = useAddCatchForm(addNewCatch);
   const { speciesList } = useSpeciesList();
 
   if (!selectedLocation) {
@@ -64,8 +64,13 @@ export default function AddCatchForm() {
               <Text style={styles.errorText}>{inputError.message}</Text>
             )}
           </View>
-          <View style={[styles.input, styles.borderRadius, styles.timeInput]}>
-            <TimeInputField time={time} setTime={setTime} />
+          <View style={[styles.input, styles.timeInput]}>
+            <DateTimePicker
+              value={date ?? new Date()}
+              mode="time"
+              display="default"
+              onChange={(_, selectedDate) => onTimeChange(selectedDate)}
+            />
           </View>
         </View>
         <View style={styles.flex}>
@@ -151,7 +156,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
   },
-  borderRadius: { borderRadius: 5 },
   mapContainer: {
     height: 260,
     width: "100%",
