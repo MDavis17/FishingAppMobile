@@ -80,10 +80,6 @@ export interface RangePolygon {
   occurrenceProbability: number;
 }
 
-export interface CatchTime {
-  hours: number;
-  minutes: number;
-}
 
 export interface InputError {
   inputId: string;

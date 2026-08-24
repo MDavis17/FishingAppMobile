@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
-import { CatchEntry, CatchTime, WaterType, InputError } from "../../../types";
+import { CatchEntry, WaterType, InputError } from "../../../types";
 import { useNavigation } from "@react-navigation/native";
 import * as Location from "expo-location";
 import { LatLng } from "react-native-maps";
 import { useTripContext } from "features/tripPlanner/components/TripContext";
 
 export default function useAddCatchForm(
-  time: CatchTime,
   addNewCatch: (tripId: number, newCatch: CatchEntry) => void
 ) {
   const navigation = useNavigation();
@@ -28,6 +27,22 @@ export default function useAddCatchForm(
     return null;
   };
 
+  const onTimeChange = (selectedDate?: Date) => {
+    if (selectedDate) {
+      setDate((prev) => {
+        const updated = new Date(prev ?? selectedDate);
+        updated.setHours(selectedDate.getHours());
+        updated.setMinutes(selectedDate.getMinutes());
+        updated.setSeconds(0);
+        updated.setMilliseconds(0);
+        return updated;
+      });
+      if (inputError?.inputId === "date") {
+        setInputError(null);
+      }
+    }
+  };
+
   const resetForm = () => {
     setSpecies("");
     setSelectedLocation(currentLocation);
@@ -45,12 +60,8 @@ export default function useAddCatchForm(
       return;
     }
 
-    const combinedDateTime = new Date(date);
-    combinedDateTime.setHours(time.hours);
-    combinedDateTime.setMinutes(time.minutes);
-
     const newCatch: CatchEntry = {
-      dateTime: combinedDateTime.toISOString(),
+      dateTime: date.toISOString(),
       species,
       waterType: trip?.waterType || WaterType.Freshwater,
       location: { coordinates: selectedLocation, name: "" },
@@ -91,14 +102,16 @@ export default function useAddCatchForm(
 
       setCurrentLocation(currentLatLong);
 
+      const now = new Date();
+
       if (!trip) {
         setSelectedLocation(currentLatLong);
-        setDate(new Date());
+        setDate(now);
         return;
       }
 
       setSelectedLocation(trip?.location.coordinates || currentLatLong);
-      setDate(new Date(trip?.date) || new Date());
+      setDate(new Date(trip.date));
     })();
   }, []);
 
@@ -107,6 +120,8 @@ export default function useAddCatchForm(
     setBait,
     species,
     setSpecies,
+    date,
+    onTimeChange,
     inputError,
     setInputError,
     handleAddCatch,
