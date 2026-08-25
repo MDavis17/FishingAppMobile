@@ -6,6 +6,7 @@ import MapWindow from "common/components/MapWindow";
 import { TempUnits, Trip, UserUnits } from "types";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { getWeatherIconName } from "common/utils/WeatherUtils";
+import TripStatusChip from "./TripStatusChip";
 
 interface Props {
   trip: Trip;
@@ -52,6 +53,7 @@ export default function TripPreview({ trip }: Props) {
     <View>
       <View style={styles.locationContainer}>
         <View style={styles.locationDescription}>
+          <TripStatusChip status={trip.status} />
           <Text style={styles.date}>{formattedDate}</Text>
           <Text style={styles.heading}>{trip.location.name}</Text>
           <Divider />
@@ -67,7 +69,7 @@ export default function TripPreview({ trip }: Props) {
 
 const styles = StyleSheet.create({
   locationContainer: { flexDirection: "row" },
-  locationDescription: { flex: 1 },
+  locationDescription: { flex: 1, gap: 4 },
   locationThumbnail: { flex: 1, paddingLeft: 24 },
   date: { fontSize: 16, paddingBottom: 4 },
   heading: { fontSize: 16, fontWeight: "bold" },
