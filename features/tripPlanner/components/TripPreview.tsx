@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import {Text } from "react-native-paper";
+import { Text } from "react-native-paper";
 import { StyleSheet, View } from "react-native";
 import Divider from "common/components/Divider";
 import MapWindow from "common/components/MapWindow";
@@ -8,10 +8,10 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { getWeatherIconName } from "common/utils/WeatherUtils";
 
 interface Props {
-  trip: Trip
+  trip: Trip;
 }
 
-export default function TripPreview({trip}: Props) {
+export default function TripPreview({ trip }: Props) {
   const mockWeather = { temp: 72, condition: "Sunny" };
   const weather = mockWeather;
 
@@ -23,28 +23,30 @@ export default function TripPreview({trip}: Props) {
   let degreeSymbol = "\u00B0";
 
   const userUnits = UserUnits.Imperial;
-  const isTripCompleted = trip.status === 'Completed';
+  const isTripCompleted = trip.status === "Completed";
 
   const weatherPreview = useMemo(() => {
-    return <View style={styles.weatherContainer}>
-      <MaterialCommunityIcons
-        name={getWeatherIconName(weather.condition)}
-        size={25}
-        color={"black"}
-      />
-      <Text>{`${weather.temp}${degreeSymbol}${
-        userUnits === UserUnits.Imperial
-          ? TempUnits.Fahrenheit
-          : TempUnits.Celsius
-      }`}</Text>
-      <Text>{"|"}</Text>
-      <Text>{weather.condition}</Text>
-    </View>
+    return (
+      <View style={styles.weatherContainer}>
+        <MaterialCommunityIcons
+          name={getWeatherIconName(weather.condition)}
+          size={25}
+          color={"black"}
+        />
+        <Text>{`${weather.temp}${degreeSymbol}${
+          userUnits === UserUnits.Imperial
+            ? TempUnits.Fahrenheit
+            : TempUnits.Celsius
+        }`}</Text>
+        <Text>{"|"}</Text>
+        <Text>{weather.condition}</Text>
+      </View>
+    );
   }, [weather]);
 
   const catchSummaryPreview = useMemo(() => {
-    return <Text>{trip.catchSummary}</Text>
-  },[trip.catchSummary]);
+    return <Text>{trip.catchSummary}</Text>;
+  }, [trip.catchSummary]);
 
   return (
     <View>
@@ -56,10 +58,7 @@ export default function TripPreview({trip}: Props) {
           {isTripCompleted ? catchSummaryPreview : weatherPreview}
         </View>
         <View style={styles.locationThumbnail}>
-          <MapWindow
-            selectedLocation={trip.location.coordinates}
-            isViewOnly
-          />
+          <MapWindow selectedLocation={trip.location.coordinates} isViewOnly />
         </View>
       </View>
     </View>

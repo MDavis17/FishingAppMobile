@@ -5,21 +5,21 @@ import CatchList from "features/catchLog/components/CatchList";
 import { useEffect, useLayoutEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Text } from "react-native-paper";
-import { RootStackParamList } from "types";
+import { RootStackParamList, Trip } from "types";
 import { useTripContext } from "./TripContext";
 import PrimaryButton from "common/components/buttons/PrimaryButton";
 import TripWeather from "./TripWeather";
+import TripStatusChip from "./TripStatusChip";
 
 type TripDetailRouteProp = RouteProp<RootStackParamList, "TripDetail">;
 
 export default function TripDetail() {
   const { setTrip } = useTripContext();
   const navigation = useNavigation();
-  const [status, setStatus] = useState('Planned');
-
   const route = useRoute<TripDetailRouteProp>();
   const { trip, deleteTrip, markTripComplete } = route.params;
   const { date, location } = trip;
+  const [status, setStatus] = useState<Trip["status"]>(trip.status);
 
   useLayoutEffect(() => {
     navigation.setOptions({ title: location.name });
@@ -32,19 +32,19 @@ export default function TripDetail() {
 
   const handleCompleteTrip = () => {
     markTripComplete();
-    setStatus('Completed');
-  }
+    setStatus("Completed");
+  };
 
   return (
     <View style={styles.container}>
       <View style={styles.mapContainer}>
-        <MapWindow
-          selectedLocation={location.coordinates}
-          isViewOnly
-        />
+        <MapWindow selectedLocation={location.coordinates} isViewOnly />
+      </View>
+      <View style={styles.statusContainer}>
+        <TripStatusChip status={status} />
       </View>
       <View style={styles.weatherContainer}>
-        <TripWeather location={location} date={date}/>
+        <TripWeather location={location} date={date} />
       </View>
       <View style={styles.catchListContainer}>
         <Text variant="titleMedium" style={styles.catchListTitle}>
@@ -55,7 +55,11 @@ export default function TripDetail() {
         </View>
       </View>
       <View style={styles.footerContainer}>
-        {status === "Planned" && <PrimaryButton onPress={handleCompleteTrip}>Mark Trip Complete</PrimaryButton>}
+        {status === "Planned" && (
+          <PrimaryButton onPress={handleCompleteTrip}>
+            Mark Trip Complete
+          </PrimaryButton>
+        )}
         <TertiaryButton onPress={deleteTrip} textColor="red">
           Delete
         </TertiaryButton>
@@ -74,6 +78,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   weatherContainer: {
-    flex: 1
-  }
+    flex: 1,
+  },
+  statusContainer: {
+    paddingVertical: 8,
+  },
 });
