@@ -6,7 +6,6 @@ import MapWindow from "common/components/MapWindow";
 import { TempUnits, Trip, UserUnits } from "types";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { getWeatherIconName } from "common/utils/WeatherUtils";
-import TripStatusChip from "./TripStatusChip";
 
 interface Props {
   trip: Trip;
@@ -51,7 +50,6 @@ export default function TripPreview({ trip }: Props) {
 
   return (
     <View>
-      <TripStatusChip trip={trip} />
       <View style={styles.locationContainer}>
         <View style={styles.locationDescription}>
           <Text style={styles.date}>{formattedDate}</Text>
