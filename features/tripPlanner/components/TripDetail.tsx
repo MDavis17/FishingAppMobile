@@ -2,6 +2,8 @@ import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import TertiaryButton from "common/components/buttons/TertiaryButton";
 import MapWindow from "common/components/MapWindow";
 import CatchList from "features/catchLog/components/CatchList";
+import AddCatchDialog from "features/catchLog/components/AddCatchDialog";
+import useCatchList from "features/catchLog/hooks/useCatchList";
 import { useEffect, useLayoutEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Text } from "react-native-paper";
@@ -20,6 +22,8 @@ export default function TripDetail() {
   const { trip, deleteTrip, markTripComplete } = route.params;
   const { date, location } = trip;
   const [status, setStatus] = useState<Trip["status"]>(trip.status);
+  const [addCatchVisible, setAddCatchVisible] = useState(false);
+  const { isLoading, catches, deleteCatch, addNewCatch } = useCatchList(trip.id);
 
   useLayoutEffect(() => {
     navigation.setOptions({ title: location.name });
@@ -51,7 +55,12 @@ export default function TripDetail() {
           Catch List
         </Text>
         <View style={{ flex: 2 }}>
-          <CatchList tripId={trip.id} />
+          <CatchList
+            catches={catches}
+            isLoading={isLoading}
+            deleteCatch={deleteCatch}
+            onAddCatchPress={() => setAddCatchVisible(true)}
+          />
         </View>
       </View>
       <View style={styles.footerContainer}>
@@ -64,6 +73,11 @@ export default function TripDetail() {
           Delete
         </TertiaryButton>
       </View>
+      <AddCatchDialog
+        visible={addCatchVisible}
+        onDismiss={() => setAddCatchVisible(false)}
+        addNewCatch={addNewCatch}
+      />
     </View>
   );
 }
