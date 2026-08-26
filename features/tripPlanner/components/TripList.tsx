@@ -1,6 +1,7 @@
 import React, { useCallback } from "react";
 import {
   ActivityIndicator,
+  Alert,
   FlatList,
   Pressable,
   StyleSheet,
@@ -32,6 +33,7 @@ export default function TripList() {
     updateFilters,
     hasTrips,
     hasFilteredTrips,
+    deleteTrip,
   } = useTripList();
 
   const handleTripPress = useCallback(
@@ -71,6 +73,22 @@ export default function TripList() {
     [navigation]
   );
 
+  const confirmDeleteTrip = useCallback(
+    (trip: Trip) => {
+      Alert.alert("Delete Trip", "Are you sure you want to delete this trip?", [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: () => {
+            deleteTrip(trip.id);
+          },
+        },
+      ]);
+    },
+    [deleteTrip]
+  );
+
   const renderEmptyState = () => {
     if (isLoading) {
       return null;
@@ -106,6 +124,7 @@ export default function TripList() {
         renderItem={({ item }) => (
           <Pressable
             onPress={() => handleTripPress(item)}
+            onLongPress={() => confirmDeleteTrip(item)}
             style={({ pressed }) => [pressed && styles.pressedRow]}
           >
             <Card>
