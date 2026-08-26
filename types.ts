@@ -114,6 +114,7 @@ export type RootStackParamList = {
   SpeciesDetail: { species: Species };
   Conditions: undefined;
   Trips: undefined;
+  Research: undefined;
 };
 
 export enum UserUnits {
