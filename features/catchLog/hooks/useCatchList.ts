@@ -1,14 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
-import { CatchEntry, RootStackParamList } from "../../../types";
+import { CatchEntry } from "../../../types";
 import { deleteCatchById } from "../api/deleteCatchById";
 import { addNewCatchToTrip } from "../api/addNewCatchToTrip";
-import { useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { getCatchListForTrip } from "../api/getCatchListForTrip";
 
 export default function useCatchList(tripId: number | null) {
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [catches, setCatches] = useState<CatchEntry[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -33,20 +29,11 @@ export default function useCatchList(tripId: number | null) {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [tripId]);
 
   useEffect(() => {
     fetchCatches();
   }, [fetchCatches]);
-
-  const openNewCatchForm = () => {
-    if (!tripId) {
-      console.error("No tripId provided to openNewCatchForm");
-      return;
-    }
-
-    navigation.navigate("AddNewCatch", { addNewCatch });
-  };
 
   const addNewCatch = async (tripId: number, newCatch: CatchEntry) => {
     if (!newCatch.species || !newCatch.dateTime) {
@@ -85,7 +72,6 @@ export default function useCatchList(tripId: number | null) {
   return {
     isLoading,
     catches,
-    openNewCatchForm,
     deleteCatch,
     addNewCatch,
   };

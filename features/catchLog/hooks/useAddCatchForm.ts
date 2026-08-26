@@ -1,13 +1,21 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { CatchEntry, WaterType, InputError } from "../../../types";
 import { useNavigation } from "@react-navigation/native";
 import * as Location from "expo-location";
 import { LatLng } from "react-native-maps";
 import { useTripContext } from "features/tripPlanner/components/TripContext";
 
-export default function useAddCatchForm(
-  addNewCatch: (tripId: number, newCatch: CatchEntry) => void
-) {
+interface UseAddCatchFormOptions {
+  addNewCatch: (tripId: number, newCatch: CatchEntry) => void | Promise<void>;
+  onSuccess?: () => void;
+  visible?: boolean;
+}
+
+export default function useAddCatchForm({
+  addNewCatch,
+  onSuccess,
+  visible = false,
+}: UseAddCatchFormOptions) {
   const navigation = useNavigation();
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [species, setSpecies] = useState("");
@@ -43,13 +51,21 @@ export default function useAddCatchForm(
     }
   };
 
-  const resetForm = () => {
+  const resetForm = useCallback(() => {
     setSpecies("");
-    setSelectedLocation(currentLocation);
-    navigation.goBack();
-  };
+    setBait("");
+    setInputError(null);
 
-  const handleAddCatch = () => {
+    if (trip) {
+      setSelectedLocation(trip.location.coordinates || currentLocation);
+      setDate(new Date(trip.date));
+    } else if (currentLocation) {
+      setSelectedLocation(currentLocation);
+      setDate(new Date());
+    }
+  }, [trip, currentLocation]);
+
+  const handleAddCatch = async () => {
     const error = validateInputs();
     if (error) {
       setInputError(error);
@@ -73,11 +89,16 @@ export default function useAddCatchForm(
       return;
     }
 
-    addNewCatch(trip.id, newCatch);
+    await addNewCatch(trip.id, newCatch);
     resetForm();
+    onSuccess?.();
   };
 
   const handleSelectNewLocation = () => {
+    if (!selectedLocation) {
+      return;
+    }
+
     navigation.navigate("SelectLocation", {
       initialLocation: selectedLocation,
       onLocationSelected: (newLocation: LatLng) => {
@@ -87,6 +108,16 @@ export default function useAddCatchForm(
   };
 
   useEffect(() => {
+    if (!visible) {
+      resetForm();
+    }
+  }, [visible, resetForm]);
+
+  useEffect(() => {
+    if (!visible) {
+      return;
+    }
+
     (async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
@@ -110,10 +141,10 @@ export default function useAddCatchForm(
         return;
       }
 
-      setSelectedLocation(trip?.location.coordinates || currentLatLong);
+      setSelectedLocation(trip.location.coordinates || currentLatLong);
       setDate(new Date(trip.date));
     })();
-  }, []);
+  }, [visible, trip]);
 
   return {
     bait,
@@ -127,7 +158,7 @@ export default function useAddCatchForm(
     handleAddCatch,
     selectedLocation,
     setSelectedLocation,
-    handleSelectNewLocation,
     currentLocation,
+    handleSelectNewLocation,
   };
 }

@@ -97,7 +97,6 @@ export type RootStackParamList = {
   Logs: undefined;
   "Fishing Log": { initialTab?: string } | undefined;
   CatchDetail: { catchItem: CatchEntry; deleteCatch: () => void };
-  AddNewCatch: { addNewCatch: (catchData: CatchEntry) => void };
   SelectLocation: {
     initialLocation: LatLng;
     onLocationSelected: (newLocation: LatLng) => void;

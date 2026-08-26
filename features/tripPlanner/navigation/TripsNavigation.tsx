@@ -2,7 +2,6 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useTheme } from "react-native-paper";
 import { RootStackParamList } from "types";
 import SelectLocation from "common/components/SelectLocation";
-import AddCatchForm from "features/catchLog/components/AddCatchForm";
 import TripDetail from "../components/TripDetail";
 import TripList from "../components/TripList";
 
@@ -29,16 +28,6 @@ export default function TripsNavigation() {
           headerTitle: route.params.trip.location.name,
           ...primaryHeaderOptions,
         })}
-      />
-      <Stack.Screen
-        name="AddNewCatch"
-        component={AddCatchForm}
-        options={{
-          presentation: "modal",
-          headerShown: true,
-          headerTitle: "Log Catch",
-          ...primaryHeaderOptions,
-        }}
       />
       <Stack.Screen
         name="SelectLocation"

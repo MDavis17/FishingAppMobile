@@ -2,16 +2,21 @@ import { FlatList, StyleSheet, View } from "react-native";
 import { Text } from "react-native-paper";
 import CatchCard from "./CatchCard";
 import SecondaryButton from "common/components/buttons/SecondaryButton";
-import useCatchList from "../hooks/useCatchList";
+import { CatchEntry } from "types";
 
 interface Props {
-  tripId: number;
+  catches: CatchEntry[];
+  isLoading: boolean;
+  deleteCatch: (id: number) => void;
+  onAddCatchPress: () => void;
 }
 
-export default function CatchList({ tripId }: Props) {
-  const { isLoading, catches, openNewCatchForm, deleteCatch } =
-    useCatchList(tripId);
-
+export default function CatchList({
+  catches,
+  isLoading,
+  deleteCatch,
+  onAddCatchPress,
+}: Props) {
   const renderSkeletonItem = (_: any, index: number) => (
     <View key={index} style={styles.skeletonItem}>
       <View style={styles.skeletonIcon} />
@@ -44,9 +49,7 @@ export default function CatchList({ tripId }: Props) {
         contentContainerStyle={styles.listContainer}
         ItemSeparatorComponent={() => <View style={{ height: 8 }} />}
       />
-      <SecondaryButton onPress={() => openNewCatchForm()}>
-        Add New Catch
-      </SecondaryButton>
+      <SecondaryButton onPress={onAddCatchPress}>Add New Catch</SecondaryButton>
     </View>
   );
 }
