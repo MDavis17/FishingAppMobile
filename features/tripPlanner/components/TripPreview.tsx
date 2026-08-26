@@ -59,7 +59,7 @@ export default function TripPreview({ trip }: Props) {
           <Divider />
           {isTripCompleted ? catchSummaryPreview : weatherPreview}
         </View>
-        <View style={styles.locationThumbnail}>
+        <View style={styles.locationThumbnail} pointerEvents="none">
           <MapWindow selectedLocation={trip.location.coordinates} isViewOnly />
         </View>
       </View>

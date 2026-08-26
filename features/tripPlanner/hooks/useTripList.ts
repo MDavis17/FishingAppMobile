@@ -1,6 +1,7 @@
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback, useMemo, useState } from "react";
 import { Trip } from "types";
+import { deleteTrip as deleteTripApi } from "../api/deleteTrip";
 import { getTrips } from "../api/getTrips";
 
 export type TripListFilters = {
@@ -63,6 +64,21 @@ export default function useTripList() {
     setFilters((prev) => ({ ...prev, ...updates }));
   }, []);
 
+  const deleteTrip = useCallback(async (tripId: number) => {
+    try {
+      const response = await deleteTripApi(tripId);
+
+      if (!response.ok) {
+        throw new Error("Failed to delete trip");
+      }
+
+      setTrips((prevTrips) => prevTrips.filter((trip) => trip.id !== tripId));
+    } catch (error) {
+      console.error("Error deleting trip:", error);
+      throw error;
+    }
+  }, []);
+
   const hasTrips = trips.length > 0;
   const hasFilteredTrips = filteredTrips.length > 0;
 
@@ -74,5 +90,6 @@ export default function useTripList() {
     hasTrips,
     hasFilteredTrips,
     refetchTrips: fetchTrips,
+    deleteTrip,
   };
 }
