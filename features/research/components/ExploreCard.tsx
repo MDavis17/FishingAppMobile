@@ -40,7 +40,8 @@ export default function ExploreCard({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 12,
+    paddingVertical: 12,
+    paddingLeft: 12,
     flexDirection: "row",
     borderWidth: 1,
     borderColor: "lightgray",
@@ -69,8 +70,5 @@ const styles = StyleSheet.create({
   },
   caretContainer: {
     justifyContent: "center",
-  },
-  description: {
-    fontSize: 12,
   },
 });
