@@ -46,6 +46,13 @@ export default function Research() {
               iconBackgroundColor="#f4eae3"
             />
           </View>
+          <View style={styles.exploreRow}>
+            <ExploreCard
+              title="Bait & Tackle"
+              icon={require("common/assets/tacklebox-icon.png")}
+              iconBackgroundColor="#e9e9e9"
+            />
+          </View>
         </View>
       </View>
     </View>
