@@ -5,6 +5,7 @@ import { useTheme } from "react-native-paper";
 import HomeNavigation from "features/anglerHome/navigation/HomeNavigation";
 import AppHeader from "common/components/AppHeader";
 import ConditionsNavigation from "features/conditions/navigation/ConditionsNavigation";
+import ResearchNavigation from "features/research/navigation/ResearchNavigation";
 import TripsNavigation from "features/tripPlanner/navigation/TripsNavigation";
 
 const Tab = createBottomTabNavigator();
@@ -23,6 +24,8 @@ export default function MainAppTabs() {
             iconName = "calendar";
           } else if (route.name === "Conditions") {
             iconName = "weather-cloudy";
+          } else if (route.name === "Research") {
+            iconName = "book-open-variant";
           }
 
           return (
@@ -42,6 +45,7 @@ export default function MainAppTabs() {
       <Tab.Screen name="Home" component={HomeNavigation} />
       <Tab.Screen name="Trips" component={TripsNavigation} />
       <Tab.Screen name="Conditions" component={ConditionsNavigation} />
+      <Tab.Screen name="Research" component={ResearchNavigation} />
     </Tab.Navigator>
   );
 }
