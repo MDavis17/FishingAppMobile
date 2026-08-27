@@ -34,6 +34,13 @@ export default function Research() {
               iconBackgroundColor="#e8efe3"
             />
           </View>
+          <View style={styles.exploreRow}>
+            <ExploreCard
+              title="Ocean"
+              icon={require("common/assets/wave-icon.png")}
+              iconBackgroundColor="#e1e9f0"
+            />
+          </View>
         </View>
       </View>
     </View>
@@ -62,6 +69,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    gap: 8,
   },
   exploreRow: {
     flexDirection: "row",
