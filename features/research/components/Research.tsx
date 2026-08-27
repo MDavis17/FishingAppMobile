@@ -52,6 +52,11 @@ export default function Research() {
               icon={require("common/assets/tacklebox-icon.png")}
               iconBackgroundColor="#e9e9e9"
             />
+            <ExploreCard
+              title="Techniques"
+              icon={require("common/assets/fishing-pole-icon.png")}
+              iconBackgroundColor="#ebe7f2"
+            />
           </View>
         </View>
       </View>
