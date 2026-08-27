@@ -40,6 +40,11 @@ export default function Research() {
               icon={require("common/assets/wave-icon.png")}
               iconBackgroundColor="#e1e9f0"
             />
+            <ExploreCard
+              title="Locations"
+              icon={require("common/assets/location-icon.png")}
+              iconBackgroundColor="#f4eae3"
+            />
           </View>
         </View>
       </View>
