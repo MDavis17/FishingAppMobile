@@ -2,9 +2,18 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 import ExploreCard from "./ExploreCard";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "types";
+
+type ResearchNavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  "Research"
+>;
 
 export default function Research() {
   const theme = useTheme();
+  const navigation = useNavigation<ResearchNavigationProp>();
 
   return (
     <View style={styles.container}>
@@ -27,6 +36,7 @@ export default function Research() {
               title="Species"
               icon={require("common/assets/species-icon.png")}
               iconBackgroundColor="#e1e1e1"
+              onPress={() => navigation.navigate("SpeciesList")}
             />
             <ExploreCard
               title="Plants"

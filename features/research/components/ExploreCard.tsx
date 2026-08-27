@@ -1,23 +1,31 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React from "react";
-import { Image, ImageSourcePropType, StyleSheet, View } from "react-native";
+import {
+  Image,
+  ImageSourcePropType,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { Text, useTheme } from "react-native-paper";
 
 interface Props {
   title: string;
   icon: ImageSourcePropType;
   iconBackgroundColor: string;
+  onPress?: () => void;
 }
 
 export default function ExploreCard({
   title,
   icon,
   iconBackgroundColor,
+  onPress,
 }: Props) {
   const theme = useTheme();
 
   return (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={onPress}>
       <View
         style={[styles.iconContainer, { backgroundColor: iconBackgroundColor }]}
       >
@@ -33,7 +41,7 @@ export default function ExploreCard({
           color={theme.colors.onSurface}
         />
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 

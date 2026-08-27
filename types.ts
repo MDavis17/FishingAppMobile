@@ -61,6 +61,7 @@ export interface Species {
   region: string;
   image: string;
   isFavorite: boolean;
+  kingdom?: string;
   description?: string;
   rangeMapUrl?: string;
   bestMonths?: number[];
@@ -79,7 +80,6 @@ export interface RangePolygon {
   coordinates: LatLng[];
   occurrenceProbability: number;
 }
-
 
 export interface InputError {
   inputId: string;
@@ -110,11 +110,11 @@ export type RootStackParamList = {
   NewTrip: undefined;
   Settings: undefined;
   ThemeSettings: undefined;
-  Analysis: undefined;
   SpeciesDetail: { species: Species };
   Conditions: undefined;
   Trips: undefined;
   Research: undefined;
+  SpeciesList: undefined;
 };
 
 export enum UserUnits {
