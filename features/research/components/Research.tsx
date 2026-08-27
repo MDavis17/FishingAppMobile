@@ -25,8 +25,13 @@ export default function Research() {
           <View style={styles.exploreRow}>
             <ExploreCard
               title="Species"
-              description="Fish and invertebrates"
               icon={require("common/assets/species-icon.png")}
+              iconBackgroundColor="#e1e1e1"
+            />
+            <ExploreCard
+              title="Plants"
+              icon={require("common/assets/plant-icon.png")}
+              iconBackgroundColor="#e8efe3"
             />
           </View>
         </View>
@@ -60,5 +65,6 @@ const styles = StyleSheet.create({
   },
   exploreRow: {
     flexDirection: "row",
+    gap: 8,
   },
 });
