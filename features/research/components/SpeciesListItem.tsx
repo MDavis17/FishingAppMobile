@@ -30,7 +30,7 @@ export default function SpeciesListItem({ species }: Props) {
       </View>
       <Text
         style={[styles.name, { color: theme.colors.onSurface }]}
-        numberOfLines={1}
+        numberOfLines={2}
       >
         {species.name}
       </Text>
@@ -56,14 +56,14 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   thumbnailContainer: {
-    width: 40,
-    height: 40,
+    width: 130,
+    height: 70,
     borderRadius: 6,
     overflow: "hidden",
   },
   thumbnail: {
-    width: 40,
-    height: 40,
+    width: 130,
+    height: 70,
     resizeMode: "cover",
   },
   thumbnailPlaceholder: {
