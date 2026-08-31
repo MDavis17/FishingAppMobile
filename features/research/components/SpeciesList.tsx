@@ -1,14 +1,17 @@
 import useSpeciesList from "features/analysis/hooks/useSpeciesList";
 import React, { useMemo } from "react";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
-import { useTheme } from "react-native-paper";
 import SearchableList from "common/components/SearchableList";
 import SpeciesListItem from "./SpeciesListItem";
 
-export default function SpeciesList() {
-  const theme = useTheme();
+interface Props {
+  kingdom: "animal" | "plant";
+  placeholderText: string;
+}
+
+export default function SpeciesList({ kingdom, placeholderText }: Props) {
   const { isLoading, speciesList, favoriteSpeciesList } =
-    useSpeciesList("animal");
+    useSpeciesList(kingdom);
 
   const combinedSpeciesList = useMemo(() => {
     return [...favoriteSpeciesList, ...speciesList];
@@ -21,12 +24,20 @@ export default function SpeciesList() {
       ) : (
         <SearchableList
           list={combinedSpeciesList}
-          placeholderText="Search Species..."
+          placeholderText={placeholderText}
           renderItem={({ item }) => <SpeciesListItem species={item} />}
         />
       )}
     </View>
   );
+}
+
+export function AnimalSpeciesListScreen() {
+  return <SpeciesList kingdom="animal" placeholderText="Search Species..." />;
+}
+
+export function PlantSpeciesListScreen() {
+  return <SpeciesList kingdom="plant" placeholderText="Search Plants..." />;
 }
 
 const styles = StyleSheet.create({

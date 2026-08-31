@@ -2,7 +2,10 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useTheme } from "react-native-paper";
 import { RootStackParamList } from "types";
 import Research from "../components/Research";
-import SpeciesList from "../components/SpeciesList";
+import {
+  AnimalSpeciesListScreen,
+  PlantSpeciesListScreen,
+} from "../components/SpeciesList";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -20,10 +23,19 @@ export default function ResearchNavigation() {
       <Stack.Screen name="Research" component={Research} />
       <Stack.Screen
         name="SpeciesList"
-        component={SpeciesList}
+        component={AnimalSpeciesListScreen}
         options={{
           headerShown: true,
           headerTitle: "Species",
+          ...primaryHeaderOptions,
+        }}
+      />
+      <Stack.Screen
+        name="PlantList"
+        component={PlantSpeciesListScreen}
+        options={{
+          headerShown: true,
+          headerTitle: "Plants",
           ...primaryHeaderOptions,
         }}
       />
