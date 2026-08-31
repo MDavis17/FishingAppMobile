@@ -115,6 +115,7 @@ export type RootStackParamList = {
   Trips: undefined;
   Research: undefined;
   SpeciesList: undefined;
+  PlantList: undefined;
 };
 
 export enum UserUnits {

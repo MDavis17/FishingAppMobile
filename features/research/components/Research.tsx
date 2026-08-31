@@ -42,6 +42,7 @@ export default function Research() {
               title="Plants"
               icon={require("common/assets/plant-icon.png")}
               iconBackgroundColor="#e8efe3"
+              onPress={() => navigation.navigate("PlantList")}
             />
           </View>
           <View style={styles.exploreRow}>
