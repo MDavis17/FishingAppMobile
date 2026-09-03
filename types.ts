@@ -57,6 +57,7 @@ export interface Bait {
 export interface Species {
   id: number;
   name: string;
+  scientificName?: string;
   waterType: WaterType;
   region: string;
   image: string;
@@ -66,6 +67,11 @@ export interface Species {
   rangeMapUrl?: string;
   bestMonths?: number[];
   bestBaits?: Bait[];
+  family?: string;
+  maxLength?: string;
+  avgLength?: string;
+  lifespan?: string;
+  depthRange?: string;
 }
 
 export interface RangeData {
