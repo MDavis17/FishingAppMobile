@@ -1,8 +1,16 @@
 import useSpeciesList from "features/analysis/hooks/useSpeciesList";
-import React, { useMemo } from "react";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import React, { useCallback, useMemo } from "react";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
 import SearchableList from "common/components/SearchableList";
+import { RootStackParamList, Species } from "types";
 import SpeciesListItem from "./SpeciesListItem";
+
+type SpeciesListNavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  "SpeciesList"
+>;
 
 interface Props {
   kingdom: "animal" | "plant";
@@ -10,12 +18,20 @@ interface Props {
 }
 
 export default function SpeciesList({ kingdom, placeholderText }: Props) {
+  const navigation = useNavigation<SpeciesListNavigationProp>();
   const { isLoading, speciesList, favoriteSpeciesList } =
     useSpeciesList(kingdom);
 
   const combinedSpeciesList = useMemo(() => {
     return [...favoriteSpeciesList, ...speciesList];
   }, [favoriteSpeciesList, speciesList]);
+
+  const handleSpeciesPress = useCallback(
+    (species: Species) => {
+      navigation.navigate("SpeciesDetail", { species });
+    },
+    [navigation],
+  );
 
   return (
     <View style={styles.container}>
@@ -25,7 +41,16 @@ export default function SpeciesList({ kingdom, placeholderText }: Props) {
         <SearchableList
           list={combinedSpeciesList}
           placeholderText={placeholderText}
-          renderItem={({ item }) => <SpeciesListItem species={item} />}
+          renderItem={({ item }) => (
+            <SpeciesListItem
+              species={item}
+              onPress={
+                kingdom === "animal"
+                  ? () => handleSpeciesPress(item)
+                  : undefined
+              }
+            />
+          )}
         />
       )}
     </View>

@@ -1,21 +1,22 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { speciesImageUri } from "features/analysis/utils/imageUtils";
 import React from "react";
-import { Image, StyleSheet, View } from "react-native";
+import { Image, Pressable, StyleSheet, View } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 import { FAVORITE_GOLD } from "common/theme/themes";
 import { Species } from "types";
 
 interface Props {
   species: Species;
+  onPress?: () => void;
 }
 
-export default function SpeciesListItem({ species }: Props) {
+export default function SpeciesListItem({ species, onPress }: Props) {
   const theme = useTheme();
   const imageUri = speciesImageUri(species.image);
 
-  return (
-    <View style={styles.container}>
+  const content = (
+    <>
       <View style={styles.thumbnailContainer}>
         {imageUri ? (
           <Image source={{ uri: imageUri }} style={styles.thumbnail} />
@@ -43,8 +44,21 @@ export default function SpeciesListItem({ species }: Props) {
           />
         ) : null}
       </View>
-    </View>
+    </>
   );
+
+  if (onPress) {
+    return (
+      <Pressable
+        onPress={onPress}
+        style={({ pressed }) => [styles.container, pressed && styles.pressed]}
+      >
+        {content}
+      </Pressable>
+    );
+  }
+
+  return <View style={styles.container}>{content}</View>;
 }
 
 const styles = StyleSheet.create({
@@ -80,5 +94,8 @@ const styles = StyleSheet.create({
     width: 24,
     alignItems: "center",
     justifyContent: "center",
+  },
+  pressed: {
+    opacity: 0.7,
   },
 });
