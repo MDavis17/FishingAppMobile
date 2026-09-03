@@ -1,5 +1,5 @@
 import useSpeciesList from "features/analysis/hooks/useSpeciesList";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useCallback, useMemo } from "react";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
@@ -19,8 +19,14 @@ interface Props {
 
 export default function SpeciesList({ kingdom, placeholderText }: Props) {
   const navigation = useNavigation<SpeciesListNavigationProp>();
-  const { isLoading, speciesList, favoriteSpeciesList } =
+  const { isLoading, speciesList, favoriteSpeciesList, fetchSpecies } =
     useSpeciesList(kingdom);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchSpecies();
+    }, [fetchSpecies]),
+  );
 
   const combinedSpeciesList = useMemo(() => {
     return [...favoriteSpeciesList, ...speciesList];
