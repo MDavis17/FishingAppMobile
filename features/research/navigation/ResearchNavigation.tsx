@@ -1,4 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import SpeciesDetail from "features/analysis/components/SpeciesDetail";
 import { useTheme } from "react-native-paper";
 import { RootStackParamList } from "types";
 import Research from "../components/Research";
@@ -36,6 +37,15 @@ export default function ResearchNavigation() {
         options={{
           headerShown: true,
           headerTitle: "Plants",
+          ...primaryHeaderOptions,
+        }}
+      />
+      <Stack.Screen
+        name="SpeciesDetail"
+        component={SpeciesDetail}
+        options={{
+          headerShown: true,
+          headerTitle: "",
           ...primaryHeaderOptions,
         }}
       />
