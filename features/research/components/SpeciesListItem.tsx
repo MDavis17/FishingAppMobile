@@ -3,7 +3,6 @@ import { speciesImageUri } from "features/analysis/utils/imageUtils";
 import React from "react";
 import { Image, Pressable, StyleSheet, View } from "react-native";
 import { Text, useTheme } from "react-native-paper";
-import { FAVORITE_GOLD } from "common/theme/themes";
 import { Species } from "types";
 
 interface Props {
@@ -40,7 +39,7 @@ export default function SpeciesListItem({ species, onPress }: Props) {
           <MaterialCommunityIcons
             name="heart"
             size={20}
-            color={FAVORITE_GOLD}
+            color={theme.colors.secondary}
           />
         ) : null}
       </View>
