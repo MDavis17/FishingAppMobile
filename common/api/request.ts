@@ -1,13 +1,21 @@
+import { getStoredAuthToken } from "common/auth/tokenStorage";
 import { config, GooglePlacesApiBaseUrl, GooglePlacesAPIKey, GoogleWeatherApiBaseUrl, GoogleWeatherAPIKey } from "./config";
 import { HTTP_STATUS } from "./constants";
 import { RequestHeaders, RequestMethod } from "./types";
+
+type UnauthorizedHandler = (() => void) | null;
+let onUnauthorized: UnauthorizedHandler = null;
+
+export function setOnUnauthorized(handler: UnauthorizedHandler) {
+  onUnauthorized = handler;
+}
 
 export const internalUrlFormatter = (path: string) => {
   const cleanPath = path[0] === "/" ? path.substring(1) : path;
   let urlPath = `${config.api}${cleanPath}`;
 
   if (process.env.ENV === "LOCAL") {
-    urlPath = `http://localhost.com:8000/${cleanPath}`;
+    urlPath = `http://localhost:8000/${cleanPath}`;
   }
 
   return urlPath;
@@ -24,88 +32,74 @@ export const externalUrlFormatter = (
   }`;
 };
 
-//* NO AUTHENTICATION YET *//
-// export async function authenticatedFetch(
-//     url,
-//     options: { method: string, body?: string } = { method: 'GET' }
-// ) {
-//     const requestOptions = { ...options };
+export async function authenticatedFetch(
+  url: string,
+  options: { method: RequestMethod; body?: string } = {
+    method: RequestMethod.GET,
+  },
+  token?: string
+): Promise<{ ok: boolean; data: unknown; status: number }> {
+  const requestOptions: RequestHeaders = { ...options };
 
-//     if (!requestOptions.headers) {
-//         requestOptions.headers = {};
-//     }
-//     requestOptions.headers['Session-Token'] = session.session_id;
+  if (!requestOptions.headers) {
+    requestOptions.headers = {};
+  }
 
-//     requestOptions.headers[
-//         'X-Mobile-App-Version'
-//     ] = `${DeviceInfo.getVersion()}`;
+  const authToken = token ?? (await getStoredAuthToken());
+  if (!authToken) {
+    return {
+      ok: false,
+      data: { detail: "Not authenticated" },
+      status: HTTP_STATUS.UNAUTHORIZED,
+    };
+  }
 
-//     if (
-//         options.method !== 'GET' &&
-//         requestOptions.headers['Content-Type'] === undefined
-//     ) {
-//         requestOptions.headers['Content-Type'] = 'application/json';
-//     }
+  requestOptions.headers.Authorization = `Bearer ${authToken}`;
 
-//     const response = await fetch(urlFormatter(url), requestOptions);
+  if (
+    options.method !== RequestMethod.GET &&
+    requestOptions.headers["Content-Type"] === undefined
+  ) {
+    requestOptions.headers["Content-Type"] = "application/json";
+  }
 
-//     // If we think we are offline, but got a proper response from a request...
-//     if (!online && response.status === HTTP_STATUS.OK) {
-//         getRequestStore().dispatch({
-//             type: ACTIONS.CONNECTED,
-//         });
-//     }
+  console.log(`Network: ${options.method} request to ${url}`, requestOptions);
 
-//     if (response.status === HTTP_STATUS.SERVICE_UNAVAILABLE) {
-//         setTimeout(() => {
-//             getRequestStore().dispatch({
-//                 type: ACTIONS.MAINTENANCE_MODE_ON,
-//             });
-//         });
+  let response: Response;
+  try {
+    response = await fetch(internalUrlFormatter(url), requestOptions);
+  } catch (networkError) {
+    console.error(`Network: Fetch failed for ${url}`, networkError);
+    throw networkError;
+  }
 
-//         throw 'Maintenance Mode Detected';
-//     } else if (
-//         inMaintenanceMode &&
-//         response.status !== HTTP_STATUS.SERVICE_UNAVAILABLE
-//     ) {
-//         getRequestStore().dispatch({
-//             type: ACTIONS.MAINTENANCE_MODE_OFF,
-//         });
-//     }
+  console.log(`Network: Received ${url}`, response);
 
-//     if (response.status === HTTP_STATUS.FORBIDDEN) {
-//         getAuthStore().dispatch({
-//             type: AUTH_ACTIONS.LOGOUT,
-//         });
-//         reset('Welcome', {});
-//         return;
-//     }
+  if (
+    response.status === HTTP_STATUS.UNAUTHORIZED ||
+    response.status === HTTP_STATUS.FORBIDDEN
+  ) {
+    onUnauthorized?.();
+  }
 
-//     // Make a best effort to parse the data as JSON, if not just return the raw text.
-//     const responseText = await response.text();
-//     try {
-//         const newResponse = JSON.parse(responseText);
-//         Object.defineProperty(newResponse, 'hasHttpError', {
-//             value: response.status !== HTTP_STATUS.OK,
-//             enumerable: false,
-//             writable: false,
-//         });
+  let responseJson: unknown;
+  try {
+    responseJson = await response.json();
+  } catch (parseError) {
+    console.error(`Network: Failed to parse JSON response for ${url}`, parseError);
+    return {
+      ok: false,
+      data: { detail: "Invalid response from server" },
+      status: response.status,
+    };
+  }
 
-//         return newResponse;
-//     } catch (e) {
-//         Object.defineProperty(response, 'hasHttpError', {
-//             value: response.status !== HTTP_STATUS.OK,
-//             enumerable: false,
-//             writable: false,
-//         });
-//         Object.defineProperty(response, 'errorText', {
-//             value: responseText || 'Unknown Error',
-//             enumerable: false,
-//             writable: false,
-//         });
-//         return response;
-//     }
-// }
+  return {
+    ok: response.status === HTTP_STATUS.OK,
+    data: responseJson,
+    status: response.status,
+  };
+}
 
 export async function unauthenticatedFetch(
   url: string,
@@ -140,7 +134,7 @@ export async function unauthenticatedFetch(
   //   }
 
   const responseJson = await response.json();
-  return { ok: response.status === HTTP_STATUS.OK, data: responseJson };
+  return { ok: response.ok, data: responseJson, status: response.status };
 }
 
 export async function googlePlacesFetch(
