@@ -1,5 +1,5 @@
 import { RequestMethod } from "common/api/types";
-import { unauthenticatedFetch } from "../../../common/api/request";
+import { authenticatedFetch } from "../../../common/api/request";
 import { Location } from "types";
 
 export type CreateTripPayload = {
@@ -10,7 +10,7 @@ export type CreateTripPayload = {
 };
 
 export const addNewTrip = async (newTrip: CreateTripPayload) => {
-  return await unauthenticatedFetch(`trips/`, {
+  return await authenticatedFetch(`trips/`, {
     method: RequestMethod.POST,
     body: JSON.stringify(newTrip),
   });

@@ -1,5 +1,5 @@
-import { unauthenticatedFetch } from "../../../common/api/request";
+import { authenticatedFetch } from "../../../common/api/request";
 
 export const getCatchLogs = async () => {
-  return await unauthenticatedFetch(`catchLog/`);
+  return await authenticatedFetch(`catch/`);
 };
