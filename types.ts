@@ -69,6 +69,7 @@ export interface Species {
   bestBaits?: Bait[];
   family?: string;
   avgLength?: string;
+  lengthUnits?: string;
   lifespan?: string;
   depthRange?: string;
 }

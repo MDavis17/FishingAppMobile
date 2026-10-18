@@ -26,13 +26,13 @@ export default function SpeciesHeader({ species }: Props) {
         icon: "ruler",
         label: "Avg Length",
         value: species.avgLength,
-        unit: "in",
+        unit: species.lengthUnits ?? "in",
       },
       {
         icon: "clock-outline",
         label: "Lifespan",
         value: species.lifespan,
-        unit: "years",
+        unit: "yr",
       },
       {
         icon: "gauge",
@@ -92,8 +92,7 @@ export default function SpeciesHeader({ species }: Props) {
                   style={[styles.statValue, { color: theme.colors.onSurface }]}
                   numberOfLines={2}
                 >
-                  {stat.value}
-                  {stat.unit ? ` ${stat.unit}` : ""}
+                  {`${stat.value} ${stat.unit}`}
                 </Text>
               </View>
             </View>
