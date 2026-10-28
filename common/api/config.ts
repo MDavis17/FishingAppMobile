@@ -1,4 +1,4 @@
-import { DEV_API } from "./constants";
+import { DEV_API, PROD_API } from "./constants";
 
 type Config = {
   symbol: string | null;
@@ -71,7 +71,8 @@ export const GoogleWeatherAPIKey = 'AIzaSyA9k6fVkoVwCJlgwX4aGeWHmS3HlXojcbM';
 //     }
 // }
 
-export let config: Config = DEV_API;
+// Use DEV_API for local development, PROD_API for production builds
+export let config: Config = process.env.ENV === "LOCAL" ? DEV_API : PROD_API;
 export const GooglePlacesApiBaseUrl =
   "https://maps.googleapis.com/maps/api/place/";
   export const GoogleWeatherApiBaseUrl =
