@@ -1,8 +1,6 @@
 import PrimaryButton from "common/components/buttons/PrimaryButton";
 import React from "react";
 import { View, StyleSheet, Dimensions, ViewStyle } from "react-native";
-import { Button } from "react-native-paper";
-
 const { width } = Dimensions.get("window");
 
 interface Props {

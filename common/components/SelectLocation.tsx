@@ -4,7 +4,6 @@ import { RootStackParamList } from "types";
 import MapWindow from "common/components/MapWindow";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { LatLng } from "react-native-maps";
-import { Button } from "react-native-paper";
 import PrimaryButton from "./buttons/PrimaryButton";
 
 type SelectLocationRouteProp = RouteProp<RootStackParamList, "SelectLocation">;

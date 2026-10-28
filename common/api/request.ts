@@ -126,13 +126,6 @@ export async function unauthenticatedFetch(
 
   console.log(`Network: Received ${url}`, response);
 
-  // potential offline solution ideas
-  //   if (!online && response.status === HTTP_STATUS.OK) {
-  //     getRequestStore().dispatch({
-  //       type: ACTIONS.CONNECTED,
-  //     });
-  //   }
-
   const responseJson = await response.json();
   return { ok: response.ok, data: responseJson, status: response.status };
 }

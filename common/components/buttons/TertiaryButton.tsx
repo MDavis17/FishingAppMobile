@@ -1,6 +1,5 @@
 import React from "react";
 import { GestureResponderEvent } from "react-native";
-import { Button } from "react-native-paper";
 import { IconSource } from "react-native-paper/lib/typescript/components/Icon";
 import AbstractButton from "./AbstractButton";
 

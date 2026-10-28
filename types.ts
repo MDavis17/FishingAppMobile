@@ -1,9 +1,5 @@
 import { LatLng } from "react-native-maps";
 
-export interface WeatherForecast {
-  forecastDays: ForecastDay[];
-}
-
 export interface ForecastDay {
   daytimeForecast: {
     weatherCondition: WeatherCondition;
@@ -100,14 +96,10 @@ export enum WaterType {
 
 export type RootStackParamList = {
   Home: undefined;
-  Logs: undefined;
-  "Fishing Log": { initialTab?: string } | undefined;
-  CatchDetail: { catchItem: CatchEntry; deleteCatch: () => void };
   SelectLocation: {
     initialLocation: LatLng;
     onLocationSelected: (newLocation: LatLng) => void;
   };
-  Plan: undefined;
   TripDetail: {
     trip: Trip;
     deleteTrip: () => void;
@@ -126,7 +118,6 @@ export type RootStackParamList = {
 
 export enum UserUnits {
   Imperial = "Imperial",
-  Metric = "Metric",
 }
 
 export enum TempUnits {

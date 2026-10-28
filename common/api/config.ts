@@ -9,72 +9,8 @@ type Config = {
 export const GooglePlacesAPIKey = "AIzaSyAIFMv0a-wViRjrkAmzPwG_RuLBOPergy8";
 export const GoogleWeatherAPIKey = 'AIzaSyA9k6fVkoVwCJlgwX4aGeWHmS3HlXojcbM';
 
-// export class ConfigurationManager {
-//     constructor() {
-//         if (configManager) {
-//             throw 'This class is a singleton, call getInstance()';
-//         }
-
-//         // try {
-//         //     // We conditionally will try to load the env.json, however
-//         //     // this is not expected to exist. It is only a development
-//         //     // environment file used to set the API information.
-//         //     let path = '../../../../config/env.json';
-//         //     config = import(path);
-//         // } catch (e) {
-//         config = getStore().getState().configuration;
-//         // }
-
-//         getStore().subscribe(() => {
-//             // if data has changed, reset the configuration
-//             config = getStore().getState().configuration;
-//         });
-//     }
-
-//     static getInstance() {
-//         return configManager;
-//     }
-
-//     getConfiguration() {
-//         return config;
-//     }
-
-//     setConfiguration(newConfig) {
-//         getStore().dispatch({
-//             type: ACTIONS.SET_CONFIGURATION,
-//             config: {
-//                 ...newConfig,
-//             },
-//         });
-
-//         config = newConfig;
-//     }
-
-//     setAlpha() {
-//         this.setConfiguration(ALPHA_API);
-//     }
-
-//     setStaging() {
-//         this.setConfiguration(STAGING_API);
-//     }
-
-//     setProduction() {
-//         this.setConfiguration(PROD_API);
-//     }
-
-//     setCustomConfiguration(api, liveApi, symbol = null) {
-//         this.setConfiguration({
-//             api,
-//             liveApi,
-//             symbol,
-//         });
-//     }
-// }
-
-// Use DEV_API for local development, PROD_API for production builds
 export let config: Config = process.env.ENV === "LOCAL" ? DEV_API : PROD_API;
 export const GooglePlacesApiBaseUrl =
   "https://maps.googleapis.com/maps/api/place/";
-  export const GoogleWeatherApiBaseUrl =
+export const GoogleWeatherApiBaseUrl =
   "https://weather.googleapis.com/v1/";
-// export let configManager = new ConfigurationManager();
