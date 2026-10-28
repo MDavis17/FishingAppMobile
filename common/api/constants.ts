@@ -3,6 +3,11 @@ export const DEV_API = {
   api: "http://localhost:8000/",
 };
 
+export const PROD_API = {
+  symbol: "🐟",
+  api: "https://fishing-app-server.onrender.com/",
+};
+
 export const HTTP_STATUS = {
   OK: 200,
   NOT_MODIFIED: 304,
