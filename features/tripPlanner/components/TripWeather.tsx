@@ -1,5 +1,5 @@
 import useWeatherForecast from "common/hooks/useWeatherForecast";
-import { ActivityIndicator, Image, View } from "react-native";
+import { ActivityIndicator, View } from "react-native";
 import { Text } from "react-native-paper";
 import { Location } from "types";
 

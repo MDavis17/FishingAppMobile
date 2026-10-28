@@ -7,11 +7,6 @@ export type AuthUser = {
   created_at: string;
 };
 
-export type LoginResponse = {
-  access_token: string;
-  token_type: string;
-};
-
 export async function registerUser(email: string, password: string) {
   return unauthenticatedFetch("auth/register", {
     method: RequestMethod.POST,
