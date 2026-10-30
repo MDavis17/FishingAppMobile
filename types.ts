@@ -95,6 +95,7 @@ export enum WaterType {
 }
 
 export type RootStackParamList = {
+  MainApp: undefined;
   Home: undefined;
   SelectLocation: {
     initialLocation: LatLng;
@@ -112,6 +113,7 @@ export type RootStackParamList = {
   Conditions: undefined;
   Trips: undefined;
   Research: undefined;
+  Dashboard: undefined;
   SpeciesList: undefined;
   PlantList: undefined;
 };

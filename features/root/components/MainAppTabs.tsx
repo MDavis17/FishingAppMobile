@@ -7,6 +7,7 @@ import AppHeader from "common/components/AppHeader";
 import ConditionsNavigation from "features/conditions/navigation/ConditionsNavigation";
 import ResearchNavigation from "features/research/navigation/ResearchNavigation";
 import TripsNavigation from "features/tripPlanner/navigation/TripsNavigation";
+import DashboardNavigation from "features/dashboard/navigation/DashboardNavigation";
 
 const Tab = createBottomTabNavigator();
 
@@ -26,6 +27,8 @@ export default function MainAppTabs() {
             iconName = "weather-cloudy";
           } else if (route.name === "Research") {
             iconName = "book-open-variant";
+          } else if (route.name === "Dashboard") {
+            iconName = "view-dashboard";
           }
 
           return (
@@ -46,6 +49,7 @@ export default function MainAppTabs() {
       <Tab.Screen name="Trips" component={TripsNavigation} />
       <Tab.Screen name="Conditions" component={ConditionsNavigation} />
       <Tab.Screen name="Research" component={ResearchNavigation} />
+      <Tab.Screen name="Dashboard" component={DashboardNavigation} />
     </Tab.Navigator>
   );
 }
