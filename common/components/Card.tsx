@@ -1,16 +1,18 @@
-
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, StyleProp, ViewStyle } from "react-native";
 import { useTheme } from "react-native-paper";
 
 interface Props {
   children: React.ReactNode;
+  style?: StyleProp<ViewStyle>;
 }
 
-export default function Card({children}: Props) {
+export default function Card({ children, style }: Props) {
   const theme = useTheme();
   return (
-    <View style={[styles.card, { backgroundColor: theme.colors.background }]}>
+    <View
+      style={[styles.card, { backgroundColor: theme.colors.background }, style]}
+    >
       {children}
     </View>
   );

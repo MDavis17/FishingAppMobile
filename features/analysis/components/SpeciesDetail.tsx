@@ -2,9 +2,10 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { toggleSpeciesFavorite } from "features/analysis/api/toggleSpeciesFavorite";
 import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
-import { Pressable, ScrollView, StyleSheet } from "react-native";
+import { Pressable, ScrollView, StyleSheet, View } from "react-native";
 import { useTheme } from "react-native-paper";
 import { RootStackParamList } from "types";
+import SpeciesCatchHistoryCard from "./SpeciesCatchHistoryCard";
 import SpeciesHeader from "./SpeciesHeader";
 
 type SpeciesAnalysisRouteProp = RouteProp<RootStackParamList, "SpeciesDetail">;
@@ -76,6 +77,7 @@ export default function SpeciesDetail() {
       contentContainerStyle={styles.contentContainer}
     >
       <SpeciesHeader species={species} />
+      <SpeciesCatchHistoryCard species={species} />
     </ScrollView>
   );
 }
