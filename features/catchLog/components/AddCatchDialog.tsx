@@ -35,6 +35,8 @@ export default function AddCatchDialog({
     setBait,
     species,
     setSpecies,
+    length,
+    setLength,
     date,
     onTimeChange,
     inputError,
@@ -58,6 +60,9 @@ export default function AddCatchDialog({
     setInputError(null);
     onDismiss();
   };
+
+  const selectedSpecies = speciesList.find((s) => s.name === species);
+  const lengthUnit = selectedSpecies?.lengthUnits ?? "in";
 
   return (
     <View style={styles.overlay}>
@@ -101,6 +106,24 @@ export default function AddCatchDialog({
               />
             </View>
           </View>
+
+          <TextInput
+            mode="outlined"
+            label={`Length (${lengthUnit})`}
+            value={length}
+            onChangeText={(text) => {
+              setLength(text);
+              if (inputError?.inputId === "length") {
+                setInputError(null);
+              }
+            }}
+            keyboardType="decimal-pad"
+            style={styles.lengthInput}
+            error={inputError?.inputId === "length"}
+          />
+          {inputError?.inputId === "length" && (
+            <Text style={styles.errorText}>{inputError.message}</Text>
+          )}
 
           <TextInput
             mode="outlined"
@@ -187,6 +210,10 @@ const styles = StyleSheet.create({
   timeInput: {
     justifyContent: "center",
     paddingTop: 8,
+  },
+  lengthInput: {
+    marginTop: 8,
+    backgroundColor: "white",
   },
   baitInput: {
     marginTop: 8,

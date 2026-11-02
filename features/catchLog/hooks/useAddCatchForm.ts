@@ -19,6 +19,7 @@ export default function useAddCatchForm({
   const navigation = useNavigation();
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [species, setSpecies] = useState("");
+  const [length, setLength] = useState("");
   const [bait, setBait] = useState("");
   const [inputError, setInputError] = useState<InputError | null>(null);
   const [selectedLocation, setSelectedLocation] = useState<LatLng | null>(null);
@@ -31,6 +32,16 @@ export default function useAddCatchForm({
     }
     if (!species.trim()) {
       return { inputId: "species", message: "Species cannot be empty." };
+    }
+    const trimmedLength = length.trim();
+    if (trimmedLength) {
+      const parsed = Number(trimmedLength);
+      if (!Number.isFinite(parsed) || parsed <= 0) {
+        return {
+          inputId: "length",
+          message: "Length must be a number greater than 0.",
+        };
+      }
     }
     return null;
   };
@@ -53,6 +64,7 @@ export default function useAddCatchForm({
 
   const resetForm = useCallback(() => {
     setSpecies("");
+    setLength("");
     setBait("");
     setInputError(null);
 
@@ -76,12 +88,16 @@ export default function useAddCatchForm({
       return;
     }
 
+    const trimmedLength = length.trim();
+    const parsedLength = trimmedLength ? Number(trimmedLength) : undefined;
+
     const newCatch: CatchEntry = {
       dateTime: date.toISOString(),
       species,
       waterType: trip?.waterType || WaterType.Freshwater,
       location: { coordinates: selectedLocation, name: "" },
       bait,
+      ...(parsedLength !== undefined ? { length: parsedLength } : {}),
     };
 
     if (!trip) {
@@ -151,6 +167,8 @@ export default function useAddCatchForm({
     setBait,
     species,
     setSpecies,
+    length,
+    setLength,
     date,
     onTimeChange,
     inputError,

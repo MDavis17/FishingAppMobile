@@ -50,6 +50,12 @@ export interface Bait {
   imageUrl?: string;
 }
 
+export interface SpeciesCatchHistory {
+  totalCatches: number;
+  largestLength: number | null;
+  mostRecentCatchDate: string | null;
+}
+
 export interface Species {
   id: number;
   name: string;
