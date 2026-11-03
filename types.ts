@@ -64,6 +64,11 @@ export interface SpeciesCatchHistory {
   catches: SpeciesCatchHistoryItem[];
 }
 
+export interface SpeciesImage {
+  url: string;
+  label: string;
+}
+
 export interface Species {
   id: number;
   name: string;
@@ -71,6 +76,7 @@ export interface Species {
   waterType: WaterType;
   region: string;
   image: string;
+  images?: SpeciesImage[] | null;
   isFavorite: boolean;
   kingdom?: string;
   description?: string;
