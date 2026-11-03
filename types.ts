@@ -50,10 +50,18 @@ export interface Bait {
   imageUrl?: string;
 }
 
+export interface SpeciesCatchHistoryItem {
+  id: number;
+  dateTime: string;
+  length?: number | null;
+  weight?: number | null;
+}
+
 export interface SpeciesCatchHistory {
   totalCatches: number;
   largestLength: number | null;
   mostRecentCatchDate: string | null;
+  catches: SpeciesCatchHistoryItem[];
 }
 
 export interface Species {
