@@ -1,10 +1,10 @@
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { RouteProp, useRoute } from "@react-navigation/native";
 import TertiaryButton from "common/components/buttons/TertiaryButton";
 import MapWindow from "common/components/MapWindow";
 import CatchList from "features/catchLog/components/CatchList";
 import AddCatchDialog from "features/catchLog/components/AddCatchDialog";
 import useCatchList from "features/catchLog/hooks/useCatchList";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Text } from "react-native-paper";
 import { RootStackParamList, Trip } from "types";
@@ -17,17 +17,12 @@ type TripDetailRouteProp = RouteProp<RootStackParamList, "TripDetail">;
 
 export default function TripDetail() {
   const { setTrip } = useTripContext();
-  const navigation = useNavigation();
   const route = useRoute<TripDetailRouteProp>();
   const { trip, deleteTrip, markTripComplete } = route.params;
   const { date, location } = trip;
   const [status, setStatus] = useState<Trip["status"]>(trip.status);
   const [addCatchVisible, setAddCatchVisible] = useState(false);
   const { isLoading, catches, deleteCatch, addNewCatch } = useCatchList(trip.id);
-
-  useLayoutEffect(() => {
-    navigation.setOptions({ title: location.name });
-  }, [location.name, navigation]);
 
   useEffect(() => {
     setStatus(trip.status);

@@ -22,12 +22,11 @@ export default function TripsNavigation() {
       <Stack.Screen
         name="TripDetail"
         component={TripDetail}
-        options={({ route }) => ({
-          presentation: "modal",
+        options={{
           headerShown: true,
-          headerTitle: route.params.trip.location.name,
+          headerTitle: "",
           ...primaryHeaderOptions,
-        })}
+        }}
       />
       <Stack.Screen
         name="SelectLocation"
