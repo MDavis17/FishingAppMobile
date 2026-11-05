@@ -70,7 +70,7 @@ export default function TripList() {
         markTripComplete: handleMarkTripComplete,
       });
     },
-    [navigation]
+    [navigation],
   );
 
   const confirmDeleteTrip = useCallback(
@@ -86,7 +86,7 @@ export default function TripList() {
         },
       ]);
     },
-    [deleteTrip]
+    [deleteTrip],
   );
 
   const renderEmptyState = () => {
@@ -109,14 +109,21 @@ export default function TripList() {
 
   if (isLoading) {
     return (
-      <View style={[styles.loadingContainer, { backgroundColor: theme.colors.background }]}>
+      <View
+        style={[
+          styles.loadingContainer,
+          { backgroundColor: theme.colors.background },
+        ]}
+      >
         <ActivityIndicator size="large" />
       </View>
     );
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <View
+      style={[styles.container, { backgroundColor: theme.colors.background }]}
+    >
       <TripListFilterBar filters={filters} onFiltersChange={updateFilters} />
       <FlatList
         data={trips}
