@@ -1,9 +1,5 @@
 import { LatLng } from "react-native-maps";
 
-export interface WeatherForecast {
-  forecastDays: ForecastDay[];
-}
-
 export interface ForecastDay {
   daytimeForecast: {
     weatherCondition: WeatherCondition;
@@ -42,11 +38,11 @@ export interface CatchEntry {
 export interface Trip {
   id: number;
   date: string;
-  waterType: WaterType;
   location: Location;
   catchList: CatchEntry[];
   catchSummary: string;
   status: "Planned" | "Completed";
+  targetSpecies?: Species[];
 }
 
 export interface Bait {
@@ -54,17 +50,44 @@ export interface Bait {
   imageUrl?: string;
 }
 
+export interface SpeciesCatchHistoryItem {
+  id: number;
+  dateTime: string;
+  length?: number | null;
+  weight?: number | null;
+}
+
+export interface SpeciesCatchHistory {
+  totalCatches: number;
+  largestLength: number | null;
+  mostRecentCatchDate: string | null;
+  catches: SpeciesCatchHistoryItem[];
+}
+
+export interface SpeciesImage {
+  url: string;
+  label: string;
+}
+
 export interface Species {
   id: number;
   name: string;
+  scientificName?: string;
   waterType: WaterType;
   region: string;
   image: string;
+  images?: SpeciesImage[] | null;
   isFavorite: boolean;
+  kingdom?: string;
   description?: string;
   rangeMapUrl?: string;
   bestMonths?: number[];
   bestBaits?: Bait[];
+  family?: string;
+  avgLength?: string;
+  lengthUnits?: string;
+  lifespan?: string;
+  depthRange?: string;
 }
 
 export interface RangeData {
@@ -80,11 +103,6 @@ export interface RangePolygon {
   occurrenceProbability: number;
 }
 
-export interface CatchTime {
-  hours: number;
-  minutes: number;
-}
-
 export interface InputError {
   inputId: string;
   message: string;
@@ -97,32 +115,31 @@ export enum WaterType {
 }
 
 export type RootStackParamList = {
+  MainApp: undefined;
   Home: undefined;
-  Logs: undefined;
-  "Fishing Log": { initialTab?: string } | undefined;
-  CatchDetail: { catchItem: CatchEntry; deleteCatch: () => void };
-  AddNewCatch: { addNewCatch: (catchData: CatchEntry) => void };
   SelectLocation: {
     initialLocation: LatLng;
     onLocationSelected: (newLocation: LatLng) => void;
   };
-  Plan: undefined;
   TripDetail: {
     trip: Trip;
     deleteTrip: () => void;
     markTripComplete: () => void;
   };
-  NewTrip: { createNewTrip: (newTrip: Trip) => void };
+  NewTrip: undefined;
   Settings: undefined;
   ThemeSettings: undefined;
-  Analysis: undefined;
   SpeciesDetail: { species: Species };
   Conditions: undefined;
+  Trips: undefined;
+  Research: undefined;
+  Dashboard: undefined;
+  SpeciesList: undefined;
+  PlantList: undefined;
 };
 
 export enum UserUnits {
   Imperial = "Imperial",
-  Metric = "Metric",
 }
 
 export enum TempUnits {

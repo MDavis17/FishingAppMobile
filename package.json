@@ -4,6 +4,7 @@
   "main": "index.ts",
   "scripts": {
     "start": "expo start",
+    "start:local": "ENV=LOCAL expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web"
@@ -17,7 +18,6 @@
     "date-fns": "^4.1.0",
     "expo": "~53.0.9",
     "expo-location": "~18.1.5",
-    "expo-status-bar": "~2.2.3",
     "fuse.js": "^7.1.0",
     "react": "19.0.0",
     "react-native": "0.79.2",
@@ -25,15 +25,13 @@
     "react-native-gifted-charts": "^1.4.77",
     "react-native-linear-gradient": "^2.8.3",
     "react-native-maps": "1.20.1",
-    "react-native-pager-view": "6.7.1",
     "react-native-paper": "^5.14.4",
-    "react-native-paper-dates": "^0.22.42",
     "react-native-reanimated": "~3.17.4",
     "react-native-safe-area-context": "^5.4.0",
     "react-native-screens": "~4.10.0",
     "react-native-svg": "^15.15.5",
-    "react-native-tab-view": "^4.1.1",
-    "react-native-vector-icons": "^10.2.0"
+    "@react-native-community/datetimepicker": "8.4.1",
+    "expo-secure-store": "~14.2.4"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

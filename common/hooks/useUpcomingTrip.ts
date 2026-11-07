@@ -1,5 +1,4 @@
 import { useFocusEffect } from "@react-navigation/native";
-import { addNewTrip } from "features/tripPlanner/api/addNewTrip";
 import { getUpcomingTrip } from "features/tripPlanner/api/getUpcomingTrip";
 import { useState, useCallback } from "react";
 import { Trip } from "types";
@@ -27,23 +26,6 @@ export default function useUpcomingTrip() {
     }
   }, []);
 
-  const createNewTrip = async (newTrip: Trip) => {
-    if (!newTrip.date || !newTrip.location) {
-      return;
-    }
-
-    try {
-      const response = await addNewTrip(newTrip);
-
-      if (!response.ok) {
-        throw new Error("Something went wrong");
-      }
-    } catch (error) {
-      console.error("Error creating trip:", error);
-      throw error;
-    }
-  };
-
   useFocusEffect(
     useCallback(() => {
       fetchUpcomingTrip();
@@ -53,7 +35,6 @@ export default function useUpcomingTrip() {
   return {
     isLoading,
     fetchUpcomingTrip,
-    createNewTrip,
     upcomingTrip,
     weather: mockWeather,
   };

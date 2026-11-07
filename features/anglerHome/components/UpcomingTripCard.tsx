@@ -5,11 +5,12 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "types";
 import useUpcomingTrip from "common/hooks/useUpcomingTrip";
+import { navigateToTripDetail } from "features/tripPlanner/navigation/navigateToTripDetail";
 
 export default function UpcomingTripCard() {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-  const { upcomingTrip, createNewTrip } = useUpcomingTrip();
+  const { upcomingTrip } = useUpcomingTrip();
 
   const actionText = () => {
     if (upcomingTrip) {
@@ -20,13 +21,9 @@ export default function UpcomingTripCard() {
 
   const onActionPress = () => {
     if (upcomingTrip) {
-      navigation.navigate("Plan");
+      navigateToTripDetail(navigation, upcomingTrip);
     } else {
-      navigation.navigate("Fishing Log", {
-        screen: "NewTrip",
-        params: { createNewTrip },
-        options: { presentation: "modal", title: "New Trip" },
-      });
+      navigation.navigate("NewTrip");
     }
   };
 

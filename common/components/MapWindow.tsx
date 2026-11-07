@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import { DimensionValue, StyleSheet, View } from "react-native";
 import MapView, {
   LatLng,
@@ -58,8 +58,13 @@ export default function MapWindow({
   animationDuration = 500,
 }: Props) {
   const mapRef = useRef<MapView | null>(null);
+  const currentRegionRef = useRef<Region | null>(null);
   const theme = useTheme();
   const pins = useMemo(() => normalizePins(pinsProp), [pinsProp]);
+
+  const handleRegionChangeComplete = useCallback((region: Region) => {
+    currentRegionRef.current = region;
+  }, []);
 
   const initialSelectedLocationRegion = useMemo((): Region | null => {
     if (!selectedLocation) return null;
@@ -124,11 +129,12 @@ export default function MapWindow({
     }
 
     if (selectedLocation) {
+      const currentRegion = currentRegionRef.current;
       map.animateToRegion(
         {
           ...selectedLocation,
-          latitudeDelta: latDelta,
-          longitudeDelta: lngDelta,
+          latitudeDelta: currentRegion?.latitudeDelta ?? latDelta,
+          longitudeDelta: currentRegion?.longitudeDelta ?? lngDelta,
         },
         animationDuration,
       );
@@ -185,6 +191,7 @@ export default function MapWindow({
         zoomEnabled={!isViewOnly}
         pitchEnabled={!isViewOnly}
         rotateEnabled={!isViewOnly}
+        onRegionChangeComplete={handleRegionChangeComplete}
         onPress={handleSetNewLocation}
       >
         {rangeData?.polygons.map((polygon, index) => (

@@ -1,13 +1,13 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import LogNavigation from "features/catchLog/navigation/LogNavigation";
-import PlannerNavigation from "features/tripPlanner/navigation/PlannerNavigation";
 import { useTheme } from "react-native-paper";
 import HomeNavigation from "features/anglerHome/navigation/HomeNavigation";
-import AnalysisNavigation from "features/analysis/navigation/AnalysisNavigation";
 import AppHeader from "common/components/AppHeader";
 import ConditionsNavigation from "features/conditions/navigation/ConditionsNavigation";
+import ResearchNavigation from "features/research/navigation/ResearchNavigation";
+import TripsNavigation from "features/tripPlanner/navigation/TripsNavigation";
+import DashboardNavigation from "features/dashboard/navigation/DashboardNavigation";
 
 const Tab = createBottomTabNavigator();
 
@@ -21,14 +21,14 @@ export default function MainAppTabs() {
 
           if (route.name === "Home") {
             iconName = "home";
-          } else if (route.name === "Fishing Log") {
-            iconName = "book-outline";
-          } else if (route.name === "Analysis") {
-            iconName = "book-outline";
-          } else if (route.name === "Plan") {
-            iconName = "map-clock-outline";
+          } else if (route.name === "Trips") {
+            iconName = "calendar";
           } else if (route.name === "Conditions") {
             iconName = "weather-cloudy";
+          } else if (route.name === "Research") {
+            iconName = "book-open-variant";
+          } else if (route.name === "Dashboard") {
+            iconName = "view-dashboard";
           }
 
           return (
@@ -46,19 +46,10 @@ export default function MainAppTabs() {
       })}
     >
       <Tab.Screen name="Home" component={HomeNavigation} />
+      <Tab.Screen name="Trips" component={TripsNavigation} />
       <Tab.Screen name="Conditions" component={ConditionsNavigation} />
-      {/* <Tab.Screen
-        name="Fishing Log"
-        component={LogNavigation}
-      />
-      <Tab.Screen
-        name="Analysis"
-        component={AnalysisNavigation}
-      />
-      <Tab.Screen
-        name="Plan"
-        component={PlannerNavigation}
-      /> */}
+      <Tab.Screen name="Research" component={ResearchNavigation} />
+      <Tab.Screen name="Dashboard" component={DashboardNavigation} />
     </Tab.Navigator>
   );
 }

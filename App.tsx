@@ -4,14 +4,14 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { PaperProvider } from "react-native-paper";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import RootNavigation from "features/root/navigation/RootNavigation";
-import { useColorScheme } from "react-native";
 import { ThemeProvider, useAppTheme } from "common/theme/ThemeContext";
 import { TripProvider } from "features/tripPlanner/components/TripContext";
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import { LocationProvider } from "common/context/LocationContext";
+import { AuthProvider } from "common/context/AuthContext";
 
 const ThemedApp = () => {
-  const { themeName, theme } = useAppTheme();
+  const { theme } = useAppTheme();
   return (
     <PaperProvider theme={theme}>
       <NavigationContainer>
@@ -22,20 +22,21 @@ const ThemedApp = () => {
 };
 
 export default function App() {
-  const colorScheme = useColorScheme();
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <ActionSheetProvider>
-        <TripProvider>
-          <SafeAreaProvider>
-            <ThemeProvider>
-              <LocationProvider>
-                <ThemedApp />
-              </LocationProvider>
-            </ThemeProvider>
-          </SafeAreaProvider>
-        </TripProvider>
-      </ActionSheetProvider>
+      <AuthProvider>
+        <ActionSheetProvider>
+          <TripProvider>
+            <SafeAreaProvider>
+              <ThemeProvider>
+                <LocationProvider>
+                  <ThemedApp />
+                </LocationProvider>
+              </ThemeProvider>
+            </SafeAreaProvider>
+          </TripProvider>
+        </ActionSheetProvider>
+      </AuthProvider>
     </GestureHandlerRootView>
   );
 }

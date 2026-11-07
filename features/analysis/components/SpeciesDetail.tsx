@@ -1,164 +1,85 @@
-import React from "react";
-import { Image, ScrollView, StyleSheet, View } from "react-native";
-import { Text, useTheme } from "react-native-paper";
-import { RouteProp, useRoute } from "@react-navigation/native";
-import { RootStackParamList, WaterType, CatchEntry } from "types";
-import { speciesImageUri } from "../utils/imageUtils";
-import { FRESHWATER_COLOR, SALTWATER_COLOR } from "common/theme/themes";
-import Divider from "common/components/Divider";
-import TargetMonths from "./TargetMonths";
-import BestBaits from "./BestBaits";
-import CatchHistory from "./CatchHistory";
-import useSpeciesRange from "../hooks/useSpeciesRange";
-import MapWindow from "common/components/MapWindow";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { toggleSpeciesFavorite } from "features/analysis/api/toggleSpeciesFavorite";
+import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
+import { Pressable, ScrollView, StyleSheet, View } from "react-native";
+import { useTheme } from "react-native-paper";
+import { RootStackParamList } from "types";
+import SpeciesCatchHistoryCard from "./SpeciesCatchHistoryCard";
+import SpeciesHeader from "./SpeciesHeader";
+import SpeciesPhotosCard from "./SpeciesPhotosCard";
 
 type SpeciesAnalysisRouteProp = RouteProp<RootStackParamList, "SpeciesDetail">;
 
 export default function SpeciesDetail() {
   const theme = useTheme();
+  const navigation = useNavigation();
   const route = useRoute<SpeciesAnalysisRouteProp>();
   const { species } = route.params;
 
-  const { rangeData } = useSpeciesRange(species.id);
+  const [isFavorite, setIsFavorite] = useState(species.isFavorite);
+  const isTogglingRef = useRef(false);
 
-  // const [catchHistory, setCatchHistory] = useState<CatchEntry[]>([]);
-  // const [catchHistoryLoading, setCatchHistoryLoading] = useState(true);
+  const handleToggleFavorite = useCallback(async () => {
+    if (isTogglingRef.current) {
+      return;
+    }
 
-  // const fetchCatchHistory = useCallback(async () => {
-  //   setCatchHistoryLoading(true);
-  //   try {
-  //     const response = await getCatchLogs();
-  //     if (!response.ok) {
-  //       throw new Error("Something went wrong");
-  //     }
-  //     const raw = response.data;
-  //     const allCatches: CatchEntry[] = Array.isArray(raw)
-  //       ? raw
-  //       : Array.isArray((raw as { catches?: CatchEntry[] })?.catches)
-  //         ? (raw as { catches: CatchEntry[] }).catches
-  //         : Array.isArray((raw as { data?: CatchEntry[] })?.data)
-  //           ? (raw as { data: CatchEntry[] }).data
-  //           : [];
-  //     const filtered = allCatches.filter(
-  //       (c) => c.species?.toLowerCase() === species.name?.toLowerCase(),
-  //     );
-  //     setCatchHistory(filtered);
-  //   } catch (error) {
-  //     console.error("Error fetching catch history:", error);
-  //     setCatchHistory([]);
-  //   } finally {
-  //     setCatchHistoryLoading(false);
-  //   }
-  // }, [species.name]);
+    isTogglingRef.current = true;
+    const previousValue = isFavorite;
 
-  // useEffect(() => {
-  //   fetchCatchHistory();
-  // }, [fetchCatchHistory]);
+    setIsFavorite((prev) => !prev);
 
-  const isSaltwater = species.waterType === WaterType.Saltwater;
-  const imageUri = speciesImageUri(species.image);
-  const description = species.description || "No description available.";
-  // const bestMonths = species.bestMonths ?? [];
-  const bestMonths = [6, 7, 8, 9];
-  // const bestBaits = species.bestBaits ?? [];
-  const bestBaits = [{ name: "Live Sardine" }, { name: "Squid" }];
-  const mockCatchHistory = [
-    {
-      dateTime: "2026-01-01",
-      location: { name: "San Diego Bay" },
-      bait: "Live Sardine",
-      species: "California Halibut",
-      waterType: WaterType.Saltwater,
-    } as CatchEntry,
-    {
-      dateTime: "2026-01-02",
-      location: { name: "San Francisco Bay" },
-      bait: "Squid",
-      species: "Pacific Halibut",
-      waterType: WaterType.Saltwater,
-    } as CatchEntry,
-  ];
+    try {
+      const response = await toggleSpeciesFavorite(species.id);
+
+      if (!response.ok) {
+        throw new Error("Something went wrong");
+      }
+
+      navigation.setParams({
+        species: { ...species, isFavorite: !previousValue },
+      });
+    } catch (error) {
+      console.error("Error toggling species favorite:", error);
+      setIsFavorite(previousValue);
+    } finally {
+      isTogglingRef.current = false;
+    }
+  }, [isFavorite, navigation, species]);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <Pressable
+          onPress={handleToggleFavorite}
+          accessibilityRole="button"
+          accessibilityLabel={
+            isFavorite ? "Remove from favorites" : "Add to favorites"
+          }
+          style={({ pressed }) => [
+            styles.headerButton,
+            pressed && styles.headerButtonPressed,
+          ]}
+        >
+          <MaterialCommunityIcons
+            name={isFavorite ? "heart" : "heart-outline"}
+            size={24}
+            color={theme.colors.secondary}
+          />
+        </Pressable>
+      ),
+    });
+  }, [handleToggleFavorite, isFavorite, navigation, theme.colors.onSurface]);
 
   return (
     <ScrollView
       style={[styles.scrollView, { backgroundColor: theme.colors.background }]}
       contentContainerStyle={styles.contentContainer}
     >
-      <View style={styles.headerContainer}>
-        <Text variant="headlineMedium" style={styles.speciesName}>
-          {species.name}
-        </Text>
-        <View
-          style={[
-            styles.waterTypeTag,
-            {
-              backgroundColor: isSaltwater ? SALTWATER_COLOR : FRESHWATER_COLOR,
-            },
-          ]}
-        >
-          <Text style={[styles.tagText, { color: theme.colors.onPrimary }]}>
-            {species.waterType}
-          </Text>
-        </View>
-      </View>
-
-      <Divider />
-
-      <View style={styles.identificationContainer}>
-        <View style={styles.imageContainer}>
-          {imageUri ? (
-            <Image
-              source={{ uri: imageUri }}
-              style={styles.speciesImage}
-              resizeMode="cover"
-            />
-          ) : null}
-        </View>
-        <Text variant="bodyLarge" style={{ color: theme.colors.onSurface }}>
-          {description}
-        </Text>
-        <View style={{ flex: 1, alignItems: "center" }}>
-          <MapWindow
-            height={200}
-            width={350}
-            rangeData={rangeData ?? undefined}
-            isViewOnly
-          />
-        </View>
-      </View>
-
-      <Divider />
-
-      <View style={styles.detailsContainer}>
-        <View style={styles.targetsContainer}>
-          <View>
-            <Text variant="titleMedium" style={styles.sectionTitle}>
-              Best Time to Target
-            </Text>
-            <View style={{ paddingHorizontal: 4 }}>
-              <TargetMonths bestMonths={bestMonths} />
-            </View>
-          </View>
-          <Divider />
-          <View style={styles.bestBaitsContainer}>
-            <Text variant="titleMedium" style={styles.sectionTitle}>
-              Best Baits
-            </Text>
-            <View style={{ paddingHorizontal: 4 }}>
-              <BestBaits bestBaits={bestBaits} />
-            </View>
-          </View>
-        </View>
-      </View>
-
-      <Divider />
-
-      <View style={styles.historyContainer}>
-        <Text variant="titleMedium" style={styles.sectionTitle}>
-          Catch History
-        </Text>
-        <CatchHistory catchHistory={mockCatchHistory} />
-      </View>
+      <SpeciesHeader species={species} />
+      <SpeciesPhotosCard species={species} />
+      <SpeciesCatchHistoryCard species={species} />
     </ScrollView>
   );
 }
@@ -168,45 +89,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   contentContainer: {
-    padding: 16,
+    paddingBottom: 8,
   },
-  headerContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  waterTypeTag: {
-    borderRadius: 20,
-    paddingVertical: 4,
+  headerButton: {
     paddingHorizontal: 12,
+    paddingVertical: 8,
   },
-  tagText: {
-    fontWeight: "bold",
-    fontSize: 14,
+  headerButtonPressed: {
+    opacity: 0.7,
   },
-  speciesName: {
-    fontWeight: "bold",
-    fontSize: 24,
-  },
-  identificationContainer: { flex: 1, paddingVertical: 6 },
-  imageContainer: {
-    width: "100%",
-    height: 200,
-    borderRadius: 8,
-  },
-  speciesImage: {
-    width: "100%",
-    height: 200,
-    borderRadius: 8,
-  },
-  detailsContainer: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  targetsContainer: { flex: 1 },
-  sectionTitle: { marginBottom: 8, fontWeight: "bold" },
-  bestBaitsContainer: { flex: 1 },
-  historyContainer: { flex: 1 },
 });

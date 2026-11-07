@@ -4,17 +4,18 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "types";
 import RecentTripPreview from "./RecentTripPreview";
+import useRecentTrip from "common/hooks/useRecentTrip";
+import { navigateToTripDetail } from "features/tripPlanner/navigation/navigateToTripDetail";
 
 export default function RecentTripCard() {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-
+  const { recentTrip } = useRecentTrip();
 
   const onActionPress = () => {
-      (navigation as any).navigate("Fishing Log", {
-        screen: "Fishing Log",
-        params: { initialTab: "analysis" },
-      });
+    if (recentTrip) {
+      navigateToTripDetail(navigation, recentTrip);
+    }
   };
 
   return (

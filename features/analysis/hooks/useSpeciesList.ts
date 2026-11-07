@@ -3,7 +3,7 @@ import { Species } from "types";
 import { getSpecies } from "../api/getSpecies";
 import { toggleSpeciesFavorite } from "../api/toggleSpeciesFavorite";
 
-export default function useSpeciesList() {
+export default function useSpeciesList(kingdom?: string) {
   const [speciesList, setSpeciesList] = useState<Species[]>([]);
   const [favoriteSpeciesList, setFavoriteSpeciesList] = useState<Species[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -12,7 +12,7 @@ export default function useSpeciesList() {
     setIsLoading(true);
 
     try {
-      const response = await getSpecies();
+      const response = await getSpecies(kingdom);
 
       if (!response.ok) {
         throw new Error("Something went wrong");
@@ -25,11 +25,11 @@ export default function useSpeciesList() {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [kingdom]);
 
   useEffect(() => {
     fetchSpecies();
-  }, []);
+  }, [fetchSpecies]);
 
   const toggleFavorite = useCallback(async (speciesId: number) => {
     try {
@@ -51,7 +51,7 @@ export default function useSpeciesList() {
       console.error("Error toggling species favorite:", error);
       throw error;
     }
-  }, []);
+  }, [fetchSpecies]);
 
   return {
     isLoading,

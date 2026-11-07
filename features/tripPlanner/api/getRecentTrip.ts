@@ -1,5 +1,5 @@
-import { unauthenticatedFetch } from "../../../common/api/request";
+import { authenticatedFetch } from "../../../common/api/request";
 
 export const getRecentTrip = async () => {
-  return await unauthenticatedFetch(`trips/mostRecentTrip/`);
+  return await authenticatedFetch(`trips/mostRecentTrip`);
 };

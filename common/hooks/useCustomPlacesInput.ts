@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from "react";
-import { GooglePlacesAPIKey } from "common/api/config";
 import { Keyboard } from "react-native";
 import { LatLng } from "react-native-maps";
 import { getPlaceSuggestions } from "common/api/getPlaceSuggestions";

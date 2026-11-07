@@ -1,8 +1,8 @@
 import { RequestMethod } from "common/api/types";
-import { unauthenticatedFetch } from "../../../common/api/request";
+import { authenticatedFetch } from "../../../common/api/request";
 
 export const deleteCatchById = async (id: number) => {
-  return await unauthenticatedFetch(`catch/${id}`, {
+  return await authenticatedFetch(`catch/${id}`, {
     method: RequestMethod.DELETE,
   });
 };
