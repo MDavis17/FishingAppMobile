@@ -9,8 +9,8 @@ import { Text, useTheme } from "react-native-paper";
 import { RootStackParamList, Trip } from "types";
 import { useTripContext } from "./TripContext";
 import PrimaryButton from "common/components/buttons/PrimaryButton";
-import TripWeather from "./TripWeather";
 import TripDetailHeader from "./TripDetailHeader";
+import TripLocationCard from "./TripLocationCard";
 
 type TripDetailRouteProp = RouteProp<RootStackParamList, "TripDetail">;
 
@@ -42,10 +42,8 @@ export default function TripDetail() {
       <View
         style={[styles.container, { backgroundColor: theme.colors.background }]}
       >
-        <View style={styles.weatherContainer}>
-          <TripWeather location={location} date={date} />
-        </View>
-        <View style={styles.catchListContainer}>
+        <TripLocationCard location={location} />
+        {/* <View style={styles.catchListContainer}>
           <Text variant="titleMedium" style={styles.catchListTitle}>
             Catch List
           </Text>
@@ -57,7 +55,7 @@ export default function TripDetail() {
               onAddCatchPress={() => setAddCatchVisible(true)}
             />
           </View>
-        </View>
+        </View> */}
         <View style={styles.footerContainer}>
           {status === "Planned" && (
             <PrimaryButton onPress={handleCompleteTrip}>
