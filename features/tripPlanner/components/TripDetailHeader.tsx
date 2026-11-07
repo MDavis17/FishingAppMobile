@@ -26,7 +26,9 @@ export default function TripDetailHeader({
     <View style={[styles.container, { backgroundColor: theme.colors.surface }]}>
       <View style={styles.statusContainer}>
         <TripStatusChip status={status} />
-        <Text variant="titleLarge">{title}</Text>
+        <Text variant="titleLarge" style={styles.title}>
+          {title}
+        </Text>
       </View>
       <View style={styles.subHeaderContainer}>
         <View style={styles.metaItem}>
@@ -63,4 +65,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 8,
   },
+  title: { fontWeight: "bold" },
 });
