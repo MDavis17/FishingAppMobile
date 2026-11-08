@@ -1,11 +1,13 @@
 import { useState, useEffect, useCallback } from "react";
-import { CatchEntry } from "../../../types";
+import { CatchEntry, TripCatchListResponse } from "../../../types";
 import { deleteCatchById } from "../api/deleteCatchById";
 import { addNewCatchToTrip } from "../api/addNewCatchToTrip";
 import { getCatchListForTrip } from "../api/getCatchListForTrip";
 
 export default function useCatchList(tripId: number | null) {
-  const [catches, setCatches] = useState<CatchEntry[]>([]);
+  const [catchList, setCatchList] = useState<TripCatchListResponse | null>(
+    null,
+  );
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const fetchCatches = useCallback(async () => {
@@ -23,7 +25,7 @@ export default function useCatchList(tripId: number | null) {
         throw new Error("Something went wrong");
       }
 
-      setCatches(response.data);
+      setCatchList(response.data);
     } catch (error) {
       console.error("Error fetching logs:", error);
     } finally {
@@ -62,7 +64,7 @@ export default function useCatchList(tripId: number | null) {
         throw new Error("Something went wrong");
       }
 
-      setCatches((prevLogs) => prevLogs.filter((log) => log.id != catchId));
+      await fetchCatches();
     } catch (error) {
       console.error("Error delete log:", error);
       throw error;
@@ -71,7 +73,7 @@ export default function useCatchList(tripId: number | null) {
 
   return {
     isLoading,
-    catches,
+    catchList,
     deleteCatch,
     addNewCatch,
   };

@@ -19,7 +19,7 @@ export default function TripLocationCard({ location }: Props) {
           {location.coordinates.latitude} N, {location.coordinates.longitude} W
         </Text>
         <View style={styles.mapContainer}>
-          <MapWindow selectedLocation={location.coordinates} />
+          <MapWindow selectedLocation={location.coordinates} isViewOnly />
         </View>
       </View>
     </Card>
