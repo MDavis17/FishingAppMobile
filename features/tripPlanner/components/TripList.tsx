@@ -15,7 +15,7 @@ import { RootStackParamList, Trip } from "types";
 import { deleteTrip as deleteTripApi } from "../api/deleteTrip";
 import { markTripComplete as markTripCompleteApi } from "../api/markTripComplete";
 import useTripList from "../hooks/useTripList";
-import TripListFilterBar from "./TripListFilterBar";
+import TripListHeader from "./TripListHeader";
 import TripPreview from "./TripPreview";
 
 type TripsNavigationProp = NativeStackNavigationProp<
@@ -95,7 +95,7 @@ export default function TripList() {
     }
 
     const message = !hasTrips
-      ? "No trips yet. Create a trip from the Home tab to get started."
+      ? "No trips yet. Tap + above to create your first trip."
       : "No trips match these filters.";
 
     return (
@@ -124,7 +124,11 @@ export default function TripList() {
     <View
       style={[styles.container, { backgroundColor: theme.colors.background }]}
     >
-      <TripListFilterBar filters={filters} onReplaceFilters={replaceFilters} />
+      <TripListHeader
+        filters={filters}
+        onReplaceFilters={replaceFilters}
+        onAddTrip={() => navigation.navigate("NewTrip")}
+      />
       <FlatList
         data={trips}
         keyExtractor={(item) => String(item.id)}
