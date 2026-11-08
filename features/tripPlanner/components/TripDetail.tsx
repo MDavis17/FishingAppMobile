@@ -20,6 +20,7 @@ import TripDetailHeader from "./TripDetailHeader";
 import TripLocationCard from "./TripLocationCard";
 import TripCatchSummary from "./TripCatchSummary";
 import TripNotesCard from "./TripNotesCard";
+import TripConditionsCard from "./TripConditionsCard";
 
 type TripDetailRouteProp = RouteProp<RootStackParamList, "TripDetail">;
 
@@ -94,6 +95,7 @@ export default function TripDetail() {
           ]}
         >
           <TripLocationCard location={location} />
+          <TripConditionsCard />
           <TripCatchSummary
             catchList={catchList}
             isLoading={isLoading}
