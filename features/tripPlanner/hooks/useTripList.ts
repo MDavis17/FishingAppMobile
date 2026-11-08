@@ -1,17 +1,19 @@
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback, useMemo, useState } from "react";
-import { Trip } from "types";
+import { Trip, TripType } from "types";
 import { deleteTrip as deleteTripApi } from "../api/deleteTrip";
 import { getTrips } from "../api/getTrips";
 
 export type TripListFilters = {
   status: "All" | "Planned" | "Completed";
   dateSort: "newest" | "oldest";
+  tripTypes: TripType[];
 };
 
-const DEFAULT_FILTERS: TripListFilters = {
+export const DEFAULT_FILTERS: TripListFilters = {
   status: "All",
   dateSort: "newest",
+  tripTypes: [],
 };
 
 export default function useTripList() {
@@ -51,6 +53,11 @@ export default function useTripList() {
       result = result.filter((trip) => trip.status === filters.status);
     }
 
+    if (filters.tripTypes.length > 0) {
+      const allowedTypes = new Set(filters.tripTypes);
+      result = result.filter((trip) => allowedTypes.has(trip.tripType));
+    }
+
     result.sort((a, b) => {
       const dateA = new Date(a.date).getTime();
       const dateB = new Date(b.date).getTime();
@@ -62,6 +69,10 @@ export default function useTripList() {
 
   const updateFilters = useCallback((updates: Partial<TripListFilters>) => {
     setFilters((prev) => ({ ...prev, ...updates }));
+  }, []);
+
+  const replaceFilters = useCallback((next: TripListFilters) => {
+    setFilters(next);
   }, []);
 
   const deleteTrip = useCallback(async (tripId: number) => {
@@ -87,6 +98,7 @@ export default function useTripList() {
     trips: filteredTrips,
     filters,
     updateFilters,
+    replaceFilters,
     hasTrips,
     hasFilteredTrips,
     refetchTrips: fetchTrips,

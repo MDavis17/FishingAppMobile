@@ -1,58 +1,87 @@
-import React from "react";
+import React, { useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import DropdownSelect from "common/components/DropdownSelect";
-import { TripListFilters } from "../hooks/useTripList";
+import { Badge, IconButton, useTheme } from "react-native-paper";
+import {
+  DEFAULT_FILTERS,
+  TripListFilters,
+} from "../hooks/useTripList";
+import TripFilterDialog from "./TripFilterDialog";
 
 interface Props {
   filters: TripListFilters;
-  onFiltersChange: (updates: Partial<TripListFilters>) => void;
+  onReplaceFilters: (filters: TripListFilters) => void;
 }
 
-const STATUS_OPTIONS = [
-  { value: "All" as const, label: "All" },
-  { value: "Planned" as const, label: "Planned" },
-  { value: "Completed" as const, label: "Completed" },
-];
+function countActiveFilterGroups(filters: TripListFilters): number {
+  let count = 0;
+  if (filters.status !== DEFAULT_FILTERS.status) {
+    count += 1;
+  }
+  if (filters.dateSort !== DEFAULT_FILTERS.dateSort) {
+    count += 1;
+  }
+  if (filters.tripTypes.length > 0) {
+    count += 1;
+  }
+  return count;
+}
 
-const DATE_SORT_OPTIONS = [
-  { value: "newest" as const, label: "Newest first" },
-  { value: "oldest" as const, label: "Oldest first" },
-];
+export default function TripListFilterBar({
+  filters,
+  onReplaceFilters,
+}: Props) {
+  const theme = useTheme();
+  const [dialogVisible, setDialogVisible] = useState(false);
+  const activeFilterCount = useMemo(
+    () => countActiveFilterGroups(filters),
+    [filters],
+  );
 
-export default function TripListFilterBar({ filters, onFiltersChange }: Props) {
   return (
-    <View style={styles.container}>
-      <View style={styles.row}>
-        <DropdownSelect
-          label="Status"
-          value={filters.status}
-          options={STATUS_OPTIONS}
-          onChange={(status) => onFiltersChange({ status })}
-          style={styles.dropdown}
-        />
-        <DropdownSelect
-          label="Sort by date"
-          value={filters.dateSort}
-          options={DATE_SORT_OPTIONS}
-          onChange={(dateSort) => onFiltersChange({ dateSort })}
-          style={styles.dropdown}
-        />
+    <View
+      style={[styles.container, { backgroundColor: theme.colors.surface }]}
+    >
+      <View style={styles.toolbar}>
+        <View style={styles.filterButtonWrap}>
+          <IconButton
+            icon="filter-variant"
+            accessibilityLabel="Filter trips"
+            onPress={() => setDialogVisible(true)}
+          />
+          {activeFilterCount > 0 ? (
+            <Badge size={18} style={styles.badge}>
+              {activeFilterCount}
+            </Badge>
+          ) : null}
+        </View>
       </View>
+      <TripFilterDialog
+        visible={dialogVisible}
+        filters={filters}
+        onDismiss={() => setDialogVisible(false)}
+        onApply={onReplaceFilters}
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 10,
-    paddingTop: 10,
-    paddingBottom: 4,
+    paddingHorizontal: 4,
+    paddingTop: 4,
+    paddingBottom: 0,
   },
-  row: {
+  toolbar: {
     flexDirection: "row",
-    gap: 10,
+    justifyContent: "flex-end",
+    alignItems: "center",
   },
-  dropdown: {
-    flex: 1,
+  filterButtonWrap: {
+    position: "relative",
+  },
+  badge: {
+    position: "absolute",
+    top: 4,
+    right: 4,
   },
 });
