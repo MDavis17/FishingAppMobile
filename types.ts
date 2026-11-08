@@ -35,6 +35,31 @@ export interface CatchEntry {
   bait?: string;
 }
 
+export interface CatchStat {
+  type: string;
+  value: number | boolean;
+}
+
+export interface IndividualCatch {
+  id: number;
+  time: string;
+  length?: number;
+  bait?: string;
+}
+
+export interface SpeciesGroup {
+  species: string;
+  speciesImage?: string;
+  count: number;
+  largestLength?: number;
+  catches: IndividualCatch[];
+}
+
+export interface TripCatchListResponse {
+  stats: CatchStat[];
+  speciesGroups: SpeciesGroup[];
+}
+
 export interface Trip {
   id: number;
   date: string;

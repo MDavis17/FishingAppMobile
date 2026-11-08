@@ -1,16 +1,16 @@
 import { RouteProp, useRoute } from "@react-navigation/native";
 import TertiaryButton from "common/components/buttons/TertiaryButton";
-import CatchList from "features/catchLog/components/CatchList";
 import AddCatchDialog from "features/catchLog/components/AddCatchDialog";
 import useCatchList from "features/catchLog/hooks/useCatchList";
 import { useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
-import { Text, useTheme } from "react-native-paper";
+import { ScrollView, StyleSheet, View } from "react-native";
+import { useTheme } from "react-native-paper";
 import { RootStackParamList, Trip } from "types";
 import { useTripContext } from "./TripContext";
 import PrimaryButton from "common/components/buttons/PrimaryButton";
 import TripDetailHeader from "./TripDetailHeader";
 import TripLocationCard from "./TripLocationCard";
+import TripCatchSummary from "./TripCatchSummary";
 
 type TripDetailRouteProp = RouteProp<RootStackParamList, "TripDetail">;
 
@@ -22,9 +22,7 @@ export default function TripDetail() {
   const { date, location } = trip;
   const [status, setStatus] = useState<Trip["status"]>(trip.status);
   const [addCatchVisible, setAddCatchVisible] = useState(false);
-  const { isLoading, catches, deleteCatch, addNewCatch } = useCatchList(
-    trip.id,
-  );
+  const { isLoading, catchList, addNewCatch } = useCatchList(trip.id);
 
   useEffect(() => {
     setStatus(trip.status);
@@ -37,25 +35,17 @@ export default function TripDetail() {
   };
 
   return (
-    <View style={styles.headerContainer}>
+    <ScrollView style={styles.outerContainer}>
       <TripDetailHeader status={status} title={location.name} date={date} />
       <View
         style={[styles.container, { backgroundColor: theme.colors.background }]}
       >
         <TripLocationCard location={location} />
-        {/* <View style={styles.catchListContainer}>
-          <Text variant="titleMedium" style={styles.catchListTitle}>
-            Catch List
-          </Text>
-          <View style={{ flex: 2 }}>
-            <CatchList
-              catches={catches}
-              isLoading={isLoading}
-              deleteCatch={deleteCatch}
-              onAddCatchPress={() => setAddCatchVisible(true)}
-            />
-          </View>
-        </View> */}
+        <TripCatchSummary
+          catchList={catchList}
+          isLoading={isLoading}
+          onAddCatchPress={() => setAddCatchVisible(true)}
+        />
         <View style={styles.footerContainer}>
           {status === "Planned" && (
             <PrimaryButton onPress={handleCompleteTrip}>
@@ -66,21 +56,19 @@ export default function TripDetail() {
             Delete
           </TertiaryButton>
         </View>
-        <AddCatchDialog
-          visible={addCatchVisible}
-          onDismiss={() => setAddCatchVisible(false)}
-          addNewCatch={addNewCatch}
-        />
       </View>
-    </View>
+      <AddCatchDialog
+        visible={addCatchVisible}
+        onDismiss={() => setAddCatchVisible(false)}
+        addNewCatch={addNewCatch}
+      />
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  headerContainer: { flex: 1 },
-  container: { flex: 4, padding: 16 },
-  catchListTitle: { marginBottom: 8 },
-  catchListContainer: { flex: 2, paddingTop: 8, paddingBottom: 8 },
+  outerContainer: { flex: 1 },
+  container: { flex: 4, padding: 16, gap: 8 },
   footerContainer: {
     marginTop: 20,
     marginBottom: 10,
