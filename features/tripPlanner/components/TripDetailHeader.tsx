@@ -1,21 +1,21 @@
 import { format } from "date-fns";
 import { StyleSheet, View } from "react-native";
 import { Icon, Text, useTheme } from "react-native-paper";
-import { Trip } from "types";
+import { Trip, TripType } from "types";
 import TripStatusChip from "./TripStatusChip";
 
 interface Props {
   status: Trip["status"];
   title: string;
   date: string;
-  tripType?: string;
+  tripType: TripType;
 }
 
 export default function TripDetailHeader({
   status,
   title,
   date,
-  tripType = "Surf Fishing",
+  tripType,
 }: Props) {
   const theme = useTheme();
   const tripDate = new Date(date);

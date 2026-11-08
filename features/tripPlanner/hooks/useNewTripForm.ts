@@ -3,7 +3,7 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import * as Location from "expo-location";
 import { LatLng } from "react-native-maps";
-import { InputError, RootStackParamList, Species } from "types";
+import { InputError, RootStackParamList, Species, TripType } from "types";
 import { addNewTrip, CreateTripPayload } from "../api/addNewTrip";
 
 export default function useNewTripForm() {
@@ -11,6 +11,7 @@ export default function useNewTripForm() {
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [status, setStatus] = useState<CreateTripPayload["status"]>("Planned");
+  const [tripType, setTripType] = useState<TripType>(TripType.Surf);
   const [selectedLocation, setSelectedLocation] = useState<LatLng | null>(null);
   const [currentLocation, setCurrentLocation] = useState<LatLng | null>(null);
   const [locationName, setLocationName] = useState("");
@@ -85,6 +86,7 @@ export default function useNewTripForm() {
           name: locationName.trim(),
         },
         status,
+        tripType,
         targetSpecies: targetSpecies.map(({ id, name }) => ({ id, name })),
       });
 
@@ -124,6 +126,8 @@ export default function useNewTripForm() {
     date,
     status,
     setStatus,
+    tripType,
+    setTripType,
     onDateTimeChange,
     selectedLocation,
     setSelectedLocation,

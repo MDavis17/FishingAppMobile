@@ -60,6 +60,18 @@ export interface TripCatchListResponse {
   speciesGroups: SpeciesGroup[];
 }
 
+export enum TripType {
+  Surf = "Surf",
+  Kayak = "Kayak",
+  Boat = "Boat",
+  Spearfishing = "Spearfishing",
+  Pier = "Pier",
+  FreeDiving = "Free Diving",
+  Crabbing = "Crabbing",
+  RockJetty = "Rock/Jetty",
+  FlyFishing = "Fly Fishing",
+}
+
 export interface Trip {
   id: number;
   date: string;
@@ -67,6 +79,7 @@ export interface Trip {
   catchList: CatchEntry[];
   catchSummary: string;
   status: "Planned" | "Completed";
+  tripType: TripType;
   targetSpecies?: Species[];
   notes?: string;
 }

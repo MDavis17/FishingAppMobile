@@ -28,12 +28,14 @@ export default function TripListFilterBar({ filters, onFiltersChange }: Props) {
           value={filters.status}
           options={STATUS_OPTIONS}
           onChange={(status) => onFiltersChange({ status })}
+          style={styles.dropdown}
         />
         <DropdownSelect
           label="Sort by date"
           value={filters.dateSort}
           options={DATE_SORT_OPTIONS}
           onChange={(dateSort) => onFiltersChange({ dateSort })}
+          style={styles.dropdown}
         />
       </View>
     </View>
@@ -49,5 +51,8 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
     gap: 10,
+  },
+  dropdown: {
+    flex: 1,
   },
 });

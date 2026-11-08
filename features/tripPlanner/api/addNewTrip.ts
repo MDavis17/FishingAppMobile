@@ -1,11 +1,12 @@
 import { RequestMethod } from "common/api/types";
 import { authenticatedFetch } from "../../../common/api/request";
-import { Location } from "types";
+import { Location, TripType } from "types";
 
 export type CreateTripPayload = {
   date: string;
   location: Location;
   status: "Planned" | "Completed";
+  tripType: TripType;
   targetSpecies?: { id: number; name: string }[];
 };
 
