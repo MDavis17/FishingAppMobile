@@ -3,18 +3,7 @@ import { StyleSheet, View } from "react-native";
 import { Icon, Text, useTheme } from "react-native-paper";
 import { Trip, TripType } from "types";
 import TripStatusChip from "./TripStatusChip";
-
-const TRIP_TYPE_ICONS: Record<TripType, string> = {
-  [TripType.Surf]: "waves",
-  [TripType.Kayak]: "kayaking",
-  [TripType.Boat]: "sail-boat",
-  [TripType.Spearfishing]: "spear",
-  [TripType.Pier]: "pier",
-  [TripType.FreeDiving]: "diving-flippers",
-  [TripType.Crabbing]: "bucket",
-  [TripType.RockJetty]: "terrain",
-  [TripType.FlyFishing]: "hook",
-};
+import { TRIP_TYPE_ICONS } from "../constants";
 
 interface Props {
   status: Trip["status"];
@@ -52,7 +41,7 @@ export default function TripDetailHeader({
           <Text variant="bodyMedium">{formattedStartTime}</Text>
         </View>
         <View style={styles.metaItem}>
-          <Icon source={TRIP_TYPE_ICONS[tripType]} size={24} />
+          <Icon source={TRIP_TYPE_ICONS[tripType as TripType]} size={24} />
           <Text variant="bodyMedium">{tripType}</Text>
         </View>
       </View>
