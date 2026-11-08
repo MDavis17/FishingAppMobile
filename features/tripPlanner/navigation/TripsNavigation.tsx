@@ -2,6 +2,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useTheme } from "react-native-paper";
 import { RootStackParamList } from "types";
 import SelectLocation from "common/components/SelectLocation";
+import NewTripModal from "../components/NewTripModal";
 import TripDetail from "../components/TripDetail";
 import TripList from "../components/TripList";
 
@@ -19,6 +20,16 @@ export default function TripsNavigation() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Trips" component={TripList} />
+      <Stack.Screen
+        name="NewTrip"
+        component={NewTripModal}
+        options={{
+          presentation: "modal",
+          headerShown: true,
+          headerTitle: "New Trip",
+          ...primaryHeaderOptions,
+        }}
+      />
       <Stack.Screen
         name="TripDetail"
         component={TripDetail}

@@ -1,15 +1,13 @@
 import React, { useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Badge, IconButton, useTheme } from "react-native-paper";
-import {
-  DEFAULT_FILTERS,
-  TripListFilters,
-} from "../hooks/useTripList";
+import { DEFAULT_FILTERS, TripListFilters } from "../hooks/useTripList";
 import TripFilterDialog from "./TripFilterDialog";
 
 interface Props {
   filters: TripListFilters;
   onReplaceFilters: (filters: TripListFilters) => void;
+  onAddTrip?: () => void;
 }
 
 function countActiveFilterGroups(filters: TripListFilters): number {
@@ -26,9 +24,10 @@ function countActiveFilterGroups(filters: TripListFilters): number {
   return count;
 }
 
-export default function TripListFilterBar({
+export default function TripListHeader({
   filters,
   onReplaceFilters,
+  onAddTrip,
 }: Props) {
   const theme = useTheme();
   const [dialogVisible, setDialogVisible] = useState(false);
@@ -38,10 +37,15 @@ export default function TripListFilterBar({
   );
 
   return (
-    <View
-      style={[styles.container, { backgroundColor: theme.colors.surface }]}
-    >
+    <View style={[styles.container, { backgroundColor: theme.colors.surface }]}>
       <View style={styles.toolbar}>
+        {onAddTrip ? (
+          <IconButton
+            icon="plus"
+            accessibilityLabel="Create a trip"
+            onPress={onAddTrip}
+          />
+        ) : null}
         <View style={styles.filterButtonWrap}>
           <IconButton
             icon="filter-variant"
@@ -73,7 +77,7 @@ const styles = StyleSheet.create({
   },
   toolbar: {
     flexDirection: "row",
-    justifyContent: "flex-end",
+    justifyContent: "space-between",
     alignItems: "center",
   },
   filterButtonWrap: {
