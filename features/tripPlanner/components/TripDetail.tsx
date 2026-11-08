@@ -81,7 +81,12 @@ export default function TripDetail() {
         keyboardDismissMode="interactive"
         automaticallyAdjustKeyboardInsets
       >
-        <TripDetailHeader status={status} title={location.name} date={date} />
+        <TripDetailHeader
+          status={status}
+          title={location.name}
+          date={date}
+          tripType={trip.tripType}
+        />
         <View
           style={[
             styles.container,

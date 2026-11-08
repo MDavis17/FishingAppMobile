@@ -4,11 +4,18 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { SegmentedButtons, Text, TextInput, useTheme } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import MapWindow from "common/components/MapWindow";
+import DropdownSelect from "common/components/DropdownSelect";
 import PrimaryButton from "common/components/buttons/PrimaryButton";
 import SecondaryButton from "common/components/buttons/SecondaryButton";
 import TertiaryButton from "common/components/buttons/TertiaryButton";
+import { TripType } from "types";
 import useNewTripForm from "../hooks/useNewTripForm";
 import SpeciesChipSelector from "./SpeciesChipSelector";
+
+const TRIP_TYPE_OPTIONS = (Object.values(TripType) as TripType[]).map((value) => ({
+  value,
+  label: value,
+}));
 
 export default function NewTripModal() {
   const theme = useTheme();
@@ -17,6 +24,8 @@ export default function NewTripModal() {
     date,
     status,
     setStatus,
+    tripType,
+    setTripType,
     onDateTimeChange,
     selectedLocation,
     setSelectedLocation,
@@ -126,6 +135,15 @@ export default function NewTripModal() {
           />
         </View>
 
+        <View style={styles.tripTypeContainer}>
+          <DropdownSelect
+            label="Trip Type"
+            value={tripType}
+            options={TRIP_TYPE_OPTIONS}
+            onChange={setTripType}
+          />
+        </View>
+
         <SpeciesChipSelector
           selectedSpecies={targetSpecies}
           onSelectedSpeciesChange={setTargetSpecies}
@@ -204,5 +222,9 @@ const styles = StyleSheet.create({
   },
   statusButtons: {
     marginBottom: 12,
+  },
+  tripTypeContainer: {
+    marginBottom: 12,
+    zIndex: 2,
   },
 });
