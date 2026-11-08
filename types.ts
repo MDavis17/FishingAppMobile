@@ -68,6 +68,7 @@ export interface Trip {
   catchSummary: string;
   status: "Planned" | "Completed";
   targetSpecies?: Species[];
+  notes?: string;
 }
 
 export interface Bait {
