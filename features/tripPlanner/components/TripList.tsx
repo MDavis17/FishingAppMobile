@@ -30,7 +30,7 @@ export default function TripList() {
     isLoading,
     trips,
     filters,
-    updateFilters,
+    replaceFilters,
     hasTrips,
     hasFilteredTrips,
     deleteTrip,
@@ -96,7 +96,7 @@ export default function TripList() {
 
     const message = !hasTrips
       ? "No trips yet. Create a trip from the Home tab to get started."
-      : "No trips match this filter.";
+      : "No trips match these filters.";
 
     return (
       <View style={styles.emptyContainer}>
@@ -124,7 +124,7 @@ export default function TripList() {
     <View
       style={[styles.container, { backgroundColor: theme.colors.background }]}
     >
-      <TripListFilterBar filters={filters} onFiltersChange={updateFilters} />
+      <TripListFilterBar filters={filters} onReplaceFilters={replaceFilters} />
       <FlatList
         data={trips}
         keyExtractor={(item) => String(item.id)}
