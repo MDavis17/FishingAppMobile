@@ -1,18 +1,19 @@
+import { TripConditionsSource } from "common/api/getTripConditions";
 import { StyleSheet, View } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 
 interface Props {
-  status: string;
+  source: TripConditionsSource;
 }
 
-export default function ConditionChip({ status }: Props) {
+export default function ConditionChip({ source }: Props) {
   const theme = useTheme();
-  const isPast = status === "past";
+  const label = source === "observed" ? "Observed" : "Forecast";
   return (
     <View style={styles.container}>
       <View style={[styles.header, { borderColor: theme.colors.primary }]}>
         <Text style={[styles.text, { color: theme.colors.primary }]}>
-          {isPast ? "Observed" : "Forecast"}
+          {label}
         </Text>
       </View>
     </View>

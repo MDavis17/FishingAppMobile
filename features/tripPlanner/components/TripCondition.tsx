@@ -9,7 +9,7 @@ interface Props {
   icon?: ComponentProps<typeof MaterialCommunityIcons>["name"];
 }
 
-export default function ForecastRow({ label, value, icon }: Props) {
+export default function TripCondition({ label, value, icon }: Props) {
   const theme = useTheme();
   return (
     <View style={styles.container}>
@@ -35,6 +35,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flex: 1,
   },
-  rowLabel: { opacity: 0.75 },
+  rowLabel: { opacity: 0.75, textAlign: "center" },
   rowValue: { fontWeight: "600", fontSize: 16, textAlign: "center" },
 });

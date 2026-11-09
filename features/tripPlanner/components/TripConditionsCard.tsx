@@ -1,9 +1,9 @@
 import Card from "common/components/Card";
-import useTripForecast from "features/tripPlanner/hooks/useTripForecast";
+import useTripConditions from "features/tripPlanner/hooks/useTripConditions";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 import { Location } from "types";
-import TripForecast from "features/tripPlanner/components/TripForecast";
+import TripConditionsMetrics from "features/tripPlanner/components/TripConditionsMetrics";
 import ConditionChip from "features/tripPlanner/components/ConditionChip";
 
 interface Props {
@@ -13,7 +13,10 @@ interface Props {
 
 export default function TripConditionsCard({ location, date }: Props) {
   const theme = useTheme();
-  const { forecast, status: forecastStatus } = useTripForecast(location, date);
+  const { conditions, status } = useTripConditions(location, date);
+
+  const showChip =
+    (status === "ready" && conditions !== null) || status === "tooFar";
 
   return (
     <Card style={styles.card}>
@@ -22,34 +25,34 @@ export default function TripConditionsCard({ location, date }: Props) {
           <Text variant="titleMedium" style={styles.title}>
             Conditions
           </Text>
-          <ConditionChip status={forecastStatus} />
+          {showChip && (
+            <ConditionChip
+              source={
+                status === "tooFar" ? "forecast" : conditions!.source
+              }
+            />
+          )}
         </View>
-        {forecastStatus === "loading" && (
+        {status === "loading" && (
           <View style={styles.centered}>
             <ActivityIndicator size="small" color={theme.colors.primary} />
           </View>
         )}
 
-        {forecastStatus === "tooFar" && (
+        {status === "tooFar" && (
           <Text variant="bodySmall" style={styles.message}>
             Forecast is available within a week of the trip.
           </Text>
         )}
 
-        {forecastStatus === "past" && (
+        {status === "error" && (
           <Text variant="bodySmall" style={styles.message}>
-            Observed conditions will show here after the trip.
+            Couldn't load conditions.
           </Text>
         )}
 
-        {forecastStatus === "error" && (
-          <Text variant="bodySmall" style={styles.message}>
-            Couldn't load the forecast.
-          </Text>
-        )}
-
-        {forecastStatus === "ready" && forecast && (
-          <TripForecast forecast={forecast} />
+        {status === "ready" && conditions && (
+          <TripConditionsMetrics conditions={conditions} />
         )}
       </View>
     </Card>
