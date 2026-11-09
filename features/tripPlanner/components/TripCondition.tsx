@@ -1,11 +1,12 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { StyleSheet, View } from "react-native";
+import type { ComponentProps } from "react";
 import { Text, useTheme } from "react-native-paper";
 
 interface Props {
   label: string;
   value: string;
-  icon?: string;
+  icon?: ComponentProps<typeof MaterialCommunityIcons>["name"];
 }
 
 export default function ForecastRow({ label, value, icon }: Props) {

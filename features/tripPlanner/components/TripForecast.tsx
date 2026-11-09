@@ -11,7 +11,7 @@ export default function TripForecast({ forecast }: Props) {
   return (
     <View style={styles.container}>
       {forecast.air_temp_f !== null && (
-        <View>
+        <View style={styles.airTempContainer}>
           {forecast.weather_description && (
             <TripCondition
               label={forecast.weather_description}
@@ -60,9 +60,12 @@ export default function TripForecast({ forecast }: Props) {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     gap: 8,
     flexDirection: "row",
     justifyContent: "space-between",
+  },
+  airTempContainer: {
     flex: 1,
   },
 });
