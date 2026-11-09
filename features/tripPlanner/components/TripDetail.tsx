@@ -95,7 +95,7 @@ export default function TripDetail() {
           ]}
         >
           <TripLocationCard location={location} />
-          <TripConditionsCard />
+          <TripConditionsCard location={location} date={date} />
           <TripCatchSummary
             catchList={catchList}
             isLoading={isLoading}
