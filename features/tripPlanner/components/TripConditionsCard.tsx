@@ -1,9 +1,10 @@
 import Card from "common/components/Card";
-import useTripForecast from "features/tripPlanner/hooks/useTripForecast";
+import useTripConditions from "features/tripPlanner/hooks/useTripConditions";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 import { Location } from "types";
-import TripForecast from "features/tripPlanner/components/TripForecast";
+import TripConditionsMetrics from "features/tripPlanner/components/TripConditionsMetrics";
+import ConditionChip from "features/tripPlanner/components/ConditionChip";
 
 interface Props {
   location: Location;
@@ -12,15 +13,26 @@ interface Props {
 
 export default function TripConditionsCard({ location, date }: Props) {
   const theme = useTheme();
-  const { forecast, status } = useTripForecast(location, date);
+  const { conditions, status } = useTripConditions(location, date);
+
+  const showChip =
+    (status === "ready" && conditions !== null) || status === "tooFar";
 
   return (
     <Card style={styles.card}>
       <View style={styles.container}>
-        <Text variant="titleMedium" style={styles.title}>
-          Conditions
-        </Text>
-
+        <View style={styles.header}>
+          <Text variant="titleMedium" style={styles.title}>
+            Conditions
+          </Text>
+          {showChip && (
+            <ConditionChip
+              source={
+                status === "tooFar" ? "forecast" : conditions!.source
+              }
+            />
+          )}
+        </View>
         {status === "loading" && (
           <View style={styles.centered}>
             <ActivityIndicator size="small" color={theme.colors.primary} />
@@ -33,19 +45,15 @@ export default function TripConditionsCard({ location, date }: Props) {
           </Text>
         )}
 
-        {status === "past" && (
-          <Text variant="bodySmall" style={styles.message}>
-            Observed conditions will show here after the trip.
-          </Text>
-        )}
-
         {status === "error" && (
           <Text variant="bodySmall" style={styles.message}>
-            Couldn't load the forecast.
+            Couldn't load conditions.
           </Text>
         )}
 
-        {status === "ready" && forecast && <TripForecast forecast={forecast} />}
+        {status === "ready" && conditions && (
+          <TripConditionsMetrics conditions={conditions} />
+        )}
       </View>
     </Card>
   );
@@ -53,8 +61,14 @@ export default function TripConditionsCard({ location, date }: Props) {
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16 },
-  title: { marginBottom: 8, fontWeight: "bold" },
+  title: { fontWeight: "bold" },
   card: { flex: 1 },
   centered: { paddingVertical: 12, alignItems: "center" },
   message: { textAlign: "center", opacity: 0.8 },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    marginBottom: 16,
+  },
 });
