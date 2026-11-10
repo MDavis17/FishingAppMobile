@@ -1,12 +1,9 @@
 import ConditionChip from "features/tripPlanner/components/ConditionChip";
 import { TripTidesData } from "common/api/getTripTides";
 import { TripTidesStatus } from "features/tripPlanner/hooks/useTripConditions";
-import {
-  extremeLabel,
-  formatTideTime,
-} from "features/tripPlanner/utils/tideUtils";
 import { StyleSheet, View } from "react-native";
 import { Text } from "react-native-paper";
+import TripTideRow from "./TripTideRow";
 
 interface Props {
   tides: TripTidesData | null;
@@ -38,10 +35,12 @@ export default function TripTides({ tides, tidesStatus }: Props) {
           Tides
         </Text>
         <ConditionChip source={tides.source} />
+        <View style={styles.stationContainer}>
+          <Text variant="bodySmall" style={styles.station}>
+            {tides.station_name} · {tides.station_distance_mi.toFixed(0)} mi
+          </Text>
+        </View>
       </View>
-      <Text variant="bodySmall" style={styles.station}>
-        {tides.station_name} · {tides.station_distance_mi.toFixed(0)} mi
-      </Text>
       {tides.events.length === 0 ? (
         <Text variant="bodySmall" style={styles.message}>
           No tide data for this day.
@@ -49,17 +48,7 @@ export default function TripTides({ tides, tidesStatus }: Props) {
       ) : (
         <View style={styles.eventList}>
           {tides.events.map((event) => (
-            <View key={`${event.time}-${event.kind}`} style={styles.eventRow}>
-              <Text variant="bodyMedium" style={styles.eventTime}>
-                {formatTideTime(event.time)}
-              </Text>
-              <Text variant="bodyMedium" style={styles.eventLabel}>
-                {extremeLabel(event.kind, event.extreme)}
-              </Text>
-              <Text variant="bodyMedium" style={styles.eventHeight}>
-                {event.height_ft.toFixed(1)} ft
-              </Text>
-            </View>
+            <TripTideRow key={`${event.time}-${event.kind}`} event={event} />
           ))}
         </View>
       )}
@@ -68,7 +57,7 @@ export default function TripTides({ tides, tidesStatus }: Props) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, gap: 8 },
+  container: { flex: 1, gap: 8, paddingTop: 8 },
   header: {
     flexDirection: "row",
     alignItems: "center",
@@ -76,15 +65,10 @@ const styles = StyleSheet.create({
   },
   title: { fontWeight: "bold" },
   station: { opacity: 0.75 },
+  stationContainer: {
+    flex: 1,
+    alignItems: "flex-end",
+  },
   message: { textAlign: "center", opacity: 0.8 },
   eventList: { gap: 6 },
-  eventRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    gap: 8,
-  },
-  eventTime: { flex: 1, fontWeight: "600" },
-  eventLabel: { flex: 1.4, opacity: 0.85, textAlign: "center" },
-  eventHeight: { flex: 0.8, textAlign: "right", fontWeight: "600" },
 });
