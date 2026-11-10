@@ -55,7 +55,7 @@ export default function TripConditionsMetrics({ conditions }: Props) {
             ? `${conditions.surf_height_ft.toFixed(1)} ft`
             : "—"
         }
-        icon="wave"
+        icon="waves"
       />
     </View>
   );

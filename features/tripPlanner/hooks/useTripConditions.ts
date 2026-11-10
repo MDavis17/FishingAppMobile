@@ -3,13 +3,17 @@ import {
   getTripConditions,
   TripConditions,
 } from "common/api/getTripConditions";
+import { getTripTides, TripTidesData } from "common/api/getTripTides";
 import { Location } from "types";
 
 export type TripConditionsStatus = "loading" | "ready" | "tooFar" | "error";
+export type TripTidesStatus = "ready" | "error";
 
 interface TripConditionsState {
   conditions: TripConditions | null;
   status: TripConditionsStatus;
+  tides: TripTidesData | null;
+  tidesStatus: TripTidesStatus;
 }
 
 function isTooFarDetail(detail: unknown): boolean {
@@ -25,6 +29,8 @@ export default function useTripConditions(
 ): TripConditionsState {
   const [conditions, setConditions] = useState<TripConditions | null>(null);
   const [status, setStatus] = useState<TripConditionsStatus>("loading");
+  const [tides, setTides] = useState<TripTidesData | null>(null);
+  const [tidesStatus, setTidesStatus] = useState<TripTidesStatus>("ready");
 
   useEffect(() => {
     let cancelled = false;
@@ -32,27 +38,44 @@ export default function useTripConditions(
     const fetchConditions = async () => {
       setStatus("loading");
       setConditions(null);
+      setTides(null);
+      setTidesStatus("ready");
+
+      const lat = location.coordinates.latitude;
+      const lng = location.coordinates.longitude;
+
       try {
-        const response = await getTripConditions(
-          location.coordinates.latitude,
-          location.coordinates.longitude,
-          dateIso,
-        );
+        const [conditionsResponse, tidesResponse] = await Promise.all([
+          getTripConditions(lat, lng, dateIso),
+          getTripTides(lat, lng, dateIso),
+        ]);
         if (cancelled) return;
-        if (response.ok) {
-          setConditions(response.data as TripConditions);
+
+        if (conditionsResponse.ok) {
+          setConditions(conditionsResponse.data as TripConditions);
           setStatus("ready");
-          return;
-        }
-        if (response.status === 400 && isTooFarDetail(response.data?.detail)) {
+        } else if (
+          conditionsResponse.status === 400 &&
+          isTooFarDetail(conditionsResponse.data?.detail)
+        ) {
           setStatus("tooFar");
-          return;
+        } else {
+          setStatus("error");
         }
-        setStatus("error");
+
+        if (tidesResponse.ok) {
+          setTides(tidesResponse.data as TripTidesData);
+          setTidesStatus("ready");
+        } else {
+          setTides(null);
+          setTidesStatus("error");
+        }
       } catch (err) {
         if (!cancelled) {
           console.error("useTripConditions: fetch failed", err);
           setStatus("error");
+          setTides(null);
+          setTidesStatus("error");
         }
       }
     };
@@ -68,5 +91,5 @@ export default function useTripConditions(
     dateIso,
   ]);
 
-  return { conditions, status };
+  return { conditions, status, tides, tidesStatus };
 }
