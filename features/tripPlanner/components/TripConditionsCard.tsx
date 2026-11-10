@@ -5,6 +5,8 @@ import { Text, useTheme } from "react-native-paper";
 import { Location } from "types";
 import TripConditionsMetrics from "features/tripPlanner/components/TripConditionsMetrics";
 import ConditionChip from "features/tripPlanner/components/ConditionChip";
+import Divider from "common/components/Divider";
+import TripTides from "./TripTides";
 
 interface Props {
   location: Location;
@@ -13,7 +15,10 @@ interface Props {
 
 export default function TripConditionsCard({ location, date }: Props) {
   const theme = useTheme();
-  const { conditions, status } = useTripConditions(location, date);
+  const { conditions, status, tides, tidesStatus } = useTripConditions(
+    location,
+    date,
+  );
 
   const showChip =
     (status === "ready" && conditions !== null) || status === "tooFar";
@@ -27,9 +32,7 @@ export default function TripConditionsCard({ location, date }: Props) {
           </Text>
           {showChip && (
             <ConditionChip
-              source={
-                status === "tooFar" ? "forecast" : conditions!.source
-              }
+              source={status === "tooFar" ? "forecast" : conditions!.source}
             />
           )}
         </View>
@@ -53,6 +56,12 @@ export default function TripConditionsCard({ location, date }: Props) {
 
         {status === "ready" && conditions && (
           <TripConditionsMetrics conditions={conditions} />
+        )}
+        {status !== "loading" && (
+          <>
+            <Divider />
+            <TripTides tides={tides} tidesStatus={tidesStatus} />
+          </>
         )}
       </View>
     </Card>
