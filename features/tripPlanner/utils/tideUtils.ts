@@ -18,3 +18,19 @@ export function extremeLabel(kind: TideKind, extreme: TideExtreme): string {
   const tide = kind === "high" ? "High" : "Low";
   return `${level} ${tide}`;
 }
+
+export function formatSolunarTime(localTimestamp: string): string {
+  try {
+    const parsed = parse(localTimestamp, "yyyy-MM-dd HH:mm", new Date());
+    return parsed.toLocaleTimeString(undefined, {
+      hour: "numeric",
+      minute: "2-digit",
+    });
+  } catch {
+    return localTimestamp;
+  }
+}
+
+export function formatSolunarWindow(start: string, end: string): string {
+  return `${formatSolunarTime(start)} – ${formatSolunarTime(end)}`;
+}

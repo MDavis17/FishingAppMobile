@@ -57,7 +57,7 @@ export default function TripTides({ tides, tidesStatus }: Props) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, gap: 8, paddingTop: 8 },
+  container: { flex: 1, gap: 8, paddingVertical: 8 },
   header: {
     flexDirection: "row",
     alignItems: "center",
