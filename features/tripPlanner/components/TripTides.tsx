@@ -1,31 +1,16 @@
 import ConditionChip from "features/tripPlanner/components/ConditionChip";
 import { TripTidesData } from "common/api/getTripTides";
 import { TripTidesStatus } from "features/tripPlanner/hooks/useTripConditions";
-import { parse } from "date-fns";
+import {
+  extremeLabel,
+  formatTideTime,
+} from "features/tripPlanner/utils/tideUtils";
 import { StyleSheet, View } from "react-native";
 import { Text } from "react-native-paper";
 
 interface Props {
   tides: TripTidesData | null;
   tidesStatus: TripTidesStatus;
-}
-
-function formatTideTime(noaaTime: string): string {
-  try {
-    const parsed = parse(noaaTime, "yyyy-MM-dd HH:mm", new Date());
-    return parsed.toLocaleTimeString(undefined, {
-      hour: "numeric",
-      minute: "2-digit",
-    });
-  } catch {
-    return noaaTime;
-  }
-}
-
-function extremeLabel(kind: "high" | "low", extreme: "major" | "minor"): string {
-  const level = extreme === "major" ? "Major" : "Minor";
-  const tide = kind === "high" ? "High" : "Low";
-  return `${level} ${tide}`;
 }
 
 export default function TripTides({ tides, tidesStatus }: Props) {
