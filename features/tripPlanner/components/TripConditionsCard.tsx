@@ -7,6 +7,7 @@ import TripConditionsMetrics from "features/tripPlanner/components/TripCondition
 import ConditionChip from "features/tripPlanner/components/ConditionChip";
 import Divider from "common/components/Divider";
 import TripTides from "./TripTides";
+import TripSolunar from "./TripSolunar";
 
 interface Props {
   location: Location;
@@ -15,10 +16,8 @@ interface Props {
 
 export default function TripConditionsCard({ location, date }: Props) {
   const theme = useTheme();
-  const { conditions, status, tides, tidesStatus } = useTripConditions(
-    location,
-    date,
-  );
+  const { conditions, status, tides, tidesStatus, solunar, solunarStatus } =
+    useTripConditions(location, date);
 
   const showChip =
     (status === "ready" && conditions !== null) || status === "tooFar";
@@ -61,6 +60,12 @@ export default function TripConditionsCard({ location, date }: Props) {
           <>
             <Divider />
             <TripTides tides={tides} tidesStatus={tidesStatus} />
+          </>
+        )}
+        {status !== "loading" && (
+          <>
+            <Divider />
+            <TripSolunar solunar={solunar} solunarStatus={solunarStatus} />
           </>
         )}
       </View>
