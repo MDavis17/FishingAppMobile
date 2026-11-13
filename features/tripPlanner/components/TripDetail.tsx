@@ -21,6 +21,7 @@ import TripLocationCard from "./TripLocationCard";
 import TripCatchSummary from "./TripCatchSummary";
 import TripNotesCard from "./TripNotesCard";
 import TripConditionsCard from "./TripConditionsCard";
+import TripSolunarCard from "./TripSolunarCard";
 import TripTidesCard from "./TripTidesCard";
 import useTripConditions from "features/tripPlanner/hooks/useTripConditions";
 
@@ -108,8 +109,12 @@ export default function TripDetail() {
           <TripConditionsCard
             conditions={conditions}
             status={conditionsStatus}
+          />
+          <TripSolunarCard
             solunar={solunar}
             solunarStatus={solunarStatus}
+            isLoading={conditionsStatus === "loading"}
+            tripDateIso={date}
           />
           <TripTidesCard
             tides={tides}

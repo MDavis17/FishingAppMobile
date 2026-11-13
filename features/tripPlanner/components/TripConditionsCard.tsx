@@ -1,29 +1,19 @@
 import Card from "common/components/Card";
-import {
-  TripConditionsStatus,
-  TripSolunarStatus,
-} from "features/tripPlanner/hooks/useTripConditions";
+import { TripConditionsStatus } from "features/tripPlanner/hooks/useTripConditions";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 import { TripConditions } from "common/api/getTripConditions";
-import { TripSolunarData } from "common/api/getTripSolunar";
 import TripConditionsMetrics from "features/tripPlanner/components/TripConditionsMetrics";
 import ConditionChip from "features/tripPlanner/components/ConditionChip";
-import Divider from "common/components/Divider";
-import TripSolunar from "./TripSolunar";
 
 interface Props {
   conditions: TripConditions | null;
   status: TripConditionsStatus;
-  solunar: TripSolunarData | null;
-  solunarStatus: TripSolunarStatus;
 }
 
 export default function TripConditionsCard({
   conditions,
   status,
-  solunar,
-  solunarStatus,
 }: Props) {
   const theme = useTheme();
 
@@ -63,12 +53,6 @@ export default function TripConditionsCard({
 
         {status === "ready" && conditions && (
           <TripConditionsMetrics conditions={conditions} />
-        )}
-        {status !== "loading" && (
-          <>
-            <Divider />
-            <TripSolunar solunar={solunar} solunarStatus={solunarStatus} />
-          </>
         )}
       </View>
     </Card>

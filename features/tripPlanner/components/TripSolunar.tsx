@@ -1,17 +1,70 @@
-import { TripSolunarData } from "common/api/getTripSolunar";
+import { TripSolunarData, SolunarPeriod } from "common/api/getTripSolunar";
 import { TripSolunarStatus } from "features/tripPlanner/hooks/useTripConditions";
-import TripCondition from "features/tripPlanner/components/TripCondition";
 import { formatSolunarTime } from "features/tripPlanner/utils/tideUtils";
+import { parseTideTimeMs } from "features/tripPlanner/utils/tideChart";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import Divider from "common/components/Divider";
 import { StyleSheet, View } from "react-native";
-import { Text } from "react-native-paper";
+import { Text, useTheme } from "react-native-paper";
 import TripSolunarRow from "./TripSolunarRow";
+import SolunarTimeline from "./SolunarTimeline";
 
 interface Props {
   solunar: TripSolunarData | null;
   solunarStatus: TripSolunarStatus;
+  tripDateIso: string;
 }
 
-export default function TripSolunar({ solunar, solunarStatus }: Props) {
+function sortPeriods(periods: SolunarPeriod[]): SolunarPeriod[] {
+  return [...periods].sort(
+    (a, b) => parseTideTimeMs(a.start) - parseTideTimeMs(b.start),
+  );
+}
+
+function splitIntoColumns(
+  periods: SolunarPeriod[],
+): [SolunarPeriod | null, SolunarPeriod | null][] {
+  const pairs: [SolunarPeriod | null, SolunarPeriod | null][] = [];
+  for (let i = 0; i < periods.length; i += 2) {
+    pairs.push([periods[i] ?? null, periods[i + 1] ?? null]);
+  }
+  return pairs;
+}
+
+function SunTimeCell({
+  label,
+  time,
+  icon,
+}: {
+  label: string;
+  time: string;
+  icon: "weather-sunset-up" | "weather-sunset-down";
+}) {
+  const theme = useTheme();
+  return (
+    <View style={styles.sunCell}>
+      <MaterialCommunityIcons
+        name={icon}
+        size={36}
+        color={theme.colors.primary}
+      />
+      <View>
+        <Text variant="bodySmall" style={styles.sunLabel}>
+          {label}
+        </Text>
+        <Text variant="titleMedium" style={styles.sunTime}>
+          {time}
+        </Text>
+      </View>
+    </View>
+  );
+}
+
+export default function TripSolunar({
+  solunar,
+  solunarStatus,
+  tripDateIso,
+}: Props) {
   if (solunarStatus === "error") {
     return (
       <View style={styles.container}>
@@ -26,10 +79,23 @@ export default function TripSolunar({ solunar, solunarStatus }: Props) {
   }
 
   if (!solunar) {
-    return null;
+    return (
+      <View style={styles.container}>
+        <Text variant="titleMedium" style={styles.title}>
+          Solunar
+        </Text>
+        <Text variant="bodySmall" style={styles.message}>
+          No solunar data for this day.
+        </Text>
+      </View>
+    );
   }
 
   const hasSunTimes = solunar.sunrise !== null || solunar.sunset !== null;
+  const majors = sortPeriods(solunar.periods.filter((p) => p.kind === "major"));
+  const minors = sortPeriods(solunar.periods.filter((p) => p.kind === "minor"));
+  const majorRows = splitIntoColumns(majors);
+  const minorRows = splitIntoColumns(minors);
 
   return (
     <View style={styles.container}>
@@ -43,18 +109,19 @@ export default function TripSolunar({ solunar, solunarStatus }: Props) {
       ) : (
         <>
           <View style={styles.sunRow}>
-            <TripCondition
+            <SunTimeCell
               label="Sunrise"
-              value={
+              time={
                 solunar.sunrise !== null
                   ? formatSolunarTime(solunar.sunrise)
                   : "—"
               }
               icon="weather-sunset-up"
             />
-            <TripCondition
+            <View style={styles.sunDivider} />
+            <SunTimeCell
               label="Sunset"
-              value={
+              time={
                 solunar.sunset !== null
                   ? formatSolunarTime(solunar.sunset)
                   : "—"
@@ -63,14 +130,36 @@ export default function TripSolunar({ solunar, solunarStatus }: Props) {
             />
           </View>
           {solunar.periods.length > 0 && (
-            <View style={styles.periodList}>
-              {solunar.periods.map((period) => (
-                <TripSolunarRow
-                  key={`${period.kind}-${period.start}`}
-                  period={period}
-                />
-              ))}
-            </View>
+            <SolunarTimeline solunar={solunar} tripDateIso={tripDateIso} />
+          )}
+          {(majors.length > 0 || minors.length > 0) && (
+            <>
+              <Divider styleOveride={styles.sectionDivider} />
+              <View style={styles.periodGrid}>
+                {majorRows.map((pair, rowIndex) => (
+                  <View key={`major-row-${rowIndex}`} style={styles.gridRow}>
+                    <View style={styles.gridCol}>
+                      {pair[0] && <TripSolunarRow period={pair[0]} />}
+                    </View>
+                    <View style={styles.gridColDivider} />
+                    <View style={styles.gridCol}>
+                      {pair[1] && <TripSolunarRow period={pair[1]} />}
+                    </View>
+                  </View>
+                ))}
+                {minorRows.map((pair, rowIndex) => (
+                  <View key={`minor-row-${rowIndex}`} style={styles.gridRow}>
+                    <View style={styles.gridCol}>
+                      {pair[0] && <TripSolunarRow period={pair[0]} />}
+                    </View>
+                    <View style={styles.gridColDivider} />
+                    <View style={styles.gridCol}>
+                      {pair[1] && <TripSolunarRow period={pair[1]} />}
+                    </View>
+                  </View>
+                ))}
+              </View>
+            </>
           )}
         </>
       )}
@@ -79,14 +168,42 @@ export default function TripSolunar({ solunar, solunarStatus }: Props) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, gap: 8, paddingVertical: 8 },
+  container: { flex: 1, gap: 12 },
   title: { fontWeight: "bold" },
   message: { textAlign: "center", opacity: 0.8 },
   sunRow: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    paddingBottom: 8,
-    gap: 8,
+    alignItems: "center",
+    justifyContent: "space-around",
   },
-  periodList: { gap: 6, paddingLeft: 8 },
+  sunCell: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    paddingHorizontal: 4,
+  },
+  sunLabel: { opacity: 0.75 },
+  sunTime: { fontWeight: "700" },
+  sunDivider: {
+    width: 1,
+    height: 48,
+    backgroundColor: "#ccc",
+    marginHorizontal: 4,
+  },
+  sectionDivider: { marginTop: 0, marginBottom: 8 },
+  periodGrid: { gap: 10 },
+  gridRow: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  gridCol: {
+    flex: 1,
+    minWidth: 0,
+  },
+  gridColDivider: {
+    width: 1,
+    alignSelf: "stretch",
+    backgroundColor: "#ccc",
+    marginHorizontal: 8,
+  },
 });
