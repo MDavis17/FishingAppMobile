@@ -110,16 +110,16 @@ export default function TripDetail() {
             conditions={conditions}
             status={conditionsStatus}
           />
+          <TripTidesCard
+            tides={tides}
+            tidesStatus={tidesStatus}
+            isLoading={conditionsStatus === "loading"}
+          />
           <TripSolunarCard
             solunar={solunar}
             solunarStatus={solunarStatus}
             isLoading={conditionsStatus === "loading"}
             tripDateIso={date}
-          />
-          <TripTidesCard
-            tides={tides}
-            tidesStatus={tidesStatus}
-            isLoading={conditionsStatus === "loading"}
           />
           <TripCatchSummary
             catchList={catchList}
