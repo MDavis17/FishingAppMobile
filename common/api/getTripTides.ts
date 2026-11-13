@@ -12,12 +12,18 @@ export interface TideEvent {
   extreme: TideExtreme;
 }
 
+export interface TideHeightPoint {
+  time: string;
+  height_ft: number;
+}
+
 export interface TripTidesData {
   station_id: string;
   station_name: string;
   station_distance_mi: number;
   source: TripTidesSource;
   events: TideEvent[];
+  heights?: TideHeightPoint[];
 }
 
 export const getTripTides = async (
