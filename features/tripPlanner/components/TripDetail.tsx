@@ -21,6 +21,8 @@ import TripLocationCard from "./TripLocationCard";
 import TripCatchSummary from "./TripCatchSummary";
 import TripNotesCard from "./TripNotesCard";
 import TripConditionsCard from "./TripConditionsCard";
+import TripTidesCard from "./TripTidesCard";
+import useTripConditions from "features/tripPlanner/hooks/useTripConditions";
 
 type TripDetailRouteProp = RouteProp<RootStackParamList, "TripDetail">;
 
@@ -34,6 +36,14 @@ export default function TripDetail() {
   const [status, setStatus] = useState<Trip["status"]>(trip.status);
   const [addCatchVisible, setAddCatchVisible] = useState(false);
   const { isLoading, catchList, addNewCatch } = useCatchList(trip.id);
+  const {
+    conditions,
+    status: conditionsStatus,
+    tides,
+    tidesStatus,
+    solunar,
+    solunarStatus,
+  } = useTripConditions(location, date);
   const scrollRef = useRef<ScrollView>(null);
   const notesFocusedRef = useRef(false);
 
@@ -95,7 +105,17 @@ export default function TripDetail() {
           ]}
         >
           <TripLocationCard location={location} />
-          <TripConditionsCard location={location} date={date} />
+          <TripConditionsCard
+            conditions={conditions}
+            status={conditionsStatus}
+            solunar={solunar}
+            solunarStatus={solunarStatus}
+          />
+          <TripTidesCard
+            tides={tides}
+            tidesStatus={tidesStatus}
+            isLoading={conditionsStatus === "loading"}
+          />
           <TripCatchSummary
             catchList={catchList}
             isLoading={isLoading}
