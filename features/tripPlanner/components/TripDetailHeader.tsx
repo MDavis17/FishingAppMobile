@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import { StyleSheet, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 import { Icon, Text, useTheme } from "react-native-paper";
 import { Trip, TripType } from "types";
 import TripStatusChip from "./TripStatusChip";
@@ -10,6 +10,7 @@ interface Props {
   title: string;
   date: string;
   tripType: TripType;
+  onDelete: () => void;
 }
 
 export default function TripDetailHeader({
@@ -17,6 +18,7 @@ export default function TripDetailHeader({
   title,
   date,
   tripType,
+  onDelete,
 }: Props) {
   const theme = useTheme();
   const tripDate = new Date(date);
@@ -26,7 +28,21 @@ export default function TripDetailHeader({
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.surface }]}>
       <View style={styles.statusContainer}>
-        <TripStatusChip status={status} />
+        <View style={styles.topRow}>
+          <TripStatusChip status={status} />
+          <Pressable
+            onPress={onDelete}
+            accessibilityRole="button"
+            accessibilityLabel="Delete trip"
+            hitSlop={8}
+          >
+            <Icon
+              source="trash-can-outline"
+              size={20}
+              color={theme.colors.error}
+            />
+          </Pressable>
+        </View>
         <Text variant="titleLarge" style={styles.title}>
           {title}
         </Text>
@@ -54,6 +70,11 @@ const styles = StyleSheet.create({
   statusContainer: {
     flex: 1,
     gap: 8,
+  },
+  topRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   subHeaderContainer: {
     flexDirection: "row",

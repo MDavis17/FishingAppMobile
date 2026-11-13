@@ -43,6 +43,7 @@ const styles = StyleSheet.create({
     gap: 8,
     flex: 1,
     minWidth: 0,
+    paddingHorizontal: 12,
   },
   chip: {
     paddingHorizontal: 10,
