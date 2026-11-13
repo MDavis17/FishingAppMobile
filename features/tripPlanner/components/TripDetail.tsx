@@ -1,10 +1,10 @@
 import { useHeaderHeight } from "@react-navigation/elements";
 import { RouteProp, useRoute } from "@react-navigation/native";
-import TertiaryButton from "common/components/buttons/TertiaryButton";
 import AddCatchDialog from "features/catchLog/components/AddCatchDialog";
 import useCatchList from "features/catchLog/hooks/useCatchList";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
+  Alert,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
@@ -69,6 +69,19 @@ export default function TripDetail() {
     setStatus("Completed");
   };
 
+  const confirmDeleteTrip = useCallback(() => {
+    Alert.alert("Delete Trip", "Are you sure you want to delete this trip?", [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Delete",
+        style: "destructive",
+        onPress: () => {
+          deleteTrip();
+        },
+      },
+    ]);
+  }, [deleteTrip]);
+
   const handleNotesFocus = () => {
     notesFocusedRef.current = true;
     requestAnimationFrame(() => {
@@ -98,6 +111,7 @@ export default function TripDetail() {
           title={location.name}
           date={date}
           tripType={trip.tripType}
+          onDelete={confirmDeleteTrip}
         />
         <View
           style={[
@@ -132,16 +146,13 @@ export default function TripDetail() {
             onFocus={handleNotesFocus}
             onBlur={handleNotesBlur}
           />
-          <View style={styles.footerContainer}>
-            {status === "Planned" && (
+          {status === "Planned" && (
+            <View style={styles.footerContainer}>
               <PrimaryButton onPress={handleCompleteTrip}>
                 Mark Trip Complete
               </PrimaryButton>
-            )}
-            <TertiaryButton onPress={deleteTrip} textColor="red">
-              Delete
-            </TertiaryButton>
-          </View>
+            </View>
+          )}
         </View>
         <AddCatchDialog
           visible={addCatchVisible}
