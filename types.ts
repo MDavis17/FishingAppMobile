@@ -100,6 +100,7 @@ export interface SpeciesCatchHistory {
   totalCatches: number;
   largestLength: number | null;
   mostRecentCatchDate: string | null;
+  bestMonth: number | null;
   catches: SpeciesCatchHistoryItem[];
 }
 
@@ -169,6 +170,7 @@ export type RootStackParamList = {
   Settings: undefined;
   ThemeSettings: undefined;
   SpeciesDetail: { species: Species };
+  SpeciesCatchHistory: { species: Species };
   Conditions: undefined;
   Trips: undefined;
   Research: undefined;

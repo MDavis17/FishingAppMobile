@@ -17,7 +17,7 @@ import { Text, useTheme } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Species } from "types";
 
-interface PhotoItem {
+export interface PhotoItem {
   uri: string;
   label?: string;
 }
@@ -52,7 +52,7 @@ interface ViewerProps {
   onClose: () => void;
 }
 
-function SpeciesPhotoViewer({
+export function SpeciesPhotoViewer({
   visible,
   items,
   initialIndex,
