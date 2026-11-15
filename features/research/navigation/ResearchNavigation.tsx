@@ -1,4 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import SpeciesCatchHistoryScreen from "features/analysis/components/SpeciesCatchHistoryScreen";
 import SpeciesDetail from "features/analysis/components/SpeciesDetail";
 import { useTheme } from "react-native-paper";
 import { RootStackParamList } from "types";
@@ -46,6 +47,16 @@ export default function ResearchNavigation() {
         options={{
           headerShown: true,
           headerTitle: "",
+          ...primaryHeaderOptions,
+        }}
+      />
+      <Stack.Screen
+        name="SpeciesCatchHistory"
+        component={SpeciesCatchHistoryScreen}
+        options={{
+          headerShown: true,
+          headerTitle: "",
+          headerBackTitle: "Back",
           ...primaryHeaderOptions,
         }}
       />

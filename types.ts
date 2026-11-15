@@ -98,8 +98,8 @@ export interface SpeciesCatchHistoryItem {
 
 export interface SpeciesCatchHistory {
   totalCatches: number;
-  largestLength: number | null;
-  mostRecentCatchDate: string | null;
+  personalBest: SpeciesCatchHistoryItem | null;
+  mostRecentCatch: SpeciesCatchHistoryItem | null;
   catches: SpeciesCatchHistoryItem[];
 }
 
@@ -169,6 +169,7 @@ export type RootStackParamList = {
   Settings: undefined;
   ThemeSettings: undefined;
   SpeciesDetail: { species: Species };
+  SpeciesCatchHistory: { species: Species };
   Conditions: undefined;
   Trips: undefined;
   Research: undefined;
