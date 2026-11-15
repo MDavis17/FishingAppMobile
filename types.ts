@@ -96,11 +96,18 @@ export interface SpeciesCatchHistoryItem {
   weight?: number | null;
 }
 
+export interface MonthlyCatchCount {
+  month: number;
+  label: string;
+  count: number;
+}
+
 export interface SpeciesCatchHistory {
   totalCatches: number;
   personalBest: SpeciesCatchHistoryItem | null;
   mostRecentCatch: SpeciesCatchHistoryItem | null;
   catches: SpeciesCatchHistoryItem[];
+  monthlyCounts: MonthlyCatchCount[];
 }
 
 export interface SpeciesImage {
