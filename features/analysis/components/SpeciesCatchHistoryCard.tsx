@@ -2,17 +2,12 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import useSpeciesCatchHistory from "features/analysis/hooks/useSpeciesCatchHistory";
-import {
-  catchHistoryStatsInput,
-  findLargestCatch,
-  findMostRecentCatch,
-} from "features/analysis/utils/catchHistoryUtils";
-import React, { useMemo } from "react";
+import { catchHistoryStatsInput } from "features/analysis/utils/catchHistoryUtils";
+import React from "react";
 import { ActivityIndicator, Pressable, StyleSheet, View } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 import { RootStackParamList, Species } from "types";
 import Card from "common/components/Card";
-import SpeciesCatchHighlight from "./SpeciesCatchHighlight";
 import SpeciesCatchStats from "./SpeciesCatchStats";
 
 interface Props {
@@ -27,15 +22,6 @@ export default function SpeciesCatchHistoryCard({ species }: Props) {
   const lengthUnit = species.lengthUnits ?? "in";
 
   const totalCatches = history?.totalCatches ?? 0;
-
-  const largestCatch = useMemo(
-    () => findLargestCatch(history?.catches ?? []),
-    [history?.catches],
-  );
-  const mostRecentCatch = useMemo(
-    () => findMostRecentCatch(history?.catches ?? []),
-    [history?.catches],
-  );
 
   const statsProps = catchHistoryStatsInput(history, lengthUnit);
 
@@ -72,20 +58,6 @@ export default function SpeciesCatchHistoryCard({ species }: Props) {
     return (
       <View style={styles.body}>
         <SpeciesCatchStats {...statsProps} />
-        <View style={styles.highlightRow}>
-          <SpeciesCatchHighlight
-            species={species}
-            title="Largest Catch"
-            titleIcon="trophy"
-            catchItem={largestCatch}
-          />
-          <SpeciesCatchHighlight
-            species={species}
-            title="Most Recent Catch"
-            titleIcon="clock-outline"
-            catchItem={mostRecentCatch}
-          />
-        </View>
       </View>
     );
   })();
@@ -161,9 +133,5 @@ const styles = StyleSheet.create({
   },
   body: {
     gap: 12,
-  },
-  highlightRow: {
-    flexDirection: "row",
-    gap: 8,
   },
 });

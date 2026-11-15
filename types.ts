@@ -98,9 +98,8 @@ export interface SpeciesCatchHistoryItem {
 
 export interface SpeciesCatchHistory {
   totalCatches: number;
-  largestLength: number | null;
-  mostRecentCatchDate: string | null;
-  bestMonth: number | null;
+  personalBest: SpeciesCatchHistoryItem | null;
+  mostRecentCatch: SpeciesCatchHistoryItem | null;
   catches: SpeciesCatchHistoryItem[];
 }
 

@@ -18,53 +18,6 @@ export function formatCatchDate(iso: string): string {
   return format(parseISO(iso), "MMM d, yyyy");
 }
 
-export function formatBestMonth(month: number | null | undefined): string {
-  if (month == null) {
-    return "—";
-  }
-  return format(new Date(2000, month - 1, 1), "MMM");
-}
-
-export function findLargestCatch(
-  catches: SpeciesCatchHistoryItem[],
-): SpeciesCatchHistoryItem | null {
-  const withLength = catches.filter((c) => c.length != null);
-  if (withLength.length === 0) {
-    return null;
-  }
-
-  return withLength.reduce((best, current) => {
-    const bestLen = best.length!;
-    const currentLen = current.length!;
-    if (currentLen > bestLen) {
-      return current;
-    }
-    if (currentLen < bestLen) {
-      return best;
-    }
-    return parseISO(current.dateTime) > parseISO(best.dateTime)
-      ? current
-      : best;
-  });
-}
-
-export function findMostRecentCatch(
-  catches: SpeciesCatchHistoryItem[],
-): SpeciesCatchHistoryItem | null {
-  if (catches.length === 0) {
-    return null;
-  }
-  return catches.reduce((latest, current) =>
-    parseISO(current.dateTime) > parseISO(latest.dateTime) ? current : latest,
-  );
-}
-
-export function personalBestCatchId(
-  catches: SpeciesCatchHistoryItem[],
-): number | null {
-  return findLargestCatch(catches)?.id ?? null;
-}
-
 export type CatchHistoryYearFilter = "all" | "thisYear" | "lastYear";
 
 export type CatchHistorySort = "newest" | "oldest" | "longest";
@@ -151,8 +104,8 @@ export function catchHistoryStatsInput(
 ) {
   return {
     totalCatches: history?.totalCatches ?? 0,
-    largestLength: history?.largestLength ?? null,
-    bestMonth: history?.bestMonth ?? null,
+    personalBest: history?.personalBest ?? null,
+    mostRecentCatch: history?.mostRecentCatch ?? null,
     lengthUnit,
   };
 }

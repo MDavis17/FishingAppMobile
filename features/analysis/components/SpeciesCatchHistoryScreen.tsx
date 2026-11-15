@@ -10,7 +10,6 @@ import {
   CatchHistoryYearFilter,
   catchHistoryStatsInput,
   filterCatchesByYear,
-  personalBestCatchId,
   sortCatches,
   yearFilterCounts,
 } from "features/analysis/utils/catchHistoryUtils";
@@ -74,7 +73,7 @@ export default function SpeciesCatchHistoryScreen() {
   }, [allCatches, sort, yearFilter]);
 
   const visibleCatches = filteredSorted.slice(0, visibleCount);
-  const pbId = personalBestCatchId(allCatches);
+  const pbId = history?.personalBest?.id ?? null;
 
   useEffect(() => {
     setVisibleCount(PAGE_SIZE);

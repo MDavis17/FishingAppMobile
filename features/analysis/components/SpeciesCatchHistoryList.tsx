@@ -59,19 +59,16 @@ function CatchHistoryRow({
       <View style={styles.lengthWrap}>
         {isPersonalBest ? (
           <View
-            style={[
-              styles.pbBadge,
-              { backgroundColor: theme.colors.primaryContainer },
-            ]}
+            style={[styles.pbBadge, { backgroundColor: theme.colors.surface }]}
           >
             <MaterialCommunityIcons
               name="trophy"
               size={14}
-              color={theme.colors.primary}
+              color={theme.colors.onSurface}
             />
             <Text
               variant="titleSmall"
-              style={{ color: theme.colors.primary, fontWeight: "700" }}
+              style={{ color: theme.colors.onSurface, fontWeight: "700" }}
             >
               {formatCatchLength(item.length, lengthUnit)}
             </Text>
@@ -128,7 +125,9 @@ export default function SpeciesCatchHistoryList({
               item={item}
               lengthUnit={lengthUnit}
               imageUri={resolveImageUri(item)}
-              isPersonalBest={personalBestId != null && item.id === personalBestId}
+              isPersonalBest={
+                personalBestId != null && item.id === personalBestId
+              }
               onImagePress={() => setViewerVisible(true)}
             />
           </View>
@@ -157,7 +156,7 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   thumbnail: {
-    width: 56,
+    width: 65,
     height: 40,
     borderRadius: 4,
     resizeMode: "cover",
@@ -182,7 +181,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 4,
-    paddingHorizontal: 8,
+    paddingHorizontal: 12,
     paddingVertical: 4,
     borderRadius: 12,
   },
