@@ -1,5 +1,6 @@
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useMemo, useState } from "react";
-import { LayoutChangeEvent, StyleSheet, View } from "react-native";
+import { LayoutChangeEvent, StyleSheet, Text, View } from "react-native";
 import { useTheme } from "react-native-paper";
 import { BarChart } from "react-native-gifted-charts";
 import { MonthlyCatchCount } from "types";
@@ -12,6 +13,7 @@ const MONTH_COUNT = 12;
 
 interface Props {
   monthlyCounts: MonthlyCatchCount[];
+  personalBestMonth?: number | null;
 }
 
 function yAxisConfig(peak: number): {
@@ -34,7 +36,10 @@ function yAxisConfig(peak: number): {
   };
 }
 
-export default function SpeciesCatchMonthChart({ monthlyCounts }: Props) {
+export default function SpeciesCatchMonthChart({
+  monthlyCounts,
+  personalBestMonth = null,
+}: Props) {
   const theme = useTheme();
   const [width, setWidth] = useState(0);
 
@@ -79,8 +84,32 @@ export default function SpeciesCatchMonthChart({ monthlyCounts }: Props) {
         value: m.count,
         label: m.label,
         frontColor: theme.colors.primary,
+        labelComponent: () => (
+          <View style={styles.monthLabel}>
+            <Text
+              style={[
+                styles.monthText,
+                { color: theme.colors.onSurfaceVariant },
+              ]}
+            >
+              {m.label}
+            </Text>
+            {personalBestMonth != null && m.month === personalBestMonth ? (
+              <MaterialCommunityIcons
+                name="trophy"
+                size={14}
+                color={theme.colors.primary}
+              />
+            ) : null}
+          </View>
+        ),
       })),
-    [monthlyCounts, theme.colors.primary],
+    [
+      monthlyCounts,
+      personalBestMonth,
+      theme.colors.onSurfaceVariant,
+      theme.colors.primary,
+    ],
   );
 
   if (monthlyCounts.length === 0) {
@@ -111,10 +140,7 @@ export default function SpeciesCatchMonthChart({ monthlyCounts }: Props) {
             color: theme.colors.onSurfaceVariant,
             fontSize: 10,
           }}
-          xAxisLabelTextStyle={{
-            color: theme.colors.onSurfaceVariant,
-            fontSize: 9,
-          }}
+          xAxisTextNumberOfLines={2}
           disableScroll
           isAnimated
           animationDuration={500}
@@ -130,5 +156,12 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     marginRight: 12,
     paddingTop: 8,
+  },
+  monthLabel: {
+    alignItems: "center",
+  },
+  monthText: {
+    fontSize: 9,
+    textAlign: "center",
   },
 });

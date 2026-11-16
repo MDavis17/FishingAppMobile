@@ -1,4 +1,5 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { parseISO } from "date-fns";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import useSpeciesCatchHistory from "features/analysis/hooks/useSpeciesCatchHistory";
@@ -25,6 +26,9 @@ export default function SpeciesCatchHistoryCard({ species }: Props) {
   const totalCatches = history?.totalCatches ?? 0;
 
   const statsProps = catchHistoryStatsInput(history, lengthUnit);
+  const personalBestMonth = history?.personalBest?.dateTime
+    ? parseISO(history.personalBest.dateTime).getMonth() + 1
+    : null;
 
   const content = (() => {
     if (isLoading) {
@@ -60,7 +64,10 @@ export default function SpeciesCatchHistoryCard({ species }: Props) {
       <View style={styles.body}>
         <SpeciesCatchStats {...statsProps} />
         {history?.monthlyCounts?.length ? (
-          <SpeciesCatchMonthChart monthlyCounts={history.monthlyCounts} />
+          <SpeciesCatchMonthChart
+            monthlyCounts={history.monthlyCounts}
+            personalBestMonth={personalBestMonth}
+          />
         ) : null}
       </View>
     );
