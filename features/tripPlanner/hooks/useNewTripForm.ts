@@ -3,7 +3,13 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import * as Location from "expo-location";
 import { LatLng } from "react-native-maps";
-import { InputError, RootStackParamList, Species, TripType } from "types";
+import {
+  InputError,
+  LocationSelection,
+  RootStackParamList,
+  Species,
+  TripType,
+} from "types";
 import { addNewTrip, CreateTripPayload } from "../api/addNewTrip";
 
 export default function useNewTripForm() {
@@ -15,6 +21,9 @@ export default function useNewTripForm() {
   const [selectedLocation, setSelectedLocation] = useState<LatLng | null>(null);
   const [currentLocation, setCurrentLocation] = useState<LatLng | null>(null);
   const [locationName, setLocationName] = useState("");
+  const [generalLocationName, setGeneralLocationName] = useState<
+    string | null | undefined
+  >(undefined);
   const [targetSpecies, setTargetSpecies] = useState<Species[]>([]);
   const [inputError, setInputError] = useState<InputError | null>(null);
   const [isSaving, setIsSaving] = useState(false);
@@ -58,8 +67,15 @@ export default function useNewTripForm() {
 
     navigation.navigate("SelectLocation", {
       initialLocation: selectedLocation,
-      onLocationSelected: (newLocation: LatLng) => {
-        setSelectedLocation(newLocation);
+      onLocationSelected: (selection: LocationSelection) => {
+        setSelectedLocation(selection.coordinates);
+        setGeneralLocationName(selection.generalLocationName);
+
+        if (selection.placeName) {
+          setLocationName((prev) =>
+            prev.trim() ? prev : selection.placeName!.trim(),
+          );
+        }
       },
     });
   };
@@ -84,6 +100,9 @@ export default function useNewTripForm() {
         location: {
           coordinates: selectedLocation,
           name: locationName.trim(),
+          ...(generalLocationName != null && generalLocationName !== ""
+            ? { generalLocationName }
+            : {}),
         },
         status,
         tripType,

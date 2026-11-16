@@ -1,16 +1,19 @@
 import { useState, useEffect, useRef } from "react";
 import { Keyboard } from "react-native";
-import { LatLng } from "react-native-maps";
 import { getPlaceSuggestions } from "common/api/getPlaceSuggestions";
 import { getPlaceDetails } from "common/api/getPlaceDetails";
+import { generalLocationFromAddressComponents } from "common/utils/generalLocationFromAddressComponents";
+import { LocationSelection } from "types";
 
 export default function useCustomPlacesInput(
-  onLocationSelect: (location: LatLng) => void
+  onLocationSelect: (selection: LocationSelection) => void,
 ) {
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState<
+    { place_id: string; description: string }[]
+  >([]);
   const [showResults, setShowResults] = useState(false);
-  const inputRef = useRef();
+  const inputRef = useRef<{ blur: () => void } | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -41,14 +44,15 @@ export default function useCustomPlacesInput(
     };
   }, [query]);
 
-  const handleSelect = async (item) => {
+  const handleSelect = async (item: { place_id: string; description: string }) => {
     try {
       const response = await getPlaceDetails(item.place_id);
       if (!response.ok) {
         throw response;
       }
 
-      const location = response.data.result?.geometry?.location;
+      const result = response.data.result;
+      const location = result?.geometry?.location;
       if (location) {
         setQuery(item.description);
         setResults([]);
@@ -58,12 +62,19 @@ export default function useCustomPlacesInput(
 
         setTimeout(() => setShowResults(false), 500);
 
+        const generalLocationName = generalLocationFromAddressComponents(
+          result.address_components,
+        );
+
         onLocationSelect({
-          latitude: location.lat,
-          longitude: location.lng,
+          coordinates: {
+            latitude: location.lat,
+            longitude: location.lng,
+          },
+          placeName: result.name,
+          generalLocationName,
         });
       } else {
-        // maybe some better alerting for the user
         console.warn("Location not found in place details");
       }
     } catch (err) {

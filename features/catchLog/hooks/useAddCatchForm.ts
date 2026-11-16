@@ -1,5 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
-import { CatchEntry, WaterType, InputError } from "../../../types";
+import {
+  CatchEntry,
+  LocationSelection,
+  WaterType,
+  InputError,
+} from "../../../types";
 import { useNavigation } from "@react-navigation/native";
 import * as Location from "expo-location";
 import { LatLng } from "react-native-maps";
@@ -23,6 +28,9 @@ export default function useAddCatchForm({
   const [bait, setBait] = useState("");
   const [inputError, setInputError] = useState<InputError | null>(null);
   const [selectedLocation, setSelectedLocation] = useState<LatLng | null>(null);
+  const [generalLocationName, setGeneralLocationName] = useState<
+    string | null | undefined
+  >(undefined);
   const [currentLocation, setCurrentLocation] = useState<LatLng | null>(null);
   const { trip } = useTripContext();
 
@@ -70,9 +78,11 @@ export default function useAddCatchForm({
 
     if (trip) {
       setSelectedLocation(trip.location.coordinates || currentLocation);
+      setGeneralLocationName(trip.location.generalLocationName);
       setDate(new Date(trip.date));
     } else if (currentLocation) {
       setSelectedLocation(currentLocation);
+      setGeneralLocationName(undefined);
       setDate(new Date());
     }
   }, [trip, currentLocation]);
@@ -91,11 +101,30 @@ export default function useAddCatchForm({
     const trimmedLength = length.trim();
     const parsedLength = trimmedLength ? Number(trimmedLength) : undefined;
 
+    const coordsMatchTrip =
+      trip &&
+      selectedLocation.latitude === trip.location.coordinates.latitude &&
+      selectedLocation.longitude === trip.location.coordinates.longitude;
+
+    let resolvedGeneralName = generalLocationName;
+    if (
+      (resolvedGeneralName === undefined || resolvedGeneralName === null) &&
+      coordsMatchTrip
+    ) {
+      resolvedGeneralName = trip.location.generalLocationName;
+    }
+
     const newCatch: CatchEntry = {
       dateTime: date.toISOString(),
       species,
       waterType: trip?.waterType || WaterType.Freshwater,
-      location: { coordinates: selectedLocation, name: "" },
+      location: {
+        coordinates: selectedLocation,
+        name: "",
+        ...(resolvedGeneralName != null && resolvedGeneralName !== ""
+          ? { generalLocationName: resolvedGeneralName }
+          : {}),
+      },
       bait,
       ...(parsedLength !== undefined ? { length: parsedLength } : {}),
     };
@@ -117,8 +146,9 @@ export default function useAddCatchForm({
 
     navigation.navigate("SelectLocation", {
       initialLocation: selectedLocation,
-      onLocationSelected: (newLocation: LatLng) => {
-        setSelectedLocation(newLocation);
+      onLocationSelected: (selection: LocationSelection) => {
+        setSelectedLocation(selection.coordinates);
+        setGeneralLocationName(selection.generalLocationName);
       },
     });
   };
@@ -158,6 +188,7 @@ export default function useAddCatchForm({
       }
 
       setSelectedLocation(trip.location.coordinates || currentLatLong);
+      setGeneralLocationName(trip.location.generalLocationName);
       setDate(new Date(trip.date));
     })();
   }, [visible, trip]);

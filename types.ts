@@ -22,6 +22,13 @@ export interface WeatherCondition {
 export interface Location {
   name: string;
   coordinates: LatLng;
+  generalLocationName?: string | null;
+}
+
+export interface LocationSelection {
+  coordinates: LatLng;
+  placeName?: string;
+  generalLocationName?: string | null;
 }
 
 export interface CatchEntry {
@@ -167,7 +174,7 @@ export type RootStackParamList = {
   Home: undefined;
   SelectLocation: {
     initialLocation: LatLng;
-    onLocationSelected: (newLocation: LatLng) => void;
+    onLocationSelected: (selection: LocationSelection) => void;
   };
   TripDetail: {
     trip: Trip;

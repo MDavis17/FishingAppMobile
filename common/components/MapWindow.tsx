@@ -9,7 +9,7 @@ import MapView, {
 } from "react-native-maps";
 import CustomPlacesInput from "./CustomPlacesInput";
 import { useTheme } from "react-native-paper";
-import { RangeData } from "types";
+import { LocationSelection, RangeData } from "types";
 
 const DEFAULT_REGION: Region = {
   latitude: 39.8283,
@@ -30,7 +30,7 @@ interface Props {
   pins?: MapPin[] | LatLng[];
   latDelta?: number;
   lngDelta?: number;
-  onLocationSelect?: (newLocation: LatLng) => void;
+  onLocationSelect?: (selection: LocationSelection) => void;
   isViewOnly?: boolean;
   rangeData?: RangeData;
   animationDuration?: number;
@@ -161,7 +161,7 @@ export default function MapWindow({
     if (isViewOnly || !onLocationSelect) {
       return;
     }
-    onLocationSelect(event.nativeEvent.coordinate);
+    onLocationSelect({ coordinates: event.nativeEvent.coordinate });
   };
 
   const getPolygonFillColor = (occurrenceProbability: number) => {

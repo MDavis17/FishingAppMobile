@@ -109,6 +109,7 @@ export default function TripDetail() {
         <TripDetailHeader
           status={status}
           title={location.name}
+          generalLocationName={location.generalLocationName}
           date={date}
           tripType={trip.tripType}
           onDelete={confirmDeleteTrip}
