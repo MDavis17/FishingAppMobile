@@ -45,6 +45,7 @@ export interface IndividualCatch {
   time: string;
   length?: number;
   bait?: string;
+  isPersonalBest?: boolean;
 }
 
 export interface SpeciesGroup {
@@ -52,6 +53,7 @@ export interface SpeciesGroup {
   speciesImage?: string;
   count: number;
   largestLength?: number;
+  includesPersonalBest?: boolean;
   catches: IndividualCatch[];
 }
 

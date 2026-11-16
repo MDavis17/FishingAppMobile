@@ -40,12 +40,22 @@ export default function SpeciesGroupRow({ group, expanded, onToggle }: Props) {
           )}
         </View>
         <View style={styles.groupText}>
-          <Text
-            variant="titleSmall"
-            style={{ color: theme.colors.onSurface, fontWeight: "600" }}
-          >
-            {group.species}
-          </Text>
+          <View style={styles.speciesTitleRow}>
+            <Text
+              variant="titleSmall"
+              style={{ color: theme.colors.onSurface, fontWeight: "600" }}
+            >
+              {group.species}
+            </Text>
+            {group.includesPersonalBest ? (
+              <MaterialCommunityIcons
+                name="trophy"
+                size={16}
+                color={theme.colors.primary}
+                accessibilityLabel="Includes personal best"
+              />
+            ) : null}
+          </View>
           <Text
             variant="bodySmall"
             style={{ color: theme.colors.onSurfaceVariant }}
@@ -96,6 +106,14 @@ function IndividualCatchRow({ item }: { item: IndividualCatch }) {
           {detailParts.join(" · ")}
         </Text>
       )}
+      {item.isPersonalBest ? (
+        <MaterialCommunityIcons
+          name="trophy"
+          size={14}
+          color={theme.colors.primary}
+          accessibilityLabel="Personal best"
+        />
+      ) : null}
     </View>
   );
 }
@@ -131,6 +149,11 @@ const styles = StyleSheet.create({
   },
   groupText: {
     flex: 1,
+  },
+  speciesTitleRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
   },
   individualRow: {
     flexDirection: "row",
