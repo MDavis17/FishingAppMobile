@@ -1,4 +1,8 @@
-import { getWeatherIconName, formatWind } from "common/utils/WeatherUtils";
+import {
+  formatSwell,
+  formatWind,
+  getWeatherIconName,
+} from "common/utils/WeatherUtils";
 import TripCondition from "features/tripPlanner/components/TripCondition";
 import { StyleSheet, View } from "react-native";
 import { TripConditions } from "common/api/getTripConditions";
@@ -49,12 +53,12 @@ export default function TripConditionsMetrics({ conditions }: Props) {
         icon="gauge"
       />
       <TripCondition
-        label="Surf"
-        value={
-          conditions.surf_height_ft !== null
-            ? `${conditions.surf_height_ft.toFixed(1)} ft`
-            : "—"
-        }
+        label="Swell"
+        value={formatSwell(
+          conditions.swell_height_ft,
+          conditions.swell_period_s,
+          conditions.swell_direction_deg,
+        )}
         icon="waves"
       />
     </View>

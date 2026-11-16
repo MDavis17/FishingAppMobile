@@ -10,7 +10,9 @@ export interface TripConditions {
   wind_direction_deg: number | null;
   wind_gusts_mph: number | null;
   pressure_inhg: number | null;
-  surf_height_ft: number | null;
+  swell_height_ft: number | null;
+  swell_period_s: number | null;
+  swell_direction_deg: number | null;
   source: TripConditionsSource;
 }
 
