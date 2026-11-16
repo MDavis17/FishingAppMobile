@@ -74,3 +74,18 @@ export function formatWind(
     ? `${Math.round(speedMph)} mph ${compass}`
     : `${Math.round(speedMph)} mph`;
 }
+
+export function formatSwell(
+  heightFt: number | null,
+  periodS: number | null,
+  directionDeg: number | null,
+): string {
+  if (heightFt === null) {
+    return "—";
+  }
+  const height = `${heightFt.toFixed(1)} ft`;
+  const period = periodS !== null ? `${Math.round(periodS)}s` : null;
+  const compass = windDirectionToCompass(directionDeg);
+  const detail = [period, compass].filter(Boolean).join(" - ");
+  return detail ? `${height}\n${detail}` : height;
+}

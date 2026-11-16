@@ -1,4 +1,8 @@
-import { getWeatherIconName, formatWind } from "common/utils/WeatherUtils";
+import {
+  formatSwell,
+  formatWind,
+  getWeatherIconName,
+} from "common/utils/WeatherUtils";
 import TripCondition from "features/tripPlanner/components/TripCondition";
 import { StyleSheet, View } from "react-native";
 import { TripForecast as TripForecastType } from "common/api/getTripForecast";
@@ -46,13 +50,13 @@ export default function TripForecast({ forecast }: Props) {
         icon="gauge"
       />
       <TripCondition
-        label="Surf"
-        value={
-          forecast.surf_height_ft !== null
-            ? `${forecast.surf_height_ft.toFixed(1)} ft`
-            : "—"
-        }
-        icon="wave"
+        label="Swell"
+        value={formatSwell(
+          forecast.swell_height_ft,
+          forecast.swell_period_s,
+          forecast.swell_direction_deg,
+        )}
+        icon="waves"
       />
     </View>
   );
