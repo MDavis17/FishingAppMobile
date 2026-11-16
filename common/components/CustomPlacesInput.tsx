@@ -8,10 +8,10 @@ import {
   StyleSheet,
 } from "react-native";
 import useCustomPlacesInput from "common/hooks/useCustomPlacesInput";
-import { LatLng } from "react-native-maps";
+import { LocationSelection } from "types";
 
 interface Props {
-  onLocationSelect: (location: LatLng) => void;
+  onLocationSelect: (selection: LocationSelection) => void;
 }
 
 export default function CustomPlacesInput({ onLocationSelect }: Props) {

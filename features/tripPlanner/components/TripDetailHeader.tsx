@@ -8,6 +8,7 @@ import { TRIP_TYPE_ICONS } from "../constants";
 interface Props {
   status: Trip["status"];
   title: string;
+  generalLocationName?: string | null;
   date: string;
   tripType: TripType;
   onDelete: () => void;
@@ -16,6 +17,7 @@ interface Props {
 export default function TripDetailHeader({
   status,
   title,
+  generalLocationName,
   date,
   tripType,
   onDelete,
@@ -46,6 +48,12 @@ export default function TripDetailHeader({
         <Text variant="titleLarge" style={styles.title}>
           {title}
         </Text>
+        {generalLocationName ? (
+          <View style={styles.metaItem}>
+            <Icon source="map-marker" size={20} />
+            <Text variant="bodyMedium">{generalLocationName}</Text>
+          </View>
+        ) : null}
       </View>
       <View style={styles.subHeaderContainer}>
         <View style={styles.metaItem}>
