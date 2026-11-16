@@ -8,6 +8,7 @@ import { ActivityIndicator, Pressable, StyleSheet, View } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 import { RootStackParamList, Species } from "types";
 import Card from "common/components/Card";
+import SpeciesCatchMonthChart from "./SpeciesCatchMonthChart";
 import SpeciesCatchStats from "./SpeciesCatchStats";
 
 interface Props {
@@ -58,6 +59,9 @@ export default function SpeciesCatchHistoryCard({ species }: Props) {
     return (
       <View style={styles.body}>
         <SpeciesCatchStats {...statsProps} />
+        {history?.monthlyCounts?.length ? (
+          <SpeciesCatchMonthChart monthlyCounts={history.monthlyCounts} />
+        ) : null}
       </View>
     );
   })();
