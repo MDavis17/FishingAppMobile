@@ -48,8 +48,8 @@ export default function AddCatchDialog({
     setInputError,
     handleAddCatch,
     selectedLocation,
-    setSelectedLocation,
     currentLocation,
+    handleUseMyLocation,
     handleSelectNewLocation,
   } = useAddCatchForm({
     addNewCatch,
@@ -151,11 +151,7 @@ export default function AddCatchDialog({
             <View style={styles.mapActionButton}>
               <SecondaryButton
                 icon="crosshairs-gps"
-                onPress={() => {
-                  if (currentLocation) {
-                    setSelectedLocation(currentLocation);
-                  }
-                }}
+                onPress={handleUseMyLocation}
               >
                 Use My Location
               </SecondaryButton>
