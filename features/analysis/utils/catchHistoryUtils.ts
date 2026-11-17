@@ -103,7 +103,7 @@ export function catchHistoryStatsInput(
   lengthUnit: string,
 ) {
   return {
-    totalCatches: history?.totalCatches ?? 0,
+    // totalCatches: history?.totalCatches ?? 0,
     personalBest: history?.personalBest ?? null,
     mostRecentCatch: history?.mostRecentCatch ?? null,
     lengthUnit,

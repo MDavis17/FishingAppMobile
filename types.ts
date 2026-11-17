@@ -103,6 +103,7 @@ export interface SpeciesCatchHistoryItem {
   dateTime: string;
   length?: number | null;
   weight?: number | null;
+  generalLocationName?: string | null;
 }
 
 export interface MonthlyCatchCount {

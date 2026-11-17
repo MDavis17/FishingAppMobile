@@ -139,6 +139,14 @@ export default function useAddCatchForm({
     onSuccess?.();
   };
 
+  const handleUseMyLocation = () => {
+    if (!currentLocation) {
+      return;
+    }
+    setSelectedLocation(currentLocation);
+    setGeneralLocationName(undefined);
+  };
+
   const handleSelectNewLocation = () => {
     if (!selectedLocation) {
       return;
@@ -208,6 +216,7 @@ export default function useAddCatchForm({
     selectedLocation,
     setSelectedLocation,
     currentLocation,
+    handleUseMyLocation,
     handleSelectNewLocation,
   };
 }

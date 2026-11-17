@@ -55,6 +55,22 @@ function CatchHistoryRow({
             {formatCatchDate(item.dateTime)}
           </Text>
         </View>
+        {item.generalLocationName ? (
+          <View style={styles.dateRow}>
+            <MaterialCommunityIcons
+              name="map-marker"
+              size={14}
+              color={theme.colors.onSurfaceVariant}
+            />
+            <Text
+              variant="bodySmall"
+              numberOfLines={2}
+              style={{ color: theme.colors.onSurfaceVariant, flexShrink: 1 }}
+            >
+              {item.generalLocationName}
+            </Text>
+          </View>
+        ) : null}
       </View>
       <View style={styles.lengthWrap}>
         {isPersonalBest ? (
@@ -164,6 +180,7 @@ const styles = StyleSheet.create({
   meta: {
     flex: 1,
     justifyContent: "center",
+    gap: 4,
   },
   dateRow: {
     flexDirection: "row",
