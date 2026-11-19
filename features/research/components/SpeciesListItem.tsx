@@ -4,6 +4,7 @@ import React from "react";
 import { Image, Pressable, StyleSheet, View } from "react-native";
 import { Chip, Text, useTheme } from "react-native-paper";
 import { Species } from "types";
+import Card from "common/components/Card";
 
 interface Props {
   species: Species;
@@ -15,7 +16,7 @@ export default function SpeciesListItem({ species, onPress }: Props) {
   const imageUri = speciesImageUri(species.image);
 
   const content = (
-    <>
+    <Card style={styles.card}>
       <View style={styles.thumbnailContainer}>
         {imageUri ? (
           <Image source={{ uri: imageUri }} style={styles.thumbnail} />
@@ -60,7 +61,12 @@ export default function SpeciesListItem({ species, onPress }: Props) {
           />
         ) : null}
       </View>
-    </>
+      <MaterialCommunityIcons
+        name="chevron-right"
+        size={26}
+        color={theme.colors.onSurface}
+      />
+    </Card>
   );
 
   if (onPress) {
@@ -78,12 +84,15 @@ export default function SpeciesListItem({ species, onPress }: Props) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flexDirection: "row",
+  card: {
     alignItems: "center",
-    paddingVertical: 10,
+    flexDirection: "row",
     paddingHorizontal: 4,
+    paddingVertical: 10,
     gap: 12,
+  },
+  container: {
+    alignItems: "center",
   },
   thumbnailContainer: {
     width: 130,
