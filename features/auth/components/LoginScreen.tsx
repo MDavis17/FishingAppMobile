@@ -24,11 +24,15 @@ export default function LoginScreen({ navigation }: Props) {
     }
 
     setIsSubmitting(true);
-    const result = await login(email, password);
-    setIsSubmitting(false);
-
-    if (!result.ok) {
-      setError(result.error ?? "Login failed.");
+    try {
+      const result = await login(email, password);
+      if (!result.ok) {
+        setError(result.error ?? "Login failed.");
+      }
+    } catch {
+      setError("An unexpected error occurred. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 

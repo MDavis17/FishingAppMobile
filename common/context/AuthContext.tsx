@@ -76,9 +76,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           error: apiErrorMessage(meResponse.data, "Session expired"),
         };
       }
-      await setStoredAuthToken(accessToken);
       setToken(accessToken);
       setUser(meResponse.data as AuthUser);
+      void setStoredAuthToken(accessToken).catch((err) =>
+        console.warn("Failed to persist token:", err)
+      );
       return { ok: true };
     },
     []

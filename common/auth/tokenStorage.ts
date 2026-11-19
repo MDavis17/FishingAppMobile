@@ -12,7 +12,12 @@ export async function getStoredAuthToken(): Promise<string | null> {
 }
 
 export async function setStoredAuthToken(token: string): Promise<void> {
-  await SecureStore.setItemAsync(AUTH_TOKEN_KEY, token);
+  try {
+    await SecureStore.setItemAsync(AUTH_TOKEN_KEY, token);
+  } catch (err) {
+    console.error("tokenStorage: failed to store token", err);
+    throw err;
+  }
 }
 
 export async function clearStoredAuthToken(): Promise<void> {
