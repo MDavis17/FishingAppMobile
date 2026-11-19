@@ -1,10 +1,19 @@
-import useSpeciesList from "features/analysis/hooks/useSpeciesList";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import React, { useCallback, useMemo } from "react";
-import { ActivityIndicator, StyleSheet, View } from "react-native";
-import SearchableList from "common/components/SearchableList";
+import React, { useCallback, useEffect, useState } from "react";
+import {
+  ActivityIndicator,
+  FlatList,
+  RefreshControl,
+  StyleSheet,
+  View,
+} from "react-native";
 import { RootStackParamList, Species } from "types";
+import useFilteredSpeciesList, {
+  DEFAULT_SPECIES_FILTERS,
+  SpeciesListFilters,
+} from "../hooks/useFilteredSpeciesList";
+import SpeciesListHeader from "./SpeciesListHeader";
 import SpeciesListItem from "./SpeciesListItem";
 
 type SpeciesListNavigationProp = NativeStackNavigationProp<
@@ -17,14 +26,29 @@ interface Props {
   placeholderText: string;
 }
 
+const SEARCH_DEBOUNCE_MS = 300;
+
 export default function SpeciesList({ kingdom, placeholderText }: Props) {
   const navigation = useNavigation<SpeciesListNavigationProp>();
-  const { isLoading, isRefreshing, speciesList, favoriteSpeciesList, refreshSpecies } =
-    useSpeciesList(kingdom);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [filters, setFilters] = useState<SpeciesListFilters>(
+    DEFAULT_SPECIES_FILTERS,
+  );
 
-  const combinedSpeciesList = useMemo(() => {
-    return [...favoriteSpeciesList, ...speciesList];
-  }, [favoriteSpeciesList, speciesList]);
+  useEffect(() => {
+    const handle = setTimeout(() => {
+      setDebouncedSearch(searchQuery);
+    }, SEARCH_DEBOUNCE_MS);
+    return () => clearTimeout(handle);
+  }, [searchQuery]);
+
+  const { isInitialLoading, isRefreshing, speciesList, refreshSpecies } =
+    useFilteredSpeciesList({
+      kingdom,
+      search: debouncedSearch,
+      filters,
+    });
 
   const handleSpeciesPress = useCallback(
     (species: Species) => {
@@ -34,28 +58,43 @@ export default function SpeciesList({ kingdom, placeholderText }: Props) {
   );
 
   return (
-    <View style={styles.container}>
-      {isLoading ? (
-        <ActivityIndicator style={styles.loader} />
-      ) : (
-        <SearchableList
-          list={combinedSpeciesList}
-          placeholderText={placeholderText}
-          refreshing={isRefreshing}
-          onRefresh={refreshSpecies}
-          renderItem={({ item }) => (
-            <SpeciesListItem
-              species={item}
-              onPress={
-                kingdom === "animal"
-                  ? () => handleSpeciesPress(item)
-                  : undefined
-              }
-            />
-          )}
-        />
-      )}
-    </View>
+    <>
+      <SpeciesListHeader
+        kingdom={kingdom}
+        placeholderText={placeholderText}
+        searchQuery={searchQuery}
+        onSearchQueryChange={setSearchQuery}
+        filters={filters}
+        onReplaceFilters={setFilters}
+      />
+      <View style={styles.container}>
+        {isInitialLoading ? (
+          <ActivityIndicator style={styles.loader} />
+        ) : (
+          <FlatList
+            data={speciesList}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => (
+              <SpeciesListItem
+                species={item}
+                onPress={
+                  kingdom === "animal"
+                    ? () => handleSpeciesPress(item)
+                    : undefined
+                }
+              />
+            )}
+            refreshControl={
+              <RefreshControl
+                refreshing={isRefreshing}
+                onRefresh={refreshSpecies}
+              />
+            }
+            contentContainerStyle={styles.listContent}
+          />
+        )}
+      </View>
+    </>
   );
 }
 
@@ -71,9 +110,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 16,
-    paddingTop: 16,
+    paddingTop: 8,
   },
   loader: {
     marginTop: 24,
+  },
+  listContent: {
+    paddingBottom: 16,
   },
 });
