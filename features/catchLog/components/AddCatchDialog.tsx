@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import {
   View,
   StyleSheet,
@@ -29,12 +29,7 @@ export default function AddCatchDialog({
   addNewCatch,
 }: Props) {
   const theme = useTheme();
-  const { speciesList, favoriteSpeciesList } = useSpeciesList();
-
-  const combinedSpeciesList = useMemo(
-    () => [...favoriteSpeciesList, ...speciesList],
-    [favoriteSpeciesList, speciesList],
-  );
+  const { speciesList } = useSpeciesList();
   const {
     bait,
     setBait,
@@ -66,7 +61,7 @@ export default function AddCatchDialog({
     onDismiss();
   };
 
-  const selectedSpecies = combinedSpeciesList.find((s) => s.name === species);
+  const selectedSpecies = speciesList.find((s) => s.name === species);
   const lengthUnit = selectedSpecies?.lengthUnits ?? "in";
 
   return (
@@ -88,9 +83,9 @@ export default function AddCatchDialog({
           <View style={styles.speciesRow}>
             <View style={styles.speciesInput}>
               <SearchableDropdownInput
-                options={combinedSpeciesList}
+                options={speciesList}
                 value={
-                  combinedSpeciesList.find((s) => s.name === species) ?? null
+                  speciesList.find((s) => s.name === species) ?? null
                 }
                 onSelect={(s) => setSpecies(s ? s.name : "")}
                 getOptionLabel={(s) => s.name}

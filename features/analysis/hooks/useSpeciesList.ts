@@ -5,7 +5,6 @@ import { toggleSpeciesFavorite } from "../api/toggleSpeciesFavorite";
 
 type CacheEntry = {
   speciesList: Species[];
-  favoriteSpeciesList: Species[];
 };
 
 type ListListener = (entry: CacheEntry) => void;
@@ -33,63 +32,18 @@ function notifyListeners(key: string, entry: CacheEntry) {
   listenersByKey.get(key)?.forEach((listener) => listener(entry));
 }
 
-function insertSortedByName(list: Species[], species: Species): Species[] {
-  const next = [...list, species];
-  next.sort((a, b) => a.name.localeCompare(b.name));
-  return next;
-}
-
-function moveFavoriteInLists(
-  speciesList: Species[],
-  favoriteSpeciesList: Species[],
-  speciesId: number,
-  isFavorite: boolean,
-): CacheEntry | null {
-  const inFavorites = favoriteSpeciesList.find((s) => s.id === speciesId);
-  const inSpecies = speciesList.find((s) => s.id === speciesId);
-  const species = inFavorites ?? inSpecies;
-  if (!species || species.isFavorite === isFavorite) {
-    return null;
-  }
-
-  const updated = { ...species, isFavorite };
-
-  if (isFavorite) {
-    return {
-      speciesList: speciesList.filter((s) => s.id !== speciesId),
-      favoriteSpeciesList: insertSortedByName(
-        favoriteSpeciesList.filter((s) => s.id !== speciesId),
-        updated,
-      ),
-    };
-  }
-
-  return {
-    speciesList: insertSortedByName(
-      speciesList.filter((s) => s.id !== speciesId),
-      updated,
-    ),
-    favoriteSpeciesList: favoriteSpeciesList.filter((s) => s.id !== speciesId),
-  };
-}
-
 function applyFavoriteToCache(speciesId: number, isFavorite: boolean) {
   for (const [key, entry] of speciesCache.entries()) {
-    const next = moveFavoriteInLists(
-      entry.speciesList,
-      entry.favoriteSpeciesList,
-      speciesId,
-      isFavorite,
-    );
-    if (!next) {
+    const index = entry.speciesList.findIndex((s) => s.id === speciesId);
+    if (index === -1) {
       continue;
     }
+    const updatedList = [...entry.speciesList];
+    updatedList[index] = { ...updatedList[index], isFavorite };
+    const next: CacheEntry = { speciesList: updatedList };
     speciesCache.set(key, next);
     notifyListeners(key, next);
   }
-
-  // If list was never loaded, buckets are empty — still try to update any in-memory
-  // hooks by checking keys that have listeners but no cache yet (skip — no data to move)
 }
 
 export function applySpeciesFavorite(speciesId: number, isFavorite: boolean) {
@@ -103,23 +57,18 @@ export default function useSpeciesList(kingdom?: string) {
   const [speciesList, setSpeciesList] = useState<Species[]>(
     cached?.speciesList ?? [],
   );
-  const [favoriteSpeciesList, setFavoriteSpeciesList] = useState<Species[]>(
-    cached?.favoriteSpeciesList ?? [],
-  );
   const [isLoading, setIsLoading] = useState(!cached);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   useEffect(() => {
     return subscribe(key, (entry) => {
       setSpeciesList(entry.speciesList);
-      setFavoriteSpeciesList(entry.favoriteSpeciesList);
     });
   }, [key]);
 
   const applyEntry = useCallback((entry: CacheEntry) => {
     speciesCache.set(key, entry);
     setSpeciesList(entry.speciesList);
-    setFavoriteSpeciesList(entry.favoriteSpeciesList);
     notifyListeners(key, entry);
   }, [key]);
 
@@ -132,7 +81,9 @@ export default function useSpeciesList(kingdom?: string) {
       }
 
       try {
-        const response = await getSpecies(kingdom);
+        const response = await getSpecies(
+          kingdom ? { kingdom, sort: "name_asc" } : { sort: "name_asc" },
+        );
 
         if (!response.ok) {
           throw new Error("Something went wrong");
@@ -140,7 +91,6 @@ export default function useSpeciesList(kingdom?: string) {
 
         const entry: CacheEntry = {
           speciesList: response.data.species,
-          favoriteSpeciesList: response.data.favoriteSpecies,
         };
         applyEntry(entry);
       } catch (error) {
@@ -176,9 +126,7 @@ export default function useSpeciesList(kingdom?: string) {
           throw new Error("Something went wrong");
         }
 
-        const inFavorites = favoriteSpeciesList.find((s) => s.id === speciesId);
-        const inSpecies = speciesList.find((s) => s.id === speciesId);
-        const species = inFavorites ?? inSpecies;
+        const species = speciesList.find((s) => s.id === speciesId);
         if (!species) {
           return;
         }
@@ -189,16 +137,14 @@ export default function useSpeciesList(kingdom?: string) {
         throw error;
       }
     },
-    [favoriteSpeciesList, speciesList],
+    [speciesList],
   );
 
   return {
     isLoading,
     isRefreshing,
     speciesList,
-    favoriteSpeciesList,
     setSpeciesList,
-    setFavoriteSpeciesList,
     refreshSpecies,
     fetchSpecies: refreshSpecies,
     toggleFavorite,
