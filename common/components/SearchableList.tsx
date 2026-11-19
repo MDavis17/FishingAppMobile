@@ -1,4 +1,10 @@
-import { FlatList, ListRenderItem, TextInput, View } from "react-native";
+import {
+  FlatList,
+  ListRenderItem,
+  RefreshControl,
+  TextInput,
+  View,
+} from "react-native";
 import { useMemo, useState } from "react";
 import { useTheme } from "react-native-paper";
 
@@ -6,12 +12,16 @@ interface Props {
   list: any[];
   placeholderText?: string;
   renderItem: ListRenderItem<any>;
+  refreshing?: boolean;
+  onRefresh?: () => void;
 }
 
 export default function SearchableList({
   list,
   placeholderText = "Search...",
   renderItem,
+  refreshing = false,
+  onRefresh,
 }: Props) {
   const [query, setQuery] = useState("");
   const theme = useTheme();
@@ -43,6 +53,11 @@ export default function SearchableList({
         data={filteredSpecies}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}
+        refreshControl={
+          onRefresh ? (
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          ) : undefined
+        }
       />
     </View>
   );

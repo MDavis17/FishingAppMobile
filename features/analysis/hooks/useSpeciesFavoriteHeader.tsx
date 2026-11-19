@@ -6,6 +6,7 @@ import {
   useRoute,
 } from "@react-navigation/native";
 import { toggleSpeciesFavorite } from "features/analysis/api/toggleSpeciesFavorite";
+import { applySpeciesFavorite } from "features/analysis/hooks/useSpeciesList";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Pressable, StyleSheet } from "react-native";
 import { useTheme } from "react-native-paper";
@@ -67,6 +68,7 @@ export default function useSpeciesFavoriteHeader(
       }
 
       const updatedSpecies = { ...species, isFavorite: nextValue };
+      applySpeciesFavorite(species.id, nextValue);
 
       if (screen === "SpeciesDetail") {
         navigation.setParams({ species: updatedSpecies } as never);
