@@ -9,12 +9,14 @@ export type SpeciesListFilters = {
   caughtStatus: SpeciesCaughtStatus;
   favoritesOnly: boolean;
   nameSort: SpeciesSort;
+  speciesGroups: string[];
 };
 
 export const DEFAULT_SPECIES_FILTERS: SpeciesListFilters = {
   caughtStatus: "All",
   favoritesOnly: false,
   nameSort: "name_asc",
+  speciesGroups: [],
 };
 
 type Options = {
@@ -47,6 +49,8 @@ export default function useFilteredSpeciesList({
       caught: kingdom === "animal" ? caught : undefined,
       favoritesOnly: filters.favoritesOnly || undefined,
       sort: filters.nameSort,
+      groups:
+        filters.speciesGroups.length > 0 ? filters.speciesGroups : undefined,
     };
   }, [filters, kingdom, search]);
 

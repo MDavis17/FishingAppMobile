@@ -2,7 +2,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { speciesImageUri } from "features/analysis/utils/imageUtils";
 import React from "react";
 import { Image, Pressable, StyleSheet, View } from "react-native";
-import { Text, useTheme } from "react-native-paper";
+import { Chip, Text, useTheme } from "react-native-paper";
 import { Species } from "types";
 
 interface Props {
@@ -28,12 +28,29 @@ export default function SpeciesListItem({ species, onPress }: Props) {
           />
         )}
       </View>
-      <Text
-        style={[styles.name, { color: theme.colors.onSurface }]}
-        numberOfLines={2}
-      >
-        {species.name}
-      </Text>
+      <View style={styles.textContainer}>
+        <Text
+          style={[styles.name, { color: theme.colors.onSurface }]}
+          numberOfLines={2}
+        >
+          {species.name}
+        </Text>
+        {species.group ? (
+          <Chip
+            compact
+            style={[
+              styles.groupChip,
+              { backgroundColor: theme.colors.surfaceVariant },
+            ]}
+            textStyle={[
+              styles.groupChipText,
+              { color: theme.colors.onSurfaceVariant },
+            ]}
+          >
+            {species.group}
+          </Chip>
+        ) : null}
+      </View>
       <View style={styles.favoriteContainer}>
         {species.isFavorite ? (
           <MaterialCommunityIcons
@@ -84,10 +101,19 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 6,
   },
-  name: {
+  textContainer: {
     flex: 1,
+    gap: 4,
+  },
+  name: {
     fontSize: 16,
     fontWeight: "500",
+  },
+  groupChip: {
+    alignSelf: "flex-start",
+  },
+  groupChipText: {
+    fontSize: 11,
   },
   favoriteContainer: {
     width: 24,

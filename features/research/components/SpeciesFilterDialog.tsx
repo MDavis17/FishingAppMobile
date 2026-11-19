@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import {
   Button,
+  Chip,
   Dialog,
   Portal,
   RadioButton,
@@ -10,6 +11,7 @@ import {
   Text,
   useTheme,
 } from "react-native-paper";
+import { SPECIES_GROUPS } from "../constants";
 import {
   DEFAULT_SPECIES_FILTERS,
   SpeciesListFilters,
@@ -46,6 +48,16 @@ export default function SpeciesFilterDialog({
   const handleApply = () => {
     onApply(draft);
     onDismiss();
+  };
+
+  const toggleSpeciesGroup = (group: string) => {
+    setDraft((prev) => {
+      const isSelected = prev.speciesGroups.includes(group);
+      const speciesGroups = isSelected
+        ? prev.speciesGroups.filter((g) => g !== group)
+        : [...prev.speciesGroups, group];
+      return { ...prev, speciesGroups };
+    });
   };
 
   return (
@@ -112,6 +124,30 @@ export default function SpeciesFilterDialog({
               <RadioButton.Item label="A–Z" value="name_asc" />
               <RadioButton.Item label="Z–A" value="name_desc" />
             </RadioButton.Group>
+
+            <Text variant="titleMedium" style={styles.sectionLabel}>
+              Species group
+            </Text>
+            <Text variant="bodySmall" style={styles.hint}>
+              Leave unselected to show all groups.
+            </Text>
+            <View style={styles.chipRow}>
+              {SPECIES_GROUPS.map((group) => {
+                const selected = draft.speciesGroups.includes(group);
+                return (
+                  <Chip
+                    key={group}
+                    selected={selected}
+                    showSelectedCheck
+                    onPress={() => toggleSpeciesGroup(group)}
+                    style={styles.chip}
+                    compact
+                  >
+                    {group}
+                  </Chip>
+                );
+              })}
+            </View>
           </ScrollView>
         </Dialog.ScrollArea>
         <Dialog.Actions>
@@ -145,5 +181,18 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginBottom: 8,
     paddingRight: 4,
+  },
+  hint: {
+    marginBottom: 8,
+    opacity: 0.7,
+  },
+  chipRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8,
+    marginBottom: 4,
+  },
+  chip: {
+    marginVertical: 0,
   },
 });
