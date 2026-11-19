@@ -9,6 +9,7 @@ export type GetSpeciesParams = {
   caught?: SpeciesCaughtFilter;
   favoritesOnly?: boolean;
   sort?: SpeciesSort;
+  groups?: string[];
 };
 
 function buildSpeciesQuery(params?: GetSpeciesParams): string {
@@ -31,6 +32,9 @@ function buildSpeciesQuery(params?: GetSpeciesParams): string {
   }
   if (params.sort && params.sort !== "name_asc") {
     query.set("sort", params.sort);
+  }
+  if (params.groups && params.groups.length > 0) {
+    query.set("groups", params.groups.join(","));
   }
 
   const qs = query.toString();

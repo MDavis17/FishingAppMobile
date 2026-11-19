@@ -27,6 +27,9 @@ function countActiveFilterGroups(filters: SpeciesListFilters): number {
   if (filters.nameSort !== DEFAULT_SPECIES_FILTERS.nameSort) {
     count += 1;
   }
+  if (filters.speciesGroups.length > 0) {
+    count += 1;
+  }
   return count;
 }
 

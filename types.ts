@@ -144,6 +144,7 @@ export interface Species {
   lengthUnits?: string;
   lifespan?: string;
   depthRange?: string;
+  group?: string | null;
 }
 
 export interface RangeData {

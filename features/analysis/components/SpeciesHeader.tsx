@@ -2,7 +2,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { speciesImageUri } from "features/analysis/utils/imageUtils";
 import React from "react";
 import { Image, StyleSheet, View } from "react-native";
-import { Text, useTheme } from "react-native-paper";
+import { Chip, Text, useTheme } from "react-native-paper";
 import { Species } from "types";
 
 interface Props {
@@ -61,6 +61,17 @@ export default function SpeciesHeader({ species }: Props) {
             >
               {species.scientificName}
             </Text>
+          ) : null}
+          {species.group ? (
+            <Chip
+              compact
+              style={[
+                styles.groupChip,
+                { backgroundColor: theme.colors.surfaceVariant },
+              ]}
+            >
+              {species.group}
+            </Chip>
           ) : null}
         </View>
         {imageUri ? (
@@ -127,6 +138,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontStyle: "italic",
     opacity: 0.55,
+  },
+  groupChip: {
+    alignSelf: "flex-start",
+    marginTop: 4,
   },
   imageContainer: {
     width: 125,
