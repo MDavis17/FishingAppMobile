@@ -4,17 +4,29 @@ import Card from "common/components/Card";
 import MapWindow from "common/components/MapWindow";
 import SaveLocationButton from "features/tripPlanner/components/SaveLocationButton";
 import useSaveLocation from "features/tripPlanner/hooks/useSaveLocation";
+import { settleSavedLocationChange } from "features/tripPlanner/savedLocationSync";
 import { Location, TripType } from "types";
 
 interface Props {
   location: Location;
   tripType: TripType;
+  tripId?: number;
+  initialSavedLocationId?: number | null;
+  onSavedStatusChange?: (savedLocationId: number | null) => void;
 }
 
-export default function TripLocationCard({ location, tripType }: Props) {
-  const { isSaved, isInitializing, save, unsave } = useSaveLocation(
+export default function TripLocationCard({
+  location,
+  tripType,
+  tripId,
+  initialSavedLocationId,
+  onSavedStatusChange,
+}: Props) {
+  const { isSaved, savedLocationId, save, unsave } = useSaveLocation(
     location,
     tripType,
+    initialSavedLocationId,
+    tripId,
   );
 
   const latitude = location.coordinates.latitude;
@@ -22,7 +34,7 @@ export default function TripLocationCard({ location, tripType }: Props) {
   const latitudeDirection = latitude > 0 ? "N" : "S";
   const longitudeDirection = longitude > 0 ? "E" : "W";
 
-  const confirmUnsave = () => {
+  const confirmUnsave = (locationId: number) => {
     Alert.alert(
       "Remove saved location?",
       "This spot will be removed from your saved locations.",
@@ -32,7 +44,7 @@ export default function TripLocationCard({ location, tripType }: Props) {
           text: "Remove",
           style: "destructive",
           onPress: () => {
-            void unsave();
+            void unsave(locationId, onSavedStatusChange);
           },
         },
       ],
@@ -40,14 +52,16 @@ export default function TripLocationCard({ location, tripType }: Props) {
   };
 
   const handleButtonPress = () => {
-    if (isInitializing) {
+    if (isSaved && savedLocationId !== null) {
+      confirmUnsave(savedLocationId);
       return;
     }
-    if (isSaved) {
-      confirmUnsave();
-      return;
-    }
-    void save();
+    void save().then((savedId) => {
+      if (savedId !== null) {
+        onSavedStatusChange?.(savedId);
+        settleSavedLocationChange();
+      }
+    });
   };
 
   return (
@@ -65,7 +79,6 @@ export default function TripLocationCard({ location, tripType }: Props) {
           </View>
           <SaveLocationButton
             isSaved={isSaved}
-            disabled={isInitializing}
             onPress={handleButtonPress}
           />
         </View>

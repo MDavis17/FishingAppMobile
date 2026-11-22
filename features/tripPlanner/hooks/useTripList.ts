@@ -1,8 +1,15 @@
 import { useFocusEffect } from "@react-navigation/native";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Trip, TripType } from "types";
 import { deleteTrip as deleteTripApi } from "../api/deleteTrip";
 import { getTrips } from "../api/getTrips";
+import {
+  applySavedLocationChangeToTrips,
+  getSavedLocationMutationEpoch,
+  overlaySavedLocationOnTrips,
+  SavedLocationChange,
+  subscribeSavedLocationChange,
+} from "../savedLocationSync";
 
 export type TripListFilters = {
   status: "All" | "Planned" | "Completed";
@@ -20,30 +27,63 @@ export default function useTripList() {
   const [isLoading, setIsLoading] = useState(true);
   const [trips, setTrips] = useState<Trip[]>([]);
   const [filters, setFilters] = useState<TripListFilters>(DEFAULT_FILTERS);
+  const fetchGeneration = useRef(0);
+  const hasLoadedOnce = useRef(false);
+
+  const applySavedLocationChange = useCallback((change: SavedLocationChange) => {
+    setTrips((prevTrips) => applySavedLocationChangeToTrips(prevTrips, change));
+  }, []);
 
   const fetchTrips = useCallback(async () => {
-    setIsLoading(true);
+    const requestGeneration = ++fetchGeneration.current;
+    const mutationEpochAtStart = getSavedLocationMutationEpoch();
+    const showFullScreenLoader = !hasLoadedOnce.current;
+    if (showFullScreenLoader) {
+      setIsLoading(true);
+    }
 
     try {
       const response = await getTrips();
+
+      if (requestGeneration !== fetchGeneration.current) {
+        return;
+      }
 
       if (!response.ok) {
         throw new Error("Something went wrong");
       }
 
-      setTrips(Array.isArray(response.data) ? response.data : []);
+      const nextTrips = overlaySavedLocationOnTrips(
+        Array.isArray(response.data) ? response.data : [],
+        mutationEpochAtStart,
+      );
+      setTrips(nextTrips);
+      hasLoadedOnce.current = true;
     } catch (error) {
+      if (requestGeneration !== fetchGeneration.current) {
+        return;
+      }
       console.error("Error fetching trips:", error);
-      setTrips([]);
+      if (!hasLoadedOnce.current) {
+        setTrips([]);
+      }
     } finally {
-      setIsLoading(false);
+      if (requestGeneration === fetchGeneration.current && showFullScreenLoader) {
+        setIsLoading(false);
+      }
     }
   }, []);
+
+  useEffect(() => {
+    return subscribeSavedLocationChange((change) => {
+      applySavedLocationChange(change);
+    });
+  }, [applySavedLocationChange]);
 
   useFocusEffect(
     useCallback(() => {
       fetchTrips();
-    }, [fetchTrips])
+    }, [fetchTrips]),
   );
 
   const filteredTrips = useMemo(() => {

@@ -69,7 +69,16 @@ export default function TripPreview({ trip }: Props) {
         </View>
       </View>
       <View style={styles.descriptionContainer}>
-        <Text style={styles.title}>{trip.location.name}</Text>
+        <View style={styles.titleRow}>
+          <Text style={styles.title}>{trip.location.name}</Text>
+          {trip.savedLocationId != null && (
+            <MaterialCommunityIcons
+              name="bookmark"
+              size={18}
+              color={theme.colors.primary}
+            />
+          )}
+        </View>
         <View style={styles.statsContainer}>
           <View style={styles.statsItem}>
             <Icon source="calendar" size={24} color={theme.colors.primary} />
@@ -130,6 +139,12 @@ const styles = StyleSheet.create({
   statsContainer: { gap: 4 },
   statsItem: { flexDirection: "row", gap: 8 },
   date: { fontSize: 16, paddingBottom: 4 },
+  titleRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    flexWrap: "wrap",
+  },
   title: { fontSize: 16, fontWeight: "bold" },
   weatherContainer: {
     flexDirection: "row",

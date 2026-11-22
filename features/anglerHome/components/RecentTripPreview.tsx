@@ -4,8 +4,11 @@ import { ActivityIndicator, StyleSheet, View } from "react-native";
 import Divider from "common/components/Divider";
 import MapWindow from "common/components/MapWindow";
 import useRecentTrip from "common/hooks/useRecentTrip";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useTheme } from "react-native-paper";
 
 export default function RecentTripPreview() {
+  const theme = useTheme();
   const { isLoading, recentTrip } = useRecentTrip();
 
   if (isLoading) {
@@ -40,7 +43,16 @@ export default function RecentTripPreview() {
       <View style={styles.locationContainer}>
         <View style={styles.locationDescription}>
           <Text style={styles.date}>{formattedDate}</Text>
-          <Text style={styles.heading}>{recentTrip.location.name}</Text>
+          <View style={styles.titleRow}>
+            <Text style={styles.heading}>{recentTrip.location.name}</Text>
+            {recentTrip.savedLocationId != null && (
+              <MaterialCommunityIcons
+                name="bookmark"
+                size={18}
+                color={theme.colors.primary}
+              />
+            )}
+          </View>
           <Divider />
           <Text>{tripHasCatches ? recentTrip.catchSummary : "No Catches"}</Text>
         </View>
@@ -60,6 +72,12 @@ const styles = StyleSheet.create({
   locationDescription: { flex: 1 },
   locationThumbnail: { flex: 1, paddingLeft: 24 },
   date: { fontSize: 16, paddingBottom: 4 },
+  titleRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    flexWrap: "wrap",
+  },
   heading: { fontSize: 16, fontWeight: "bold" },
   centeredText: { textAlign: "center" },
 });
