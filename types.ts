@@ -31,6 +31,24 @@ export interface LocationSelection {
   generalLocationName?: string | null;
 }
 
+export interface SavedLocation {
+  id: number;
+  location: Location;
+  didCatchFishHere: boolean;
+  notes?: string | null;
+  tripType?: TripType | null;
+  lastFishedAt?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type SavedLocationCreatePayload = {
+  location: Location;
+  didCatchFishHere?: boolean;
+  notes?: string | null;
+  tripType?: TripType | null;
+};
+
 export interface CatchEntry {
   id?: number;
   dateTime: string;

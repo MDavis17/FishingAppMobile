@@ -120,7 +120,7 @@ export default function TripDetail() {
             { backgroundColor: theme.colors.background },
           ]}
         >
-          <TripLocationCard location={location} />
+          <TripLocationCard location={location} tripType={trip.tripType} />
           <TripConditionsCard
             conditions={conditions}
             status={conditionsStatus}
