@@ -1,5 +1,6 @@
 import { useHeaderHeight } from "@react-navigation/elements";
-import { RouteProp, useRoute } from "@react-navigation/native";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import AddCatchDialog from "features/catchLog/components/AddCatchDialog";
 import useCatchList from "features/catchLog/hooks/useCatchList";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -24,6 +25,7 @@ import TripConditionsCard from "./TripConditionsCard";
 import TripSolunarCard from "./TripSolunarCard";
 import TripTidesCard from "./TripTidesCard";
 import useTripConditions from "features/tripPlanner/hooks/useTripConditions";
+import { notifySavedLocationChange } from "features/tripPlanner/savedLocationSync";
 
 type TripDetailRouteProp = RouteProp<RootStackParamList, "TripDetail">;
 
@@ -31,8 +33,24 @@ export default function TripDetail() {
   const theme = useTheme();
   const headerHeight = useHeaderHeight();
   const { setTrip } = useTripContext();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList, "TripDetail">>();
   const route = useRoute<TripDetailRouteProp>();
   const { trip, deleteTrip, markTripComplete } = route.params;
+
+  const handleSavedStatusChange = useCallback(
+    (savedLocationId: number | null) => {
+      navigation.setParams({
+        trip: { ...trip, savedLocationId },
+      });
+      notifySavedLocationChange({
+        tripId: trip.id,
+        savedLocationId,
+        coordinates: trip.location.coordinates,
+      });
+    },
+    [navigation, trip],
+  );
   const { date, location } = trip;
   const [status, setStatus] = useState<Trip["status"]>(trip.status);
   const [addCatchVisible, setAddCatchVisible] = useState(false);
@@ -120,7 +138,13 @@ export default function TripDetail() {
             { backgroundColor: theme.colors.background },
           ]}
         >
-          <TripLocationCard location={location} tripType={trip.tripType} />
+          <TripLocationCard
+            location={location}
+            tripType={trip.tripType}
+            tripId={trip.id}
+            initialSavedLocationId={trip.savedLocationId}
+            onSavedStatusChange={handleSavedStatusChange}
+          />
           <TripConditionsCard
             conditions={conditions}
             status={conditionsStatus}

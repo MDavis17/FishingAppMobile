@@ -1,34 +1,69 @@
 import { useFocusEffect } from "@react-navigation/native";
 import { getRecentTrip } from "features/tripPlanner/api/getRecentTrip";
-import { useState, useCallback } from "react";
+import {
+  applySavedLocationChangeToTrip,
+  getSavedLocationMutationEpoch,
+  overlaySavedLocationOnTrip,
+  subscribeSavedLocationChange,
+} from "features/tripPlanner/savedLocationSync";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { Trip } from "types";
 
 export default function useRecentTrip() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [recentTrip, setRecentTrip] = useState<Trip | null>(null);
+  const fetchGeneration = useRef(0);
+  const hasLoadedOnce = useRef(false);
 
   const fetchRecentTrip = useCallback(async () => {
-    setIsLoading(true);
+    const requestGeneration = ++fetchGeneration.current;
+    const mutationEpochAtStart = getSavedLocationMutationEpoch();
+    const showFullScreenLoader = !hasLoadedOnce.current;
+    if (showFullScreenLoader) {
+      setIsLoading(true);
+    }
 
     try {
       const response = await getRecentTrip();
+
+      if (requestGeneration !== fetchGeneration.current) {
+        return;
+      }
 
       if (!response.ok) {
         throw new Error("Something went wrong");
       }
 
-      setRecentTrip(response.data);
+      const nextTrip = overlaySavedLocationOnTrip(
+        (response.data as Trip | null) ?? null,
+        mutationEpochAtStart,
+      );
+      setRecentTrip(nextTrip);
+      hasLoadedOnce.current = true;
     } catch (error) {
-      console.error("Error fetching upcoming trip:", error);
+      if (requestGeneration !== fetchGeneration.current) {
+        return;
+      }
+      console.error("Error fetching recent trip:", error);
     } finally {
-      setIsLoading(false);
+      if (requestGeneration === fetchGeneration.current && showFullScreenLoader) {
+        setIsLoading(false);
+      }
     }
+  }, []);
+
+  useEffect(() => {
+    return subscribeSavedLocationChange((change) => {
+      setRecentTrip((current) =>
+        applySavedLocationChangeToTrip(current, change),
+      );
+    });
   }, []);
 
   useFocusEffect(
     useCallback(() => {
       fetchRecentTrip();
-    }, [fetchRecentTrip])
+    }, [fetchRecentTrip]),
   );
 
   return {

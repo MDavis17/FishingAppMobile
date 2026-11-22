@@ -1,5 +1,5 @@
 import React from "react";
-import { ActivityIndicator, Text } from "react-native-paper";
+import { ActivityIndicator, Text, useTheme } from "react-native-paper";
 import { StyleSheet, View } from "react-native";
 import Divider from "common/components/Divider";
 import MapWindow from "common/components/MapWindow";
@@ -9,6 +9,7 @@ import { getWeatherIconName } from "common/utils/WeatherUtils";
 import useUpcomingTrip from "common/hooks/useUpcomingTrip";
 
 export default function UpcomingTripPreview() {
+  const theme = useTheme();
   const { isLoading, upcomingTrip, weather } = useUpcomingTrip();
   if (isLoading) {
     return <ActivityIndicator />;
@@ -44,7 +45,16 @@ export default function UpcomingTripPreview() {
       <View style={styles.locationContainer}>
         <View style={styles.locationDescription}>
           <Text style={styles.date}>{formattedDate}</Text>
-          <Text style={styles.heading}>{upcomingTrip.location.name}</Text>
+          <View style={styles.titleRow}>
+            <Text style={styles.heading}>{upcomingTrip.location.name}</Text>
+            {upcomingTrip.savedLocationId != null && (
+              <MaterialCommunityIcons
+                name="bookmark"
+                size={18}
+                color={theme.colors.primary}
+              />
+            )}
+          </View>
           <Divider />
           <View style={styles.weatherContainer}>
             <MaterialCommunityIcons
@@ -77,6 +87,12 @@ const styles = StyleSheet.create({
   locationDescription: { flex: 1 },
   locationThumbnail: { flex: 1, paddingLeft: 24 },
   date: { fontSize: 16, paddingBottom: 4 },
+  titleRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    flexWrap: "wrap",
+  },
   heading: { fontSize: 16, fontWeight: "bold" },
   weatherContainer: {
     flexDirection: "row",

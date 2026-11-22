@@ -47,6 +47,7 @@ export type SavedLocationCreatePayload = {
   didCatchFishHere?: boolean;
   notes?: string | null;
   tripType?: TripType | null;
+  tripId?: number | null;
 };
 
 export interface CatchEntry {
@@ -109,6 +110,7 @@ export interface Trip {
   tripType: TripType;
   targetSpecies?: Species[];
   notes?: string;
+  savedLocationId?: number | null;
 }
 
 export interface Bait {
