@@ -1,7 +1,12 @@
 import React from "react";
 import { SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { SegmentedButtons, Text, TextInput, useTheme } from "react-native-paper";
+import {
+  SegmentedButtons,
+  Text,
+  TextInput,
+  useTheme,
+} from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import MapWindow from "common/components/MapWindow";
 import DropdownSelect from "common/components/DropdownSelect";
@@ -11,11 +16,14 @@ import TertiaryButton from "common/components/buttons/TertiaryButton";
 import { TripType } from "types";
 import useNewTripForm from "../hooks/useNewTripForm";
 import SpeciesChipSelector from "./SpeciesChipSelector";
+import VerticalSecondaryButton from "common/components/buttons/VerticalSecondaryButton";
 
-const TRIP_TYPE_OPTIONS = (Object.values(TripType) as TripType[]).map((value) => ({
-  value,
-  label: value,
-}));
+const TRIP_TYPE_OPTIONS = (Object.values(TripType) as TripType[]).map(
+  (value) => ({
+    value,
+    label: value,
+  }),
+);
 
 export default function NewTripModal() {
   const theme = useTheme();
@@ -59,7 +67,7 @@ export default function NewTripModal() {
           <MapWindow isViewOnly selectedLocation={selectedLocation} />
           <View style={styles.mapActionsContainer}>
             <View style={styles.mapActionButton}>
-              <SecondaryButton
+              <VerticalSecondaryButton
                 icon="crosshairs-gps"
                 onPress={() => {
                   if (currentLocation) {
@@ -67,14 +75,25 @@ export default function NewTripModal() {
                   }
                 }}
               >
-                Use My Location
-              </SecondaryButton>
+                Current Location
+              </VerticalSecondaryButton>
             </View>
 
             <View style={styles.mapActionButton}>
-              <SecondaryButton onPress={handleSelectNewLocation}>
+              <VerticalSecondaryButton
+                icon="map-outline"
+                onPress={handleSelectNewLocation}
+              >
                 Select Location
-              </SecondaryButton>
+              </VerticalSecondaryButton>
+            </View>
+            <View style={styles.mapActionButton}>
+              <VerticalSecondaryButton
+                icon="bookmark-outline"
+                onPress={() => {}}
+              >
+                Saved Locations
+              </VerticalSecondaryButton>
             </View>
           </View>
         </View>
@@ -120,7 +139,9 @@ export default function NewTripModal() {
           </Text>
           <SegmentedButtons
             value={status}
-            onValueChange={(value) => setStatus(value as "Planned" | "Completed")}
+            onValueChange={(value) =>
+              setStatus(value as "Planned" | "Completed")
+            }
             buttons={[
               { value: "Planned", label: "Planned" },
               { value: "Completed", label: "Completed" },
@@ -195,9 +216,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignSelf: "center",
     paddingVertical: 8,
+    gap: 8,
   },
   mapActionButton: {
-    marginHorizontal: 4,
+    flex: 1,
   },
   input: {
     marginVertical: 6,
