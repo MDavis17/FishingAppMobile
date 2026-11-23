@@ -4,6 +4,7 @@ import SpeciesDetail from "features/analysis/components/SpeciesDetail";
 import { useTheme } from "react-native-paper";
 import { RootStackParamList } from "types";
 import Research from "../components/Research";
+import SavedLocationsListScreen from "../components/SavedLocationsList";
 import {
   AnimalSpeciesListScreen,
   PlantSpeciesListScreen,
@@ -38,6 +39,15 @@ export default function ResearchNavigation() {
         options={{
           headerShown: true,
           headerTitle: "Plants",
+          ...primaryHeaderOptions,
+        }}
+      />
+      <Stack.Screen
+        name="SavedLocations"
+        component={SavedLocationsListScreen}
+        options={{
+          headerShown: true,
+          headerTitle: "Locations",
           ...primaryHeaderOptions,
         }}
       />

@@ -203,7 +203,16 @@ export type RootStackParamList = {
     deleteTrip: () => void;
     markTripComplete: () => void;
   };
-  NewTrip: undefined;
+  NewTrip:
+    | {
+        presetLocation?: {
+          name: string;
+          coordinates: LatLng;
+          generalLocationName?: string | null;
+          tripType?: TripType | null;
+        };
+      }
+    | undefined;
   Settings: undefined;
   ThemeSettings: undefined;
   SpeciesDetail: { species: Species };
@@ -214,6 +223,7 @@ export type RootStackParamList = {
   Dashboard: undefined;
   SpeciesList: undefined;
   PlantList: undefined;
+  SavedLocations: undefined;
 };
 
 export enum UserUnits {
