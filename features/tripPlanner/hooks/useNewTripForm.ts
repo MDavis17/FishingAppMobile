@@ -7,6 +7,7 @@ import {
   InputError,
   LocationSelection,
   RootStackParamList,
+  SavedLocation,
   Species,
   TripType,
 } from "types";
@@ -65,6 +66,19 @@ export default function useNewTripForm() {
       if (inputError?.inputId === "date") {
         setInputError(null);
       }
+    }
+  };
+
+  const applySavedLocation = (saved: SavedLocation) => {
+    const { location } = saved;
+    setSelectedLocation(location.coordinates);
+    setLocationName(location.name);
+    setGeneralLocationName(location.generalLocationName);
+    if (
+      inputError?.inputId === "location" ||
+      inputError?.inputId === "locationName"
+    ) {
+      setInputError(null);
     }
   };
 
@@ -168,6 +182,7 @@ export default function useNewTripForm() {
     inputError,
     setInputError,
     handleSelectNewLocation,
+    applySavedLocation,
     handleSave,
     isSaving,
     saveError,
