@@ -4,8 +4,8 @@ import { StyleSheet, View } from "react-native";
 import { TempUnits, Trip, TripType, UserUnits } from "types";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { getWeatherIconName } from "common/utils/WeatherUtils";
+import LocationMapThumbnail from "common/components/LocationMapThumbnail";
 import TripStatusChip from "./TripStatusChip";
-import MapWindow from "common/components/MapWindow";
 import { format } from "date-fns";
 import { TRIP_TYPE_ICONS } from "../constants";
 
@@ -50,24 +50,11 @@ export default function TripPreview({ trip }: Props) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.mapContainer}>
-        <MapWindow selectedLocation={trip.location.coordinates} isViewOnly />
-        <View style={styles.overlayContainer}>
-          <View
-            style={[
-              styles.tripTypeContainer,
-              { backgroundColor: theme.colors.primary },
-            ]}
-          >
-            <Icon
-              source={TRIP_TYPE_ICONS[trip.tripType as TripType]}
-              size={24}
-              color={theme.colors.onPrimary}
-            />
-          </View>
-          <TripStatusChip status={trip.status} />
-        </View>
-      </View>
+      <LocationMapThumbnail
+        coordinates={trip.location.coordinates}
+        badgeIcon={TRIP_TYPE_ICONS[trip.tripType as TripType]}
+        overlay={<TripStatusChip status={trip.status} />}
+      />
       <View style={styles.descriptionContainer}>
         <View style={styles.titleRow}>
           <Text style={styles.title}>{trip.location.name}</Text>
@@ -113,23 +100,6 @@ export default function TripPreview({ trip }: Props) {
 
 const styles = StyleSheet.create({
   container: { flexDirection: "row", gap: 12 },
-  mapContainer: {
-    width: 150,
-    aspectRatio: 1.25,
-    borderRadius: 8,
-    overflow: "hidden",
-  },
-  overlayContainer: {
-    position: "absolute",
-    padding: 4,
-    top: 0,
-    left: 0,
-    right: 0,
-    flexDirection: "row",
-    gap: 4,
-  },
-  tripTypeContainer: { borderRadius: 8, overflow: "hidden", padding: 4 },
-  statusContainer: { position: "absolute", top: 4, left: 4 },
   descriptionContainer: {
     flex: 1,
     gap: 4,

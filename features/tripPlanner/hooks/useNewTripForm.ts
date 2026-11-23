@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigation } from "@react-navigation/native";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import * as Location from "expo-location";
 import { LatLng } from "react-native-maps";
@@ -15,15 +15,23 @@ import { addNewTrip, CreateTripPayload } from "../api/addNewTrip";
 export default function useNewTripForm() {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const route = useRoute<RouteProp<RootStackParamList, "NewTrip">>();
+  const preset = route.params?.presetLocation;
+  const hasPreset = preset != null;
+
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [status, setStatus] = useState<CreateTripPayload["status"]>("Planned");
-  const [tripType, setTripType] = useState<TripType>(TripType.Surf);
-  const [selectedLocation, setSelectedLocation] = useState<LatLng | null>(null);
+  const [tripType, setTripType] = useState<TripType>(
+    preset?.tripType ?? TripType.Surf,
+  );
+  const [selectedLocation, setSelectedLocation] = useState<LatLng | null>(
+    preset ? preset.coordinates : null,
+  );
   const [currentLocation, setCurrentLocation] = useState<LatLng | null>(null);
-  const [locationName, setLocationName] = useState("");
+  const [locationName, setLocationName] = useState(preset?.name ?? "");
   const [generalLocationName, setGeneralLocationName] = useState<
     string | null | undefined
-  >(undefined);
+  >(preset?.generalLocationName);
   const [targetSpecies, setTargetSpecies] = useState<Species[]>([]);
   const [inputError, setInputError] = useState<InputError | null>(null);
   const [isSaving, setIsSaving] = useState(false);
@@ -137,9 +145,11 @@ export default function useNewTripForm() {
       };
 
       setCurrentLocation(coordinates);
-      setSelectedLocation(coordinates);
+      if (!hasPreset) {
+        setSelectedLocation(coordinates);
+      }
     })();
-  }, []);
+  }, [hasPreset]);
 
   return {
     date,

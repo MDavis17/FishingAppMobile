@@ -55,6 +55,7 @@ export default function Research() {
               title="Locations"
               icon={require("common/assets/location-icon.png")}
               iconBackgroundColor="#f4eae3"
+              onPress={() => navigation.navigate("SavedLocations")}
             />
           </View>
           <View style={styles.exploreRow}>
