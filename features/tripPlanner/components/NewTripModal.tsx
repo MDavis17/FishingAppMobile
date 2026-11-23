@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import {
@@ -17,6 +17,7 @@ import { TripType } from "types";
 import useNewTripForm from "../hooks/useNewTripForm";
 import SpeciesChipSelector from "./SpeciesChipSelector";
 import VerticalSecondaryButton from "common/components/buttons/VerticalSecondaryButton";
+import SavedLocationPickerSheet from "./SavedLocationPickerSheet";
 
 const TRIP_TYPE_OPTIONS = (Object.values(TripType) as TripType[]).map(
   (value) => ({
@@ -28,6 +29,8 @@ const TRIP_TYPE_OPTIONS = (Object.values(TripType) as TripType[]).map(
 export default function NewTripModal() {
   const theme = useTheme();
   const navigation = useNavigation();
+  const [savedLocationsPickerVisible, setSavedLocationsPickerVisible] =
+    useState(false);
   const {
     date,
     status,
@@ -45,6 +48,7 @@ export default function NewTripModal() {
     inputError,
     setInputError,
     handleSelectNewLocation,
+    applySavedLocation,
     handleSave,
     isSaving,
     saveError,
@@ -90,7 +94,7 @@ export default function NewTripModal() {
             <View style={styles.mapActionButton}>
               <VerticalSecondaryButton
                 icon="bookmark-outline"
-                onPress={() => {}}
+                onPress={() => setSavedLocationsPickerVisible(true)}
               >
                 Saved Locations
               </VerticalSecondaryButton>
@@ -191,6 +195,15 @@ export default function NewTripModal() {
           {isSaving ? "Saving..." : "Save Trip"}
         </PrimaryButton>
       </View>
+
+      {savedLocationsPickerVisible ? (
+        <SavedLocationPickerSheet
+          visible
+          currentCoordinates={selectedLocation}
+          onDismiss={() => setSavedLocationsPickerVisible(false)}
+          onConfirm={applySavedLocation}
+        />
+      ) : null}
     </SafeAreaView>
   );
 }
