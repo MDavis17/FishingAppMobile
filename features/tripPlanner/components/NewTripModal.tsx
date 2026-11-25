@@ -14,6 +14,7 @@ import PrimaryButton from "common/components/buttons/PrimaryButton";
 import SecondaryButton from "common/components/buttons/SecondaryButton";
 import TertiaryButton from "common/components/buttons/TertiaryButton";
 import { TripType } from "types";
+import { TRIP_TYPE_ICONS } from "../constants";
 import useNewTripForm from "../hooks/useNewTripForm";
 import SpeciesChipSelector from "./SpeciesChipSelector";
 import VerticalSecondaryButton from "common/components/buttons/VerticalSecondaryButton";
@@ -23,6 +24,7 @@ const TRIP_TYPE_OPTIONS = (Object.values(TripType) as TripType[]).map(
   (value) => ({
     value,
     label: value,
+    icon: TRIP_TYPE_ICONS[value],
   }),
 );
 

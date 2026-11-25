@@ -1,10 +1,17 @@
 import React, { useState } from "react";
-import { Pressable, StyleProp, StyleSheet, View, ViewStyle } from "react-native";
-import { Text, TextInput, useTheme } from "react-native-paper";
+import {
+  Pressable,
+  StyleProp,
+  StyleSheet,
+  View,
+  ViewStyle,
+} from "react-native";
+import { Icon, Text, TextInput, useTheme } from "react-native-paper";
 
 export interface DropdownOption<T extends string> {
   value: T;
   label: string;
+  icon?: string;
 }
 
 interface Props<T extends string> {
@@ -40,7 +47,13 @@ export default function DropdownSelect<T extends string>({
             label={label}
             value={selectedLabel}
             editable={false}
-            right={<TextInput.Icon icon={open ? "menu-up" : "menu-down"} />}
+            activeOutlineColor={theme.colors.primary}
+            right={
+              <TextInput.Icon
+                icon={open ? "menu-up" : "menu-down"}
+                color={theme.colors.primary}
+              />
+            }
             style={[styles.input, { backgroundColor: theme.colors.background }]}
           />
         </View>
@@ -50,13 +63,16 @@ export default function DropdownSelect<T extends string>({
           style={[
             styles.options,
             {
-              borderColor: theme.colors.outline,
+              borderColor: theme.colors.primary,
               backgroundColor: theme.colors.surface,
             },
           ]}
         >
           {options.map((option) => {
             const selected = option.value === value;
+            const contentColor = selected
+              ? theme.colors.onSecondary
+              : theme.colors.onSurface;
             return (
               <Pressable
                 key={option.value}
@@ -67,19 +83,15 @@ export default function DropdownSelect<T extends string>({
                 style={({ pressed }) => [
                   styles.optionRow,
                   selected && {
-                    backgroundColor: theme.colors.secondaryContainer,
+                    backgroundColor: theme.colors.secondary,
                   },
                   pressed && styles.optionPressed,
                 ]}
               >
-                <Text
-                  variant="bodyLarge"
-                  style={
-                    selected
-                      ? { color: theme.colors.onSecondaryContainer }
-                      : undefined
-                  }
-                >
+                {option.icon ? (
+                  <Icon source={option.icon} size={22} color={contentColor} />
+                ) : null}
+                <Text variant="bodyLarge" style={{ color: contentColor }}>
                   {option.label}
                 </Text>
               </Pressable>
@@ -105,6 +117,9 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   optionRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
     paddingHorizontal: 16,
     paddingVertical: 12,
   },

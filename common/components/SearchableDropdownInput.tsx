@@ -100,7 +100,7 @@ export default function SearchableDropdownInput<T>({
   };
 
   const dropdownStyles = {
-    borderColor: theme.colors.outline,
+    borderColor: theme.colors.primary,
     backgroundColor: theme.colors.background,
     maxHeight: maxDropdownHeight,
   };
@@ -117,6 +117,8 @@ export default function SearchableDropdownInput<T>({
         placeholder={placeholder}
         disabled={disabled}
         error={error}
+        outlineColor={error ? undefined : theme.colors.primary}
+        activeOutlineColor={theme.colors.primary}
         style={[styles.input, { backgroundColor: theme.colors.background }]}
         right={
           value && !dropdownOpen ? (
