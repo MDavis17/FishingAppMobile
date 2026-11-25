@@ -24,9 +24,6 @@ export default function SavedLocationPickerListItem({
   const longitudeDirection = longitude >= 0 ? "E" : "W";
 
   const borderColor = selected ? theme.colors.primary : "transparent";
-  // const backgroundColor = selected
-  //   ? `${theme.colors.primary}14`
-  //   : theme.colors.surface;
 
   return (
     <Pressable onPress={onPress} accessibilityRole="button">
@@ -34,7 +31,6 @@ export default function SavedLocationPickerListItem({
         style={[
           styles.card,
           {
-            // backgroundColor,
             borderWidth: selected ? 1.5 : 0,
             borderColor,
           },
