@@ -142,6 +142,12 @@ export default function SpeciesFilterDialog({
                     onPress={() => toggleSpeciesGroup(group)}
                     style={styles.chip}
                     compact
+                    theme={{
+                      colors: {
+                        secondaryContainer: theme.colors.secondary,
+                        onSecondaryContainer: theme.colors.onSecondary,
+                      },
+                    }}
                   >
                     {group}
                   </Chip>

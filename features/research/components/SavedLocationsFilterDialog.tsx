@@ -123,6 +123,12 @@ export default function SavedLocationsFilterDialog({
                     onPress={() => toggleTripType(tripType)}
                     style={styles.chip}
                     compact
+                    theme={{
+                      colors: {
+                        secondaryContainer: theme.colors.secondary,
+                        onSecondaryContainer: theme.colors.onSecondary,
+                      },
+                    }}
                   >
                     {tripType}
                   </Chip>

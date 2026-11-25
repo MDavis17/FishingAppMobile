@@ -33,7 +33,7 @@ export default function SavedLocationListItem({
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const { location, didCatchFishHere, tripType } = savedLocation;
+  const { location, tripType } = savedLocation;
   const latitude = location.coordinates.latitude;
   const longitude = location.coordinates.longitude;
   const latitudeDirection = latitude > 0 ? "N" : "S";
@@ -125,8 +125,7 @@ export default function SavedLocationListItem({
             </View>
           ) : null}
         </View>
-        // TODO: add fish icon when adding catch updates saved location catch
-        status
+        {/* TODO: add fish icon when adding catch updates saved location catch status */}
         {/* <View style={styles.fishContainer}>
           <MaterialCommunityIcons
             name={didCatchFishHere ? "fish" : "fish-off"}

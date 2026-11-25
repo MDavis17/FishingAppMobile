@@ -126,10 +126,7 @@ export default function SpeciesChipSelector({
                 key={species.id}
                 compact
                 onClose={() => handleRemoveSpecies(species.id)}
-                style={[
-                  styles.chip,
-                  { backgroundColor: theme.colors.primary },
-                ]}
+                style={[styles.chip, { backgroundColor: theme.colors.primary }]}
                 textStyle={{ color: theme.colors.onPrimary }}
                 theme={{
                   colors: {
@@ -153,7 +150,7 @@ export default function SpeciesChipSelector({
             style={[
               styles.dropdown,
               {
-                borderColor: theme.colors.outline,
+                borderColor: theme.colors.primary,
                 backgroundColor: theme.colors.background,
               },
             ]}
