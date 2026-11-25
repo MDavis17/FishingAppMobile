@@ -59,6 +59,7 @@ export interface CatchEntry {
   waterType: WaterType;
   location?: Location;
   bait?: string;
+  isCatchPB?: boolean;
 }
 
 export interface CatchStat {
@@ -106,6 +107,7 @@ export interface Trip {
   location: Location;
   catchList: CatchEntry[];
   catchSummary: string;
+  personalBestCount: number;
   status: "Planned" | "Completed";
   tripType: TripType;
   targetSpecies?: Species[];
