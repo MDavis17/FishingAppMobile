@@ -1,24 +1,5 @@
 import { LatLng } from "react-native-maps";
 
-export interface ForecastDay {
-  daytimeForecast: {
-    weatherCondition: WeatherCondition;
-  };
-  displayDate: {
-    day: number;
-    month: number;
-    year: number;
-  };
-}
-
-export interface WeatherCondition {
-  iconBaseUri: string;
-  description: {
-    text: string;
-  };
-  type: string;
-}
-
 export interface Location {
   name: string;
   coordinates: LatLng;
@@ -101,6 +82,13 @@ export enum TripType {
   FlyFishing = "Fly Fishing",
 }
 
+export interface TripWeatherPreview {
+  status: "ready" | "outside_window" | "unavailable";
+  airTempF: number | null;
+  weatherDescription: string | null;
+  daysUntilForecast?: number | null;
+}
+
 export interface Trip {
   id: number;
   date: string;
@@ -108,6 +96,7 @@ export interface Trip {
   catchList: CatchEntry[];
   catchSummary: string;
   personalBestCount: number;
+  weatherPreview?: TripWeatherPreview | null;
   status: "Planned" | "Completed";
   tripType: TripType;
   targetSpecies?: Species[];
