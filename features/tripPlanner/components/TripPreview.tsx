@@ -14,10 +14,15 @@ interface Props {
   trip: Trip;
 }
 
+function outsideForecastLabel(daysUntilForecast: number): string {
+  if (daysUntilForecast <= 1) {
+    return "view forecast tomorrow";
+  }
+  return `view forecast in ${daysUntilForecast} days`;
+}
+
 export default function TripPreview({ trip }: Props) {
   const theme = useTheme();
-  const mockWeather = { temp: 72, condition: "Sunny" };
-  const weather = mockWeather;
   const tripDate = new Date(trip.date);
   const formattedDate = new Intl.DateTimeFormat("en-US", {
     weekday: "long",
@@ -33,28 +38,51 @@ export default function TripPreview({ trip }: Props) {
   const personalBestCount = trip.personalBestCount ?? 0;
 
   const weatherPreview = useMemo(() => {
+    const preview = trip.weatherPreview;
+    if (!preview) {
+      return null;
+    }
+
+    if (preview.status === "outside_window") {
+      return (
+        <PreviewStatsItem
+          label={outsideForecastLabel(preview.daysUntilForecast ?? 1)}
+        />
+      );
+    }
+
+    if (preview.status !== "ready") {
+      return null;
+    }
+
+    const airTempF = preview.airTempF;
+    const description = preview.weatherDescription;
+    if (airTempF == null || !description) {
+      return null;
+    }
+
     return (
       <PreviewStatsItem
         leading={
           <MaterialCommunityIcons
-            name={getWeatherIconName(weather.condition)}
+            name={getWeatherIconName(description)}
             size={24}
             color={theme.colors.primary}
           />
         }
       >
         <View style={styles.weatherTextRow}>
-          <Text variant="bodyMedium">{`${weather.temp}${degreeSymbol}${
+          <Text variant="bodyMedium">{`${Math.round(airTempF)}${degreeSymbol}${
             userUnits === UserUnits.Imperial
               ? TempUnits.Fahrenheit
               : TempUnits.Celsius
           }`}</Text>
           <Text variant="bodyMedium">|</Text>
-          <Text variant="bodyMedium">{weather.condition}</Text>
+          <Text variant="bodyMedium">{description}</Text>
         </View>
       </PreviewStatsItem>
     );
-  }, [degreeSymbol, theme.colors.primary, userUnits, weather]);
+  }, [degreeSymbol, theme.colors.primary, trip.weatherPreview, userUnits]);
 
   const catchSummaryPreview = useMemo(() => {
     if (catchCount === 0) {
